@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="theme-color" content="#8C383A" />
+    <link rel="icon" href="icons/favicon-196x196.png" type="image/png" />
+    <link rel="alternate icon" href="/favicon.ico" type="ico" sizes="16x16" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-152x152.png" sizes="180x180" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>Vite Typescript React PWA</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        // Register a service worker hosted at the root of the
+        // site using the default scope.
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then((registration) => {
+            console.log("Service worker registration succeeded:", registration);
+          })
+          .catch((err) => {
+            console.log("Service worker registration failed:", error);
+          });
+      } else {
+        console.log("Service workers are not supported.");
+      }
+    </script>
+  </body>
+</html>

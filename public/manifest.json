@@ -1,0 +1,32 @@
+{
+  "name": "Linklip",
+  "short_name": "linklip",
+  "start_url": "",
+  "display": "standalone",
+  "background_color": "#F8F7DA",
+  "theme_color": "#8C383A",
+  "description": "PWA realized with Vite.js, React.js and React Router",
+  "icons": [
+    {
+      "src": "icons/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "icons/favicon-196x196.png",
+      "type": "image/png",
+      "sizes": "196x196"
+    },
+    {
+      "src": "icons/logo-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "icons/logo-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
