@@ -1,7 +1,7 @@
 
 
 ################
-# <type>: <subject>
+# [ticket number]: subject
 ##### Subject 50 characters ################# -> |
 
 

@@ -3,13 +3,13 @@
 //   console.log("Service Worker is installed", e);
 // });
 
-self.addEventListener("install", (e) => {
-  console.log("[Service Worker] installed");
+self.addEventListener('install', (e) => {
+  console.log('[Service Worker] installed');
 });
 
 // activate event
-self.addEventListener("activate", (e) => {
-  console.log("[Service Worker] actived", e);
+self.addEventListener('activate', (e) => {
+  console.log('[Service Worker] actived', e);
 });
 
 // // fetch event
@@ -17,6 +17,6 @@ self.addEventListener("activate", (e) => {
 //   console.log("fetch event", evt);
 // });
 
-self.addEventListener("fetch", (e) => {
-  console.log("[Service Worker] fetched resource " + e.request.url);
+self.addEventListener('fetch', (e) => {
+  console.log('[Service Worker] fetched resource ' + e.request.url);
 });
