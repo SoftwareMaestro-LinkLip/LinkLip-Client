@@ -1,13 +1,13 @@
-import logo from './images/logo.png';
-// import "./css/App.scss";
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className="mt-4 font-medium">Vite + React + TypeScript + PWA</p>
-      </header>
+    <div>
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+      </Routes>
     </div>
   );
 }
