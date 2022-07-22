@@ -8,12 +8,13 @@
   // justify-content: space-between;
   height: 100vh;
   width: 100%;
+  background-color: #282c34;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
-  margin-bottom: 1.5rem;
+  margin: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -57,7 +58,7 @@
 
 .inputbox {
   // background-color: #282c34;
-  height: 5em;
+  // height: 5em;
   display: flex;
   z-index: 10;
 }
@@ -68,7 +69,7 @@
 }
 
 .inputbox button {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
 }
 
 @keyframes App-logo-spin {

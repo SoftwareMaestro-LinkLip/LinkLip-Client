@@ -2,13 +2,14 @@ import logo from '../images/logo.png';
 import '../css/style.scss';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../partials/Navbar';
+import CategoryBar from '../partials/CategoryBar';
 
 const Home = () => {
   const [arr, setArr] = useState<string[]>([]);
   const [text, setText] = useState('');
   const [show, setShow] = useState(true);
   const [lastY, setLastY] = useState(0);
+  const [top, setTop] = useState(true);
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,9 +42,15 @@ const Home = () => {
     const { scrollHeight, scrollTop, clientHeight } = e.target;
     const scroll = scrollHeight - scrollTop - clientHeight;
 
+    if (scrollTop === 0) {
+      setTop(true);
+    } else {
+      setTop(false);
+    }
+
     if (lastY < scroll) {
       setShow(true);
-    } else {
+    } else if (lastY > scroll) {
       setShow(false);
     }
     setLastY(scroll);
@@ -56,8 +63,10 @@ const Home = () => {
         <p className="mt-12 font-medium">Vite + React + TypeScript + PWA</p>
       </header>
       <div className="container1">
-        {show && <Navbar />}
+        {show && <CategoryBar />}
         <ol className="list" onScroll={onScroll}>
+          {!top && <CategoryBar />}
+
           {arr.map((item, idx) => {
             return (
               <li
