@@ -1,0 +1,36 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: ['develop']
+  pull_request:
+    branches: ['develop']
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Set up NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install all dependencies
+        run: yarn install
+
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.2
+        with:
+          dry: True
+          prettier_options: '--ignore-path .prettierignore'
+          github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
