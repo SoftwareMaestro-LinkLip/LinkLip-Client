@@ -1,13 +1,13 @@
-# Linklip-Client
+<img src="./public/icons/favicon.ico" alt="Logo of the project" align="right">
 
-## Demo
+# Linklip-Client &middot;
 
 ## Quick Start
-### 0) Requirments
-- Make sure your NodeJS and npm (or yarn) versions are up to date
+### Prerequisites
+- Make sure your NodeJS and yarn (or npm) versions are up to date
 
 
-### 1) Download
+### Download
 - [Download the latest version](https://github.com/SoftwareMaestro-LinkLip/LinkLip-Client/archive/refs/heads/develop.zip)
 
 or
@@ -17,7 +17,7 @@ or
 $ git clone https://github.com/SoftwareMaestro-LinkLip/LinkLip-Client.git
 ```
 
-### 2) Installation
+### Installation
 
 ```bash
 $ yarn install
@@ -29,7 +29,7 @@ or
 $ npm install
 ```
 
-### 3) Basic Usage
+### Basic Usage
 - start server
 ```bash
 $ yarn dev
@@ -43,6 +43,35 @@ $ npm dev
 
 - Navigate to [http://localhost:3000](http://localhost:3000)
 
+<br />
+
+## Developing
+### Built With
+- React
+- React Router
+- TypeScript
+- Tailwind CSS
+- AWS Amplify
+
+### Prerequisites
+- Editor: install `Visual Studio Code` or `WebStorm`
+- Editor tools:
+  > - install `ESLint`, `Prettier` extensions(plugins).
+  > - turn `formatOnSave` option on.
+- global dependencies: make sure your NodeJS and yarn (or npm) versions are up to date
+
+### Setting up Dev
+```bash
+$ git clone https://github.com/SoftwareMaestro-LinkLip/LinkLip-Client.git
+$ cd LinkLip-Client
+$ yarn install
+```
+
+### Deploying / Publishing
+- Make pull request to main branch and merge it.
+- Check building success in AWS Amplify.
+
+<br />
 
 ## Directory Structure
 
@@ -66,3 +95,12 @@ $ npm dev
     ├── pakage.json
     ├── ...
     └── sw.js
+
+<br />
+
+## API Reference
+
+<br />
+
+## License
+
