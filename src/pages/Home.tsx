@@ -3,6 +3,7 @@ import '../css/style.scss';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CategoryBar from '../partials/CategoryBar';
+import axios from 'axios';
 
 const Home = () => {
   const [arr, setArr] = useState<string[]>([]);
@@ -21,11 +22,11 @@ const Home = () => {
       setText('');
     }
 
-    // let dataToSubmit = {
-    //   url: URL;
-    // };
+    let body = {
+      url: text,
+    };
 
-    // const request = axios.post("/api/conents", body).then((response) => {
+    // const request = axios.post('/v1/link', body).then((response) => {
     //   console.log(response.data);
     //   return response.data;
     // });
