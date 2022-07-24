@@ -1,6 +1,7 @@
 # Linklip-Client
 
-website link:
+### website link
+
 
 ### Project Stack
 
@@ -12,31 +13,24 @@ website link:
 
 ### Directory
 
-    .
-    ├── public
-    │   ├── icons
+    linklip-client
+    ├── public/             # static files
+    │   ├── icons/          # icon images for mobile
     │   └── manifest.json
-    ├── src
-    │   ├── css
-    │   ├── hooks
-    │   ├── images
-    │   ├── pages
-    │   ├── typings
-    │   ├── utils
-    │   └── images
-    ├── .env
-    ├── App.tsx
-    ├── main.tsx
-    ├── vite-env.d.ts
-    ├── .gitignore
-    ├── .gitmessage.txt
+    │
+    ├── src/                # project root
+    │   ├── css/            # css/scss styles
+    │   ├── hooks/          # custom hooks
+    │   ├── images/         # images, icons, etc.
+    │   ├── pages/          # application views
+    │   ├── typings/        # types for typescript
+    │   ├── utils/          # utilities
+    │   ├── .env
+    │   ├── App.tsx
+    │   ├── main.tsx
+    │   └── vite-env.d.ts
+    │
     ├── index.html
-    ├── pakage-lock.json
     ├── pakage.json
-    ├── postcss.config.js
-    ├── README.md
-    ├── sw.js
-    ├── tsconfig.json
-    ├── tsconfig.node.json
-    ├── vite.config.ts
-    └── yarn.lock
+    ├── ...
+    └── sw.js
