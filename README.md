@@ -54,11 +54,10 @@ $ npm dev
 - AWS Amplify
 
 ### Prerequisites
-- Editor: install `Visual Studio Code` or `WebStorm`
-- Editor tools:
-  > - install `ESLint`, `Prettier` extensions(plugins).
-  > - turn `formatOnSave` option on.
-- global dependencies: make sure your NodeJS and yarn (or npm) versions are up to date
+- Install editor `Visual Studio Code` or `WebStorm`
+- Install `ESLint`, `Prettier` extensions(plugins) in the editor.
+- Turn the `formatOnSave` option on.
+- Make sure your `NodeJS` and `yarn` (or `npm`) versions are up to date
 
 ### Setting up Dev
 ```bash
@@ -89,7 +88,7 @@ $ yarn install
     │   ├── utils/          # utilities
     │   ├── ...
     │   ├── App.tsx
-    │   └──  main.tsx
+    │   └── main.tsx
     │
     ├── index.html
     ├── pakage.json
