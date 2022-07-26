@@ -1,29 +1,47 @@
 import logo from '../images/logo.png';
 import '../css/style.scss';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import CategoryBar from '../partials/CategoryBar';
+import NavBar from '../partials/Navbar';
 import axios from 'axios';
+import useInput from '../hooks/useInput';
+import { IContent } from '../typings/types';
 
 const Home = () => {
   const [arr, setArr] = useState<string[]>([]);
-  const [text, setText] = useState('');
+  const [note, onChangeNote] = useInput('');
   const [show, setShow] = useState(true);
   const [lastY, setLastY] = useState(0);
   const [top, setTop] = useState(true);
+  const [contents, setContents] = useState<IContent[]>([]);
+
+  useEffect(() => {
+    getContents('');
+  }, []);
+
+  const getContents = (term: string) => {
+    axios
+      .get(`/content/v1?term=${term}`)
+      .then((response) => {
+        if (response.data.success) {
+          setContents([...contents, ...response.data.contents]);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (text) {
+    if (note) {
       let temp = [...arr];
-      temp.push(text);
+      temp.push(note);
       setArr(temp);
-      setText('');
+      onChangeNote('');
     }
 
     let body = {
-      url: text,
+      url: note,
     };
 
     // const request = axios.post('/v1/link', body).then((response) => {
@@ -32,8 +50,9 @@ const Home = () => {
     // });
   };
 
-  const onTextHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.currentTarget.value);
+  const onTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // console.log(event.currentTarget.value);
+    onChangeNote(e.target.value);
   };
 
   const onScroll = (e: any) => {
@@ -64,9 +83,9 @@ const Home = () => {
         <p className="mt-12 font-medium">Vite + React + TypeScript + PWA</p>
       </header>
       <div className="container1">
-        {show && <CategoryBar />}
+        {show && <NavBar getContents={getContents} />}
         <ol className="list" onScroll={onScroll}>
-          {!top && <CategoryBar />}
+          {!top && <NavBar getContents={getContents} />}
 
           {arr.map((item, idx) => {
             return (
@@ -101,7 +120,7 @@ const Home = () => {
         focus:text-gray-700 focus:bg-white focus:outline-none
       "
             placeholder="Input URL"
-            value={text}
+            value={note}
           />
           <button
             type="submit"
