@@ -2,7 +2,7 @@ import logo from '../images/logo.png';
 import '../css/style.scss';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AppContainer } from '../css/styled';
+import { AppContainer, ContentsContainer } from '../css/Containers';
 import NavBar from '../partials/Navbar';
 import axios, { AxiosResponse } from 'axios';
 import useInput from '../hooks/useInput';
@@ -10,6 +10,7 @@ import { IContent } from '../typings/types';
 // import { fetch } from '../utils/fetch';
 import { fetch } from 'fetch-opengraph';
 import Notebox from '../partials/Notebox';
+import { isLink, getFullLink, getShortLink } from '../utils/link';
 
 const Home = () => {
   const [note, onChangeNote, setNote] = useInput('');
@@ -35,6 +36,7 @@ const Home = () => {
   };
 
   const saveURL = (url: string) => {
+    url = getFullLink(url);
     let body = {
       url,
       linkImg: '',
@@ -65,9 +67,7 @@ const Home = () => {
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (note.startsWith('www.')) {
-      saveURL('https://' + note);
-    } else if (note.startsWith('https://')) {
+    if (isLink(note)) {
       saveURL(note);
     }
   };
@@ -95,27 +95,29 @@ const Home = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
+      {contents.length === 0 && (
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+        </header>
+      )}
+
       <AppContainer>
         {show && <NavBar getContents={getContents} />}
-        <ol className="list" onScroll={onScroll}>
+        <ContentsContainer onScroll={onScroll}>
           {!top && <NavBar getContents={getContents} />}
 
           {contents.map((item, idx) => {
             return (
-              <li
-                key={idx}
-                className="card rounded-md shadow-lg text-gray-700 text-base bg-white bg-opacity-50"
-              >
-                <a href={item.url} target="_blank">
-                  {item.url}
-                </a>
-              </li>
+              <div key={idx}>
+                <p>
+                  <a href={item.url} target="_blank">
+                    {getShortLink(item.url)}
+                  </a>
+                </p>
+              </div>
             );
           })}
-        </ol>
+        </ContentsContainer>
         <Notebox
           note={note}
           onChangeNote={onChangeNote}

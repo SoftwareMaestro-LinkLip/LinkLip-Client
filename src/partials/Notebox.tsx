@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useCallback } from 'react';
-import { NoteContainer, ToolArea } from '../css/partials';
+import { ToolArea } from '../css/Conponents';
+import { NoteContainer } from '../css/Containers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 

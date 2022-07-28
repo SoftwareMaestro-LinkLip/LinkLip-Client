@@ -67,7 +67,7 @@ export const CategoryContainer = styled.div`
     white-space: nowrap;
     // vertical-align: baseline;
     font-weight: 700;
-    // border-radius: 9999px;
+    border-radius: 4px;
     margin: 0.5rem 0.1rem;
     padding: 0.25rem 0.625rem;
     padding-top: 0.4rem;
@@ -97,5 +97,61 @@ export const CategoryContainer = styled.div`
   & .non-selected:focus {
     outline: 2px solid transparent;
     outline-offset: 2px;
+  }
+`;
+
+export const ContentsContainer = styled.div`
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 15rem));
+
+  row-gap: 0.5rem;
+  column-gap: 0.5rem;
+
+  align-items: stretch;
+  // min-width: 80%;
+  // z-index: 2;
+  overflow: scroll;
+  overflow-x: hidden;
+  padding: 0.5rem;
+
+  flex: 1 1 auto;
+
+  & > div {
+    border-radius: 0.375rem;
+    background-opacity: 0.5;
+    color: rgb(55 65 81);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 1rem 1rem;
+    max-height: 10rem;
+    min-heihgt: 15rem;
+  }
+`;
+
+export const NoteContainer = styled.div`
+  z-index: 10;
+  display: flex;
+  width: 100%;
+  padding: 1rem 1rem;
+  padding-top: 0;
+  //   border-radius: 4px;
+
+  & > form {
+    color: rgb(29, 28, 29);
+    //   font-size: 15px;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid rgb(221, 221, 221);
+  }
+
+  & > form > textarea {
+    width: 100%;
+    border: 1px solid rgb(221, 221, 221);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    resize: none;
+
+    outline: none;
+    box-shadow: none;
   }
 `;

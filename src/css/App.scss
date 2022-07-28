@@ -47,22 +47,6 @@
   padding: 1em;
 }
 
-.inputbox {
-  // background-color: #282c34;
-  // height: 5em;
-  display: flex;
-  z-index: 10;
-}
-
-.inputbox input {
-  // border-color: #282c34;
-  flex: 1 1 auto;
-}
-
-.inputbox button {
-  flex: 1 1 auto;
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

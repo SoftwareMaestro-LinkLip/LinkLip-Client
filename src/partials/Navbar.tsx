@@ -1,6 +1,6 @@
 import { Dispatch, FunctionComponent, useState, useEffect } from 'react';
 import '../css/reset.css';
-import { SearchContainer, CategoryContainer } from '../css/styled';
+import { SearchContainer, CategoryContainer } from '../css/Containers';
 import useInput from '../hooks/useInput';
 import axios from 'axios';
 
