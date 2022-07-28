@@ -3,9 +3,10 @@ import '../css/style.scss';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from '../partials/Navbar';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
+import { fetch } from '../utils/fetch';
 
 const Home = () => {
   const [arr, setArr] = useState<string[]>([]);
@@ -17,14 +18,15 @@ const Home = () => {
 
   useEffect(() => {
     getContents('');
+    console.log('contents:', contents);
   }, []);
 
   const getContents = (term: string) => {
-    axios
-      .get(`/content/v1?term=${term}`)
+    const request = axios
+      .get(`/content/v1/link?term=${term}`)
       .then((response) => {
         if (response.data.success) {
-          setContents([...contents, ...response.data.contents]);
+          setContents([...response.data.data.contents]);
         }
       })
       .catch((err) => console.log(err));
@@ -33,21 +35,31 @@ const Home = () => {
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (note) {
-      let temp = [...arr];
-      temp.push(note);
-      setArr(temp);
-      onChangeNote('');
-    }
-
     let body = {
       url: note,
+      linkImg: '',
+      title: '',
+      text: '',
     };
 
-    // const request = axios.post('/v1/link', body).then((response) => {
-    //   console.log(response.data);
-    //   return response.data;
-    // });
+    const request = axios
+      .post('content/v1/link', body)
+      .then((response) => {
+        if (response.data.success) {
+          getContents('');
+        } else {
+          let temp = {
+            id: -1,
+            url: note,
+            linkImg: '',
+            title: '',
+          };
+          setContents([temp, ...contents]);
+          console.log(response.data.message);
+        }
+        return response.data;
+      })
+      .catch((err) => console.log(err));
   };
 
   const onTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,14 +99,14 @@ const Home = () => {
         <ol className="list" onScroll={onScroll}>
           {!top && <NavBar getContents={getContents} />}
 
-          {arr.map((item, idx) => {
+          {contents.map((item, idx) => {
             return (
               <li
                 key={idx}
                 className="card rounded-md shadow-lg text-gray-700 text-base bg-white bg-opacity-50"
               >
-                <a href={item} target="_blank">
-                  {item}
+                <a href={item.url} target="_blank">
+                  {item.url}
                 </a>
               </li>
             );
