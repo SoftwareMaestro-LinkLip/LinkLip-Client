@@ -7,5 +7,11 @@ export default defineConfig({
   css: {
     postcss,
   },
+  server: {
+    proxy: {
+      // Using the proxy instance
+      '/content': 'http://localhost:8080',
+    },
+  },
   plugins: [react()],
 });
