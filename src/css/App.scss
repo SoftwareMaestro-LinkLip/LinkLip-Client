@@ -2,15 +2,6 @@
   text-align: center;
 }
 
-.container1 {
-  display: flex;
-  flex-direction: column;
-  // justify-content: space-between;
-  height: 100vh;
-  width: 100%;
-  background-color: #282c34;
-}
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -24,7 +15,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  // background-color: #282c34;
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
@@ -36,13 +27,13 @@
 }
 
 .list {
-  background-color: #282c34;
+  // background-color: #282c34;
   display: flex;
   flex-direction: column;
   align-items: center;
   // justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  // color: white;
   flex: 1 1 auto;
   align-items: stretch;
   // min-width: 80%;
@@ -64,7 +55,7 @@
 }
 
 .inputbox input {
-  border-color: #282c34;
+  // border-color: #282c34;
   flex: 1 1 auto;
 }
 

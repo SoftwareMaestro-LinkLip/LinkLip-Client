@@ -2,15 +2,17 @@ import logo from '../images/logo.png';
 import '../css/style.scss';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { AppContainer } from '../css/styled';
 import NavBar from '../partials/Navbar';
 import axios, { AxiosResponse } from 'axios';
 import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
-import { fetch } from '../utils/fetch';
+// import { fetch } from '../utils/fetch';
+import { fetch } from 'fetch-opengraph';
+import Notebox from '../partials/Notebox';
 
 const Home = () => {
-  const [arr, setArr] = useState<string[]>([]);
-  const [note, onChangeNote] = useInput('');
+  const [note, onChangeNote, setNote] = useInput('');
   const [show, setShow] = useState(true);
   const [lastY, setLastY] = useState(0);
   const [top, setTop] = useState(true);
@@ -32,11 +34,9 @@ const Home = () => {
       .catch((err) => console.log(err));
   };
 
-  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const saveURL = (url: string) => {
     let body = {
-      url: note,
+      url,
       linkImg: '',
       title: '',
       text: '',
@@ -46,6 +46,7 @@ const Home = () => {
       .post('content/v1/link', body)
       .then((response) => {
         if (response.data.success) {
+          setNote('');
           getContents('');
         } else {
           let temp = {
@@ -55,16 +56,20 @@ const Home = () => {
             title: '',
           };
           setContents([temp, ...contents]);
-          console.log(response.data.message);
         }
         return response.data;
       })
       .catch((err) => console.log(err));
   };
 
-  const onTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(event.currentTarget.value);
-    onChangeNote(e.target.value);
+  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (note.startsWith('www.')) {
+      saveURL('https://' + note);
+    } else if (note.startsWith('https://')) {
+      saveURL(note);
+    }
   };
 
   const onScroll = (e: any) => {
@@ -92,9 +97,8 @@ const Home = () => {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p className="mt-12 font-medium">Vite + React + TypeScript + PWA</p>
       </header>
-      <div className="container1">
+      <AppContainer>
         {show && <NavBar getContents={getContents} />}
         <ol className="list" onScroll={onScroll}>
           {!top && <NavBar getContents={getContents} />}
@@ -112,36 +116,12 @@ const Home = () => {
             );
           })}
         </ol>
-        <form className="inputbox rounded-3xl" onSubmit={onSubmitHandler}>
-          <input
-            onChange={onTextHandler}
-            type="text"
-            className="
-        form-control
-        w-full
-        h-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:outline-none
-      "
-            placeholder="Input URL"
-            value={note}
-          />
-          <button
-            type="submit"
-            className="px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-          >
-            send
-          </button>
-        </form>
-      </div>
+        <Notebox
+          note={note}
+          onChangeNote={onChangeNote}
+          onSubmitHandler={onSubmitHandler}
+        ></Notebox>
+      </AppContainer>
     </div>
   );
 };
