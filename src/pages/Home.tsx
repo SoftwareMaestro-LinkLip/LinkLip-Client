@@ -2,15 +2,16 @@ import logo from '../images/logo.png';
 import '../css/style.scss';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { AppContainer, ContentsContainer } from '../css/Containers';
 import NavBar from '../partials/Navbar';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
-import { fetch } from '../utils/fetch';
+import Notebox from '../partials/Notebox';
+import { isLink, getShortLink, saveLink } from '../utils/link';
 
 const Home = () => {
-  const [arr, setArr] = useState<string[]>([]);
-  const [note, onChangeNote] = useInput('');
+  const [note, onChangeNote, setNote] = useInput('');
   const [show, setShow] = useState(true);
   const [lastY, setLastY] = useState(0);
   const [top, setTop] = useState(true);
@@ -18,7 +19,6 @@ const Home = () => {
 
   useEffect(() => {
     getContents('');
-    console.log('contents:', contents);
   }, []);
 
   const getContents = (term: string) => {
@@ -35,17 +35,10 @@ const Home = () => {
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    let body = {
-      url: note,
-      linkImg: '',
-      title: '',
-      text: '',
-    };
-
-    const request = axios
-      .post('content/v1/link', body)
-      .then((response) => {
-        if (response.data.success) {
+    if (isLink(note)) {
+      saveLink(note).then((res) => {
+        if (res) {
+          setNote('');
           getContents('');
         } else {
           let temp = {
@@ -53,18 +46,12 @@ const Home = () => {
             url: note,
             linkImg: '',
             title: '',
+            text: '',
           };
           setContents([temp, ...contents]);
-          console.log(response.data.message);
         }
-        return response.data;
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const onTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(event.currentTarget.value);
-    onChangeNote(e.target.value);
+      });
+    }
   };
 
   const onScroll = (e: any) => {
@@ -90,58 +77,39 @@ const Home = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className="mt-12 font-medium">Vite + React + TypeScript + PWA</p>
-      </header>
-      <div className="container1">
+      {contents.length === 0 && (
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+        </header>
+      )}
+
+      <AppContainer>
         {show && <NavBar getContents={getContents} />}
-        <ol className="list" onScroll={onScroll}>
-          {!top && <NavBar getContents={getContents} />}
+        <ContentsContainer onScroll={onScroll}>
+          {/* {!top && <NavBar getContents={getContents} />} */}
 
           {contents.map((item, idx) => {
             return (
-              <li
-                key={idx}
-                className="card rounded-md shadow-lg text-gray-700 text-base bg-white bg-opacity-50"
-              >
+              <div key={idx}>
                 <a href={item.url} target="_blank">
-                  {item.url}
+                  <img
+                    src={item.linkImg ? item.linkImg : logo}
+                    alt="thumbnail"
+                  />
+                  <p>{item.title}</p>
+                  <p>{item.text}</p>
+                  {getShortLink(item.url)}
                 </a>
-              </li>
+              </div>
             );
           })}
-        </ol>
-        <form className="inputbox rounded-3xl" onSubmit={onSubmitHandler}>
-          <input
-            onChange={onTextHandler}
-            type="text"
-            className="
-        form-control
-        w-full
-        h-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:outline-none
-      "
-            placeholder="Input URL"
-            value={note}
-          />
-          <button
-            type="submit"
-            className="px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-          >
-            send
-          </button>
-        </form>
-      </div>
+        </ContentsContainer>
+        <Notebox
+          note={note}
+          onChangeNote={onChangeNote}
+          onSubmitHandler={onSubmitHandler}
+        ></Notebox>
+      </AppContainer>
     </div>
   );
 };

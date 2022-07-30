@@ -3,6 +3,7 @@ export interface IContent {
   url: string;
   linkImg: string;
   title: string;
+  text: string;
 }
 
 interface IProps {
