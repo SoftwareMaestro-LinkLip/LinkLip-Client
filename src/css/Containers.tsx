@@ -108,7 +108,7 @@ export const ContentsContainer = styled.div`
   row-gap: 0.5rem;
   column-gap: 0.5rem;
 
-  align-items: stretch;
+  // align-items: stretch;
   // min-width: 80%;
   // z-index: 2;
   overflow: scroll;
@@ -125,6 +125,15 @@ export const ContentsContainer = styled.div`
     padding: 1rem 1rem;
     max-height: 10rem;
     min-heihgt: 15rem;
+
+    display: flex;
+    overflow: hidden;
+  }
+
+  & > div > a > img {
+    max-height: 6rem;
+    display: block;
+    margin: 0px auto;
   }
 `;
 

@@ -4,13 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContainer, ContentsContainer } from '../css/Containers';
 import NavBar from '../partials/Navbar';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
-// import { fetch } from '../utils/fetch';
-import { fetch } from 'fetch-opengraph';
 import Notebox from '../partials/Notebox';
-import { isLink, getFullLink, getShortLink } from '../utils/link';
+import { isLink, getShortLink, saveLink } from '../utils/link';
 
 const Home = () => {
   const [note, onChangeNote, setNote] = useInput('');
@@ -21,7 +19,6 @@ const Home = () => {
 
   useEffect(() => {
     getContents('');
-    console.log('contents:', contents);
   }, []);
 
   const getContents = (term: string) => {
@@ -35,19 +32,12 @@ const Home = () => {
       .catch((err) => console.log(err));
   };
 
-  const saveURL = (url: string) => {
-    url = getFullLink(url);
-    let body = {
-      url,
-      linkImg: '',
-      title: '',
-      text: '',
-    };
+  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    const request = axios
-      .post('content/v1/link', body)
-      .then((response) => {
-        if (response.data.success) {
+    if (isLink(note)) {
+      saveLink(note).then((res) => {
+        if (res) {
           setNote('');
           getContents('');
         } else {
@@ -56,19 +46,11 @@ const Home = () => {
             url: note,
             linkImg: '',
             title: '',
+            text: '',
           };
           setContents([temp, ...contents]);
         }
-        return response.data;
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (isLink(note)) {
-      saveURL(note);
+      });
     }
   };
 
@@ -104,16 +86,20 @@ const Home = () => {
       <AppContainer>
         {show && <NavBar getContents={getContents} />}
         <ContentsContainer onScroll={onScroll}>
-          {!top && <NavBar getContents={getContents} />}
+          {/* {!top && <NavBar getContents={getContents} />} */}
 
           {contents.map((item, idx) => {
             return (
               <div key={idx}>
-                <p>
-                  <a href={item.url} target="_blank">
-                    {getShortLink(item.url)}
-                  </a>
-                </p>
+                <a href={item.url} target="_blank">
+                  <img
+                    src={item.linkImg ? item.linkImg : logo}
+                    alt="thumbnail"
+                  />
+                  <p>{item.title}</p>
+                  <p>{item.text}</p>
+                  {getShortLink(item.url)}
+                </a>
               </div>
             );
           })}
