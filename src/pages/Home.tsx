@@ -9,7 +9,6 @@ import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import { isLink, getShortLink, saveLink } from '../utils/link';
-// import { SERVER_API } from '..'
 
 const Home = () => {
   const [note, onChangeNote, setNote] = useInput('');
@@ -24,7 +23,7 @@ const Home = () => {
 
   const getContents = (term: string) => {
     const request = axios
-      .get(`/content/v1/link?term=${term}`)
+      .get(`/content/v1/link?term=${term}&page=0&size=20`)
       .then((response) => {
         if (response.data.success) {
           setContents([...response.data.data.contents]);
