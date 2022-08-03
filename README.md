@@ -23,22 +23,10 @@ $ git clone https://github.com/SoftwareMaestro-LinkLip/LinkLip-Client.git
 $ yarn install
 ```
 
-or
-
-```bash
-$ npm install
-```
-
 ### Basic Usage
 - start server
 ```bash
 $ yarn dev
-```
-
-or
-
-```bash
-$ npm dev
 ```
 
 - Navigate to [http://localhost:3000](http://localhost:3000)
