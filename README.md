@@ -4,7 +4,7 @@
 
 ## Quick Start
 ### Prerequisites
-- Make sure your NodeJS and yarn (or npm) versions are up to date
+- Make sure your NodeJS and yarn versions are up to date
 
 
 ### Download
@@ -56,8 +56,10 @@ $ npm dev
 ### Prerequisites
 - Install editor `Visual Studio Code` or `WebStorm`
 - Install `ESLint`, `Prettier` extensions(plugins) in the editor.
+  - `ESLint`: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+  - `Prettier`: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 - Turn the `formatOnSave` option on.
-- Make sure your `NodeJS` and `yarn` (or `npm`) versions are up to date
+- Make sure your `NodeJS` and `yarn` versions are up to date
 
 ### Setting up Dev
 ```bash

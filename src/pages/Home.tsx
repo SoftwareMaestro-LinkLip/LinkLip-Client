@@ -9,6 +9,7 @@ import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import { isLink, getShortLink, saveLink } from '../utils/link';
+// import { SERVER_API } from '..'
 
 const Home = () => {
   const [note, onChangeNote, setNote] = useInput('');

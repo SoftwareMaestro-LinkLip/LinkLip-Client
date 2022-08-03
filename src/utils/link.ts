@@ -37,7 +37,9 @@ export const saveLink = async (url: string): Promise<any> => {
   console.log('body:', body);
   // ============
   return await axios
-    .post('content/v1/link', body)
+    .post('/content/v1/link', body, {
+      withCredentials: true,
+    })
     .then((response) => response.data.success)
     .catch((err) => {
       console.log(err);
@@ -55,42 +57,40 @@ export const getMetaData = async (url: string) => {
   }
 
   const html = response.data;
-  const title = html
-    .match(/<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim)[0]
-    .replace(/<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim, '$1');
+  const metas: any = html.match(/<meta[^>]+>/gim);
+  const res = { linkImg: '', title: '', text: '' };
 
-  const imgTags = html.match(/property="og:image"[^>]*>/gim);
-  let linkImg = imgTags
-    ? imgTags[0]
-        .replace(`property="og:image" content="`, '')
-        .replace(' ', '')
-        .replace(`">`, '')
-        .replace(`"/>`, '')
-    : '';
-  // let texts = html.match(/<p[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/p>/gim);
+  if (metas) {
+    const targets = ['og:image', 'og:title', 'og:description'];
 
-  // if (texts) {
-  //   texts = texts.map((text: string) => {
-  //     return text.replace(
-  //       /<p[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/p>/gim,
-  //       '$1',
-  //     );
-  //   });
-  // }
-  // console.log('text', texts ? texts.join(' ') : '');
-  const descs = html.match(/property="og:description"[^>]*>/gim);
-  const desc = descs
-    ? descs[0]
-        .replace(`property="og:description" content="`, '')
-        .replace(`/>`, '')
-    : '';
+    for (let meta of metas) {
+      meta = meta.replace(/\s*\/?>$/, ' />');
 
-  return {
-    url,
-    title: title || '',
-    linkImg: linkImg || '',
-    text: desc || '',
-  };
+      if (meta.includes('og:image')) {
+        const startIdx = meta.indexOf('content="') + 9;
+        const endIdx = meta.indexOf('"', startIdx + 9);
+        res.linkImg = meta.slice(startIdx, endIdx);
+      }
+
+      if (meta.includes('og:title')) {
+        const startIdx = meta.indexOf('content="') + 9;
+        const endIdx = meta.indexOf('"', startIdx + 9);
+        res.title = meta.slice(startIdx, endIdx);
+      }
+
+      if (meta.includes('og:description')) {
+        const startIdx = meta.indexOf('content="') + 9;
+        const endIdx = meta.indexOf('"', startIdx + 9);
+        res.text = meta.slice(startIdx, endIdx);
+      }
+    }
+  } else {
+    const title = html
+      .match(/<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim)[0]
+      .replace(/<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim, '$1');
+    res.title = title;
+  }
+  return res;
 };
 
 export default {
