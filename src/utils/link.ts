@@ -39,6 +39,7 @@ export const saveLink = async (url: string): Promise<any> => {
   return await axios
     .post('/content/v1/link', body, {
       withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
     })
     .then((response) => response.data.success)
     .catch((err) => {
@@ -58,7 +59,7 @@ export const getMetaData = async (url: string) => {
 
   const html = response.data;
   const metas: any = html.match(/<meta[^>]+>/gim);
-  const res = { linkImg: '', title: '', text: '' };
+  const res = { linkImg: '', title: '', text: '', url };
 
   if (metas) {
     const targets = ['og:image', 'og:title', 'og:description'];
@@ -69,7 +70,8 @@ export const getMetaData = async (url: string) => {
       if (meta.includes('og:image')) {
         const startIdx = meta.indexOf('content="') + 9;
         const endIdx = meta.indexOf('"', startIdx + 9);
-        res.linkImg = meta.slice(startIdx, endIdx);
+        let imgURL = meta.slice(startIdx, endIdx);
+        res.linkImg = isLink(imgURL) ? imgURL : '';
       }
 
       if (meta.includes('og:title')) {
@@ -90,6 +92,7 @@ export const getMetaData = async (url: string) => {
       .replace(/<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim, '$1');
     res.title = title;
   }
+
   return res;
 };
 
