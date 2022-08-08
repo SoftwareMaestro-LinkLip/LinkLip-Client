@@ -2,12 +2,13 @@ import logo from '../images/logo.png';
 import '../css/style.scss';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AppContainer, ContentsContainer } from '../css/Containers';
-import NavBar from '../partials/Navbar';
+import { DashboadContainer, ContentsContainer } from '../css/Containers';
+import Header from '../partials/Header';
 import axios from 'axios';
 import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
+import Sidebar from '../partials/Sidebar';
 import { isLink, getShortLink, saveLink } from '../utils/link';
 
 const Dashboard = () => {
@@ -16,9 +17,11 @@ const Dashboard = () => {
   const [lastY, setLastY] = useState(0);
   const [top, setTop] = useState(true);
   const [contents, setContents] = useState<IContent[]>([]);
-  // const [term, onChangeTerm, setTerm] = useInput('');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
+    const htmlTitle = document.querySelector('title');
+    htmlTitle!.innerHTML = 'Linklip Dashboard';
     getContents('');
   }, []);
 
@@ -26,8 +29,6 @@ const Dashboard = () => {
     const request = axios
       .get(`/content/v1/link?term=${term}&pageNumber=0`)
       .then((response) => {
-        console.log('term:', term);
-        console.log('res: ', response.data.data.pageDto);
         if (response.data.success) {
           setContents([...response.data.data.pageDto.content]);
           // setTerm(term);
@@ -80,40 +81,52 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="App">
-      {contents.length === 0 && (
+    <div className="flex h-screen overflow-hidden">
+      {/* {contents.length === 0 && (
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
         </header>
-      )}
+      )} */}
 
-      <AppContainer>
-        {show && <NavBar getContents={getContents} />}
-        <ContentsContainer onScroll={onScroll}>
-          {/* {!top && <NavBar getContents={getContents} />} */}
-
-          {contents.map((item, idx) => {
-            return (
-              <div key={idx}>
-                <a href={item.url} target="_blank">
-                  <img
-                    src={item.linkImg ? item.linkImg : logo}
-                    alt="thumbnail"
-                  />
-                  <p>{item.title}</p>
-                  <p>{item.text}</p>
-                  {getShortLink(item.url)}
-                </a>
-              </div>
-            );
-          })}
-        </ContentsContainer>
+      {/* Side Bar */}
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      {/* Content area */}
+      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+        {/* Header */}
+        <Header
+          getContents={getContents}
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+        />
+        <main>
+          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+            <div className="grid grid-cols-4 gap-2">
+              {contents.map((item, idx) => {
+                return (
+                  <div key={idx}>
+                    <a href={item.url} target="_blank">
+                      <div className="max-h-28 overflow-y-hidden">
+                        <img
+                          className="min-w-full "
+                          src={item.linkImg ? item.linkImg : logo}
+                          alt="thumbnail"
+                        />
+                      </div>
+                      <p>{item.title}</p>
+                      <p>{item.text}</p>
+                    </a>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </main>
         <Notebox
           note={note}
           onChangeNote={onChangeNote}
           onSubmitHandler={onSubmitHandler}
         ></Notebox>
-      </AppContainer>
+      </div>
     </div>
   );
 };

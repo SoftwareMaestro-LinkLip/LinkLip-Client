@@ -1,19 +1,41 @@
 import styled from '@emotion/styled';
 
-export const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  // justify-content: space-between;
+export const DashboadContainer = styled.div`
+  @media (min-width: 300px) {
+    display: grid;
+    grid-template-columns: 20% 1fr;
+    grid-template-areas: 
+      'header header';
+      'sidebar contents';
+
+    & > header {
+      grid-area: header;
+    }
+
+    & > aside {
+      grid-area: sidebar;
+      // margin-top: 3rem;
+    }
+
+    & > div {
+      // margin-top: 3rem;
+      gird-area: contents;
+    }
+  }
+
+  display: grid;
   height: 100vh;
   width: 100%;
   // background-color: #282c34;
 `;
 
-export const SearchContainer = styled.div`
+export const HeaderContainer = styled.header`
   display: flex;
   text-align: center;
   z-index: 10;
   padding: 0.5rem;
+  // position: absolute;
+  width: 100%;
 
   & > form > input {
     border: 1px solid rgb(221, 221, 221);
@@ -21,7 +43,7 @@ export const SearchContainer = styled.div`
     // border-top-left-radius: 9999px;
     // border-bottom-left-radius: 9999px;
 
-    overflow: auto;
+    // overflow: auto;
     width: 12.5rem;
   }
 
@@ -40,10 +62,10 @@ export const SearchContainer = styled.div`
     left: 10rem;
     top: 1rem;
   }
+`;
 
-  // & > button:hover {
-  //   background-color: rgb(29 78 216);
-  // }
+export const SidebarContainer = styled.aside`
+  background-color: #282c34;
 `;
 
 export const CategoryContainer = styled.div`
@@ -51,6 +73,7 @@ export const CategoryContainer = styled.div`
   overflow: scroll;
   border: 1px solid rgb(221, 221, 221);
   padding-left: 0.625rem;
+  margin-top: 4rem;
 
   overflow-y: hidden;
   text-align: center;
@@ -101,9 +124,10 @@ export const CategoryContainer = styled.div`
 `;
 
 export const ContentsContainer = styled.div`
+  margin-top: 4rem;
   z-index: 5;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 15rem));
+  grid-template-columns: repeat(auto-fill, minmax(15rem, auto));
 
   row-gap: 0.5rem;
   column-gap: 0.5rem;
@@ -111,11 +135,11 @@ export const ContentsContainer = styled.div`
   // align-items: stretch;
   // min-width: 80%;
   // z-index: 2;
-  overflow: scroll;
+  // overflow: scroll;
   overflow-x: hidden;
-  padding: 0.5rem;
+  // padding: 0.5rem;
 
-  flex: 1 1 auto;
+  // flex: 1 1 auto;
 
   & > div {
     border-radius: 0.375rem;
@@ -132,13 +156,19 @@ export const ContentsContainer = styled.div`
 
   & > div > a > img {
     max-height: 6rem;
-    display: block;
-    margin: 0px auto;
+    // display: block;
+    // margin: 0px auto;
+    // padding-bottom: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    // background-size: cover;
   }
 `;
 
 export const NoteContainer = styled.div`
   z-index: 10;
+  position: absolute;
+  bottom: 1rem;
   display: flex;
   width: 100%;
   padding: 1rem 1rem;
