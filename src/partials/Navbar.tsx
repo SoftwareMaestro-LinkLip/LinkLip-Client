@@ -13,8 +13,10 @@ const NavBar: FunctionComponent<IProps> = ({ getContents }) => {
   const [selected, setSelected] = useState(0);
   const [term, onChangeTerm] = useInput('');
 
-  const onSubmitHandler = () => {
+  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     // axios.get(`/api/product/products_by_id?term=${term}&type=single`)
+    event.preventDefault();
+    console.log('term', term);
     getContents(term);
   };
 
@@ -45,7 +47,7 @@ const NavBar: FunctionComponent<IProps> = ({ getContents }) => {
   return (
     <div data-aos="slide-down">
       <SearchContainer>
-        <form>
+        <form onSubmit={onSubmitHandler}>
           <input
             type="search"
             className="form-control relative min-w-0 block px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
@@ -53,7 +55,7 @@ const NavBar: FunctionComponent<IProps> = ({ getContents }) => {
             aria-label="Search"
             onChange={onChangeHandler}
           />
-          <button type="submit" onClick={onSubmitHandler}>
+          <button type="submit">
             <svg
               aria-hidden="true"
               focusable="false"

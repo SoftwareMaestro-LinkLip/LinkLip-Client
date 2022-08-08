@@ -10,12 +10,13 @@ import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import { isLink, getShortLink, saveLink } from '../utils/link';
 
-const Home = () => {
+const Dashboard = () => {
   const [note, onChangeNote, setNote] = useInput('');
   const [show, setShow] = useState(true);
   const [lastY, setLastY] = useState(0);
   const [top, setTop] = useState(true);
   const [contents, setContents] = useState<IContent[]>([]);
+  // const [term, onChangeTerm, setTerm] = useInput('');
 
   useEffect(() => {
     getContents('');
@@ -23,10 +24,13 @@ const Home = () => {
 
   const getContents = (term: string) => {
     const request = axios
-      .get(`/content/v1/link?term=${term}&page=0&size=20`)
+      .get(`/content/v1/link?term=${term}&pageNumber=0`)
       .then((response) => {
+        console.log('term:', term);
+        console.log('res: ', response.data.data.pageDto);
         if (response.data.success) {
-          setContents([...response.data.data.contents]);
+          setContents([...response.data.data.pageDto.content]);
+          // setTerm(term);
         }
       })
       .catch((err) => console.log(err));
@@ -114,4 +118,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;
