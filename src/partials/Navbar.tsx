@@ -19,7 +19,7 @@ const NavBar: FunctionComponent<IProps> = ({ getContents }) => {
   };
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeTerm(e.target.value);
+    onChangeTerm(e);
   };
 
   const onClickHandler = (e: any, key: number) => {
