@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useCallback } from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useRef,
+  useEffect,
+} from 'react';
 import { ToolArea } from '../css/Conponents';
 import { NoteContainer } from '../css/Containers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +20,24 @@ const Notebox: FunctionComponent<IProps> = ({
   onChangeNote,
   note,
 }) => {
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (ref === null || ref.current === null) {
+      return;
+    }
+    // ref.current.style.height = '38px';
+    ref.current.style.height = ref.current.scrollHeight + 'px';
+  }, []);
+
+  const handleResizeHeight = useCallback(() => {
+    if (ref === null || ref.current === null) {
+      return;
+    }
+    ref.current.style.height = '38px';
+    ref.current.style.height = ref.current.scrollHeight + 'px';
+  }, []);
+
   const onKeyDown = useCallback(
     (e: any) => {
       if (e.key === 'Enter') {
@@ -35,6 +58,9 @@ const Notebox: FunctionComponent<IProps> = ({
           onKeyPress={onKeyDown}
           placeholder="Input URL"
           value={note}
+          rows={1}
+          ref={ref}
+          onInput={handleResizeHeight}
         ></textarea>
         <ToolArea>
           <button type="submit">

@@ -167,8 +167,8 @@ export const ContentsContainer = styled.div`
 
 export const NoteContainer = styled.div`
   z-index: 10;
-  position: absolute;
-  bottom: 1rem;
+  position: fixed;
+  bottom: 0;
   display: flex;
   width: 100%;
   padding: 1rem 1rem;
@@ -181,6 +181,7 @@ export const NoteContainer = styled.div`
     width: 100%;
     border-radius: 4px;
     border: 1px solid rgb(221, 221, 221);
+    background-color: rgb(221, 221, 221);
   }
 
   & > form > textarea {
@@ -192,5 +193,7 @@ export const NoteContainer = styled.div`
 
     outline: none;
     box-shadow: none;
+    overflow: hidden;
+    // margin: 0;
   }
 `;

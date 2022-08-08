@@ -21,10 +21,6 @@ const Header: FunctionComponent<IProps> = ({
     getContents(term);
   };
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeTerm(e);
-  };
-
   return (
     <header className="sticky top-0 bg-white border-b border-slate-200 z-30">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -53,7 +49,7 @@ const Header: FunctionComponent<IProps> = ({
               className="form-control relative min-w-0 block px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               placeholder="Search"
               aria-label="Search"
-              onChange={onChangeHandler}
+              onChange={onChangeTerm}
             />
             <button
               type="submit"

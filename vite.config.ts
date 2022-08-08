@@ -11,6 +11,7 @@ export default defineConfig({
     proxy: {
       // Using the proxy instance
       '/content': 'http://localhost:8080',
+      '/category': 'http://localhost:8080',
     },
   },
   plugins: [react()],
