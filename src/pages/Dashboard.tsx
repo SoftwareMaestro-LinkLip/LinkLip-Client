@@ -109,7 +109,7 @@ const Dashboard = () => {
       {/* Side Bar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       {/* Content area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="">
         {/* Header */}
         <Header
           getContents={getContents}
@@ -117,39 +117,38 @@ const Dashboard = () => {
           setSidebarOpen={setSidebarOpen}
         />
         <main>
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  gap-2">
-              {contents.map((item, idx) => {
-                return (
-                  <div className="flex justify-center" key={idx}>
-                    <div className="block p-6 rounded-lg shadow-lg bg-white max-h-40">
-                      <div className="h-2/3 overflow-y-hidden">
-                        <a href={item.url} target="_blank">
-                          <img
-                            className="w-full "
-                            src={item.linkImg ? item.linkImg : logo}
-                            alt="item.title"
-                          />
-                        </a>
-                      </div>
-                      <div className="h-1/3 overflow-hidden mt-4">
-                        <a href={item.url} target="_blank">
-                          <p>{item.title}</p>
-                          <p>{item.text}</p>
-                        </a>
-                      </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full">
+            {contents.map((item, idx) => {
+              return (
+                <div className="flex justify-center" key={idx}>
+                  <div className="block p-6 rounded-lg shadow-lg bg-white max-h-40">
+                    <div className="h-2/3 overflow-y-hidden">
+                      <a href={item.url} target="_blank">
+                        <img
+                          className="w-full "
+                          src={item.linkImg ? item.linkImg : logo}
+                          alt="item.title"
+                        />
+                      </a>
+                    </div>
+                    <div className="h-1/3 overflow-hidden mt-4">
+                      <a href={item.url} target="_blank">
+                        <p>{item.title}</p>
+                        <p>{item.text}</p>
+                      </a>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
+          <Notebox
+            note={note}
+            onChangeNote={onChangeNote}
+            onSubmitHandler={onSubmitHandler}
+            sidebarOpen={sidebarOpen}
+          ></Notebox>
         </main>
-        <Notebox
-          note={note}
-          onChangeNote={onChangeNote}
-          onSubmitHandler={onSubmitHandler}
-        ></Notebox>
       </div>
     </div>
   );

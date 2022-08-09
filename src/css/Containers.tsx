@@ -166,14 +166,14 @@ export const ContentsContainer = styled.div`
 `;
 
 export const NoteContainer = styled.div`
-  z-index: 10;
-  position: fixed;
-  bottom: 0;
+  // z-index: 10;
+  // position: fixed;
+  // bottom: 0;
   display: flex;
   width: 100%;
-  padding: 1rem 1rem;
-  padding-top: 0;
-  //   border-radius: 4px;
+  // padding: 1rem 1rem;
+  // padding-top: 0;
+  // border-radius: 4px;
 
   & > form {
     color: rgb(29, 28, 29);

@@ -13,13 +13,10 @@ interface IProps {
   onSubmitHandler: (e: any) => void;
   onChangeNote: (e: any) => void;
   note: string;
+  sidebarOpen: boolean;
 }
 
-const Notebox: FunctionComponent<IProps> = ({
-  onSubmitHandler,
-  onChangeNote,
-  note,
-}) => {
+const Notebox = (props: IProps) => {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -43,32 +40,39 @@ const Notebox: FunctionComponent<IProps> = ({
       if (e.key === 'Enter') {
         if (!e.shiftKey) {
           e.preventDefault();
-          onSubmitHandler(e);
+          props.onSubmitHandler(e);
         }
       }
     },
-    [onSubmitHandler],
+    [props.onSubmitHandler],
   );
 
   return (
-    <NoteContainer>
-      <form onSubmit={onSubmitHandler}>
-        <textarea
-          onChange={onChangeNote}
-          onKeyPress={onKeyDown}
-          placeholder="Input URL"
-          value={note}
-          rows={1}
-          ref={ref}
-          onInput={handleResizeHeight}
-        ></textarea>
-        <ToolArea>
-          <button type="submit">
-            <FontAwesomeIcon icon={faPaperPlane} />
-          </button>
-        </ToolArea>
-      </form>
-    </NoteContainer>
+    <div className="flex justify-center">
+      <div
+        className={`fixed bottom-0 w-full
+      } lg:w-9/12 p-2`}
+      >
+        <NoteContainer>
+          <form onSubmit={props.onSubmitHandler}>
+            <textarea
+              onChange={props.onChangeNote}
+              onKeyPress={onKeyDown}
+              placeholder="Input URL"
+              value={props.note}
+              rows={1}
+              ref={ref}
+              onInput={handleResizeHeight}
+            ></textarea>
+            <ToolArea>
+              <button type="submit">
+                <FontAwesomeIcon icon={faPaperPlane} />
+              </button>
+            </ToolArea>
+          </form>
+        </NoteContainer>
+      </div>
+    </div>
   );
 };
 

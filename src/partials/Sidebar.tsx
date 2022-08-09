@@ -10,6 +10,8 @@ import useOnClickOutside from '../hooks/useOnClickOutside';
 import { ICategory } from '../typings/types';
 import { SidebarContainer } from '../css/Containers';
 import AddCategoryButton from './AddCategoryButton';
+import EditCategoryButton from './EditCategoryButton';
+import EditCategoryInput from './EditCategoryInput';
 import axios from 'axios';
 
 interface IProps {
@@ -17,21 +19,19 @@ interface IProps {
   setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Sidebar: FunctionComponent<IProps> = ({
-  sidebarOpen,
-  setSidebarOpen,
-}) => {
+const Sidebar = (props: IProps) => {
   const ref = useRef(null);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selected, setSelected] = useState(0);
+  const [editCategoryId, setEditCategoryId] = useState(0);
 
   useOnClickOutside(
     ref,
     (event) => {
       // event.preventDefault();
-      setSidebarOpen(false);
+      props.setSidebarOpen(false);
     },
-    sidebarOpen,
+    props.sidebarOpen,
   );
 
   useEffect(() => {
@@ -84,7 +84,7 @@ const Sidebar: FunctionComponent<IProps> = ({
         ref={ref}
         id="sidebar"
         className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-64'
+          props.sidebarOpen ? 'translate-x-0' : '-translate-x-64'
         }`}
       >
         {/* Sidebar header */}
@@ -92,9 +92,9 @@ const Sidebar: FunctionComponent<IProps> = ({
           {/* Close button */}
           <button
             className="lg:hidden text-slate-500 hover:text-slate-400"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() => props.setSidebarOpen(!props.sidebarOpen)}
             aria-controls="sidebar"
-            aria-expanded={sidebarOpen}
+            aria-expanded={props.sidebarOpen}
           >
             <span className="sr-only">Close sidebar</span>
             <svg
@@ -108,7 +108,7 @@ const Sidebar: FunctionComponent<IProps> = ({
         </div>
         <nav className="space-y-8">
           <div className="flex justify-between">
-            <h3 className="text-lg uppercase text-slate-500 font-semibold pl-3">
+            <h3 className="text-lg uppercase text-slate-400 font-semibold pl-3">
               카테고리
             </h3>
             <AddCategoryButton
@@ -121,19 +121,38 @@ const Sidebar: FunctionComponent<IProps> = ({
             {categories.map((item) => {
               return (
                 <li
-                  className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 text-slate-200 text-xl ${
+                  className={`flex py-2 rounded-sm mb-0.5 last:mb-0 text-slate-200 text-xl ${
                     selected === item.id && 'bg-slate-900'
                   }`}
                   key={item.id}
                 >
-                  <button
-                    className="w-full text-left"
-                    onClick={() => {
-                      setSelected(item.id);
-                    }}
-                  >
-                    {item.name}
-                  </button>
+                  {!editCategoryId || editCategoryId !== item.id ? (
+                    <>
+                      <button
+                        className="w-full px-3 text-left overflow-hidden"
+                        onClick={() => {
+                          setSelected(item.id);
+                        }}
+                      >
+                        {item.name}
+                      </button>
+                      {item.id !== 0 ? (
+                        <EditCategoryButton
+                          setEditCategoryId={setEditCategoryId}
+                          categoryId={item.id}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  ) : (
+                    <EditCategoryInput
+                      editCategoryId={editCategoryId}
+                      editCategoryName={item.name}
+                      setEditCategoryId={setEditCategoryId}
+                      categoryId={item.id}
+                    />
+                  )}
                 </li>
               );
             })}
