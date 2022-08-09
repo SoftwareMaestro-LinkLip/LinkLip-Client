@@ -16,7 +16,7 @@ export default function useOnClickOutside<T extends HTMLElement = HTMLElement>(
     };
     if (status) {
       document.addEventListener('click', listener, true);
-      document.addEventListener('touchstart', listener);
+      document.addEventListener('touchstart', listener, { passive: false });
       return () => {
         document.removeEventListener('click', listener, true);
         document.removeEventListener('touchstart', listener);

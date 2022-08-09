@@ -23,7 +23,7 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
 }) => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [category, onChangeCategory] = useInput('');
+  const [name, onChangeName] = useInput('');
 
   useOnClickOutside(
     ref,
@@ -38,15 +38,15 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
       event.preventDefault();
       // =============
       // API 완성하면 연동하기
-      // addCategory(category);
+      // addCategory(name);
 
       // 임시로 로컬에서 카테고리 추가
-      const newCategory = { id: categories.length, name: category };
+      const newCategory = { id: categories.length, name: name };
       setCategories([...categories, newCategory]);
       setDropdownOpen(false);
       // =============
     },
-    [setCategories, setDropdownOpen, categories, category],
+    [setCategories, setDropdownOpen, categories, name],
   );
 
   const onDropHandler = useCallback(() => {
@@ -57,7 +57,7 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
     <div>
       {dropdownOpen ? (
         <button
-          className="flex justify-center items-center w-6 h-6 mr-2 rounded-lg bg-white border-slate-200 text-indigo-500 "
+          className="flex justify-center items-center w-6 h-6 mr-2 rounded-lg bg-white border-slate-200 text-slate-400"
           aria-haspopup="true"
           onClick={onDropHandler}
           aria-expanded={dropdownOpen}
@@ -72,7 +72,7 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
         </button>
       ) : (
         <button
-          className="flex justify-center items-center w-6 h-6 mr-2 rounded-lg bg-white border-slate-200 text-indigo-500 "
+          className="flex justify-center items-center w-6 h-6 mr-2 rounded-lg  border-slate-200 text-slate-400"
           aria-haspopup="true"
           onClick={onDropHandler}
           aria-expanded={dropdownOpen}
@@ -88,7 +88,6 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
           ref={ref}
           className="origin-top-right z-50 absolute right-5 w-4/5 bg-white border border-slate-200 p-2 rounded shadow-lg mt-1"
         >
-          <div></div>
           <form onSubmit={onSubmitHandler}>
             <label
               htmlFor="newCategory"
@@ -112,7 +111,7 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
       "
               id="newCategory"
               placeholder="카테고리 입력"
-              onChange={onChangeCategory}
+              onChange={onChangeName}
             />
             <button
               type="submit"

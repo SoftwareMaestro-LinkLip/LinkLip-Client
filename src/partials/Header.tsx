@@ -9,27 +9,23 @@ interface IProps {
   setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Header: FunctionComponent<IProps> = ({
-  getContents,
-  sidebarOpen,
-  setSidebarOpen,
-}) => {
+const Header = (props: IProps) => {
   const [term, onChangeTerm] = useInput('');
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    getContents(term);
+    props.getContents(term);
   };
 
   return (
-    <header className="sticky top-0 bg-white border-b border-slate-200 z-30">
-      <div className="px-4 sm:px-6 lg:px-8">
+    <header className="py-2 bg-white border-b border-slate-200 z-30">
+      <div className=" sm:px-6 lg:px-8">
         <div className="flex items-center">
           <button
-            className="text-slate-500 hover:text-slate-600 lg:hidden"
+            className="px-4 text-slate-500 hover:text-slate-400 lg:hidden "
             aria-controls="sidebar"
-            aria-expanded={sidebarOpen}
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-expanded={props.sidebarOpen}
+            onClick={() => props.setSidebarOpen(!props.sidebarOpen)}
           >
             <span className="sr-only">Open sidebar</span>
             <svg
@@ -53,7 +49,7 @@ const Header: FunctionComponent<IProps> = ({
             />
             <button
               type="submit"
-              className="w-8 h-8 flex items-center justify-center"
+              className="w-12 h-10 flex items-center justify-center"
             >
               <svg
                 aria-hidden="true"
