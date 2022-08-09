@@ -44,6 +44,17 @@ const Sidebar: FunctionComponent<IProps> = ({
     setCategories([total, ...arr]);
   }, []);
 
+  const getCategories = useCallback(() => {
+    const request = axios
+      .get(`/category/v1`)
+      .then((response) => {
+        if (response.data.success) {
+          setCategories([...response.data.data.category]);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const addCategory = useCallback(
     async (name: string) => {
       const body = {
@@ -54,13 +65,17 @@ const Sidebar: FunctionComponent<IProps> = ({
           withCredentials: true,
           headers: { 'Content-Type': 'application/json' },
         })
-        .then((response) => response.data.success)
+        .then((response) => {
+          if (response.data.success) {
+            getCategories();
+          }
+        })
         .catch((err) => {
           console.log(err);
           return false;
         });
     },
-    [categories, setCategories],
+    [categories, setCategories, getCategories],
   );
 
   return (
@@ -99,6 +114,7 @@ const Sidebar: FunctionComponent<IProps> = ({
             <AddCategoryButton
               categories={categories}
               setCategories={setCategories}
+              addCategory={addCategory}
             />
           </div>
           <ol>

@@ -13,11 +13,13 @@ import { ICategory } from '../typings/types';
 interface IProps {
   setCategories: Dispatch<React.SetStateAction<ICategory[]>>;
   categories: ICategory[];
+  addCategory: (name: string) => Promise<boolean | void>;
 }
 
 const AddCategoryButton: FunctionComponent<IProps> = ({
   setCategories,
   categories,
+  addCategory,
 }) => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -34,9 +36,15 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
   const onSubmitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      // =============
+      // API 완성하면 연동하기
+      // addCategory(category);
+
+      // 임시로 로컬에서 카테고리 추가
       const newCategory = { id: categories.length, name: category };
       setCategories([...categories, newCategory]);
       setDropdownOpen(false);
+      // =============
     },
     [setCategories, setDropdownOpen, categories, category],
   );
@@ -54,12 +62,13 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
           onClick={onDropHandler}
           aria-expanded={dropdownOpen}
         >
-          <svg
+          {/* <svg
             className={`w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 transform rotate-180`}
             viewBox="0 0 12 12"
           >
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-          </svg>
+          </svg> */}
+          ∆
         </button>
       ) : (
         <button
