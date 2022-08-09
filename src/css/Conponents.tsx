@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 
 export const ToolArea = styled.div`
   position: relative;
-  background: rgb(248, 248, 248);
-  height: 41px;
+  background: rgb(250, 250, 250);
+  height: 2rem;
   display: flex;
   border-top: 1px solid rgb(221, 221, 221);
   align-items: center;
@@ -15,7 +15,7 @@ export const ToolArea = styled.div`
     right: 5px;
     top: 5px;
     padding: 0.3rem 0.5rem;
-    color: rgb(28, 29, 28);
+    color: rgb(150, 150, 150);
   }
 `;
 export const EachMention = styled.button<{ focus: boolean }>`

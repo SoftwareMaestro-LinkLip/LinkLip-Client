@@ -1,22 +1,18 @@
 import axios, { AxiosResponse } from 'axios';
 
 export const isLink = (url: string): boolean => {
-  const prefixes = ['https://', 'http://', 'www.'];
-  const postfixes = ['.com', '.net', '.org', '.kr', '.io'];
+  const res = url.match(
+    /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g,
+  );
+  return !!res;
+};
 
-  for (let prefix of prefixes) {
-    if (url.startsWith(prefix)) {
-      return true;
-    }
-  }
+export const fetch = async (url: string): Promise<any> => {
+  const response: AxiosResponse<any> = await axios.get(
+    url.replace(/^([^?#]*).*/, '$1'),
+  );
 
-  for (let postfix of postfixes) {
-    if (url.includes(postfix)) {
-      return true;
-    }
-  }
-
-  return false;
+  return response.data;
 };
 
 export const getFullLink = (url: string): string => {
@@ -32,7 +28,7 @@ export const getShortLink = (url: string): string => {
 };
 
 export const saveLink = async (url: string): Promise<any> => {
-  let body = await getMetaData(getFullLink(url));
+  let body = await getMetaData(url);
   // ============
   console.log('body:', body);
   // ============
@@ -62,8 +58,6 @@ export const getMetaData = async (url: string) => {
   const res = { linkImg: '', title: '', text: '', url };
 
   if (metas) {
-    const targets = ['og:image', 'og:title', 'og:description'];
-
     for (let meta of metas) {
       meta = meta.replace(/\s*\/?>$/, ' />');
 
@@ -71,7 +65,19 @@ export const getMetaData = async (url: string) => {
         const startIdx = meta.indexOf('content="') + 9;
         const endIdx = meta.indexOf('"', startIdx + 9);
         let imgURL = meta.slice(startIdx, endIdx);
-        res.linkImg = isLink(imgURL) ? imgURL : '';
+
+        // if (!res.linkImg && isLink(imgURL)) {
+        //   fetch(imgURL).then((response) => {
+        //     if (response) {
+        //       console.log('response: ', res);
+        //       res.linkImg = imgURL;
+        //     }
+        //   });
+        // }
+        if (!res.linkImg && isLink(imgURL)) {
+          res.linkImg = imgURL;
+        }
+        // res.linkImg = isLink(imgURL) ? imgURL : '';
       }
 
       if (meta.includes('og:title')) {
@@ -84,6 +90,10 @@ export const getMetaData = async (url: string) => {
         const startIdx = meta.indexOf('content="') + 9;
         const endIdx = meta.indexOf('"', startIdx + 9);
         res.text = meta.slice(startIdx, endIdx);
+      }
+
+      if (!!res.linkImg && !!!!res.title && !!res.text) {
+        break;
       }
     }
   } else {

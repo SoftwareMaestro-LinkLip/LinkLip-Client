@@ -4,9 +4,13 @@ import React, {
   useRef,
   FunctionComponent,
   Dispatch,
+  useCallback,
 } from 'react';
+import useOnClickOutside from '../hooks/useOnClickOutside';
 import { ICategory } from '../typings/types';
 import { SidebarContainer } from '../css/Containers';
+import AddCategoryButton from './AddCategoryButton';
+import axios from 'axios';
 
 interface IProps {
   sidebarOpen: boolean;
@@ -17,74 +21,69 @@ const Sidebar: FunctionComponent<IProps> = ({
   sidebarOpen,
   setSidebarOpen,
 }) => {
-  const trigger = useRef(null);
-  const sidebar = useRef(null);
-  const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
-  const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
-  );
+  const ref = useRef(null);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selected, setSelected] = useState(0);
 
-  //   // close on click outside
-  //   useEffect(() => {
-  //     const clickHandler = ({ target }) => {
-  //       if (!sidebar.current || !trigger.current) return;
-  //       if (
-  //         !sidebarOpen ||
-  //         sidebar.current.contains(target) ||
-  //         trigger.current.contains(target)
-  //       ) {
-  //         return;
-  //       }
-  //       setSidebarOpen(false);
-  //     };
-  //     document.addEventListener('click', clickHandler);
-  //     return () => document.removeEventListener('click', clickHandler);
-  //   });
-
-  //   // close if the esc key is pressed
-  //   useEffect(() => {
-  //     const keyHandler = ({ keyCode }) => {
-  //       if (!sidebarOpen || keyCode !== 27) return;
-  //       setSidebarOpen(false);
-  //     };
-  //     document.addEventListener('keydown', keyHandler);
-  //     return () => document.removeEventListener('keydown', keyHandler);
-  //   });
-
-  //   useEffect(() => {
-  //     localStorage.setItem('sidebar-expanded', sidebarExpanded);
-  //     if (sidebarExpanded) {
-  //       document.querySelector('body')!.classList.add('sidebar-expanded');
-  //     } else {
-  //       document.querySelector('body')!.classList.remove('sidebar-expanded');
-  //     }
-  //   }, [sidebarExpanded]);
+  useOnClickOutside(
+    ref,
+    (event) => {
+      // event.preventDefault();
+      setSidebarOpen(false);
+    },
+    sidebarOpen,
+  );
 
   useEffect(() => {
     const total = { id: 0, name: '전체' };
-    setCategories([
-      total,
-      { id: 1, name: '음악' },
-      { id: 2, name: '게임' },
-      { id: 3, name: '공부' },
-    ]);
+
+    const arr = [];
+    for (let i = 1; i < 3; i++) {
+      arr.push({ id: i, name: 'test' });
+    }
+    setCategories([total, ...arr]);
   }, []);
+
+  const getCategories = useCallback(() => {
+    const request = axios
+      .get(`/category/v1`)
+      .then((response) => {
+        if (response.data.success) {
+          setCategories([...response.data.data.category]);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const addCategory = useCallback(
+    async (name: string) => {
+      const body = {
+        name,
+      };
+      return await axios
+        .post('/category/v1', body, {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then((response) => {
+          if (response.data.success) {
+            getCategories();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          return false;
+        });
+    },
+    [categories, setCategories, getCategories],
+  );
 
   return (
     <div>
-      {/* Sidebar backdrop (mobile only) */}
       <div
-        className={`fixed inset-0 bg-slate-900 bg-opacity-30 z-40 lg:hidden lg:z-auto transition-opacity duration-200 ${
-          sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        aria-hidden="true"
-      ></div>
-      <div
+        ref={ref}
         id="sidebar"
-        ref={sidebar}
-        className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-50 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
+        className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-64'
         }`}
       >
@@ -92,7 +91,6 @@ const Sidebar: FunctionComponent<IProps> = ({
         <div className="flex justify-between mb-10 pr-3 sm:px-2">
           {/* Close button */}
           <button
-            ref={trigger}
             className="lg:hidden text-slate-500 hover:text-slate-400"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             aria-controls="sidebar"
@@ -109,19 +107,33 @@ const Sidebar: FunctionComponent<IProps> = ({
           </button>
         </div>
         <nav className="space-y-8">
-          <h3 className="text-xs uppercase text-slate-500 font-semibold pl-3">
-            카테고리
-          </h3>
+          <div className="flex justify-between">
+            <h3 className="text-lg uppercase text-slate-500 font-semibold pl-3">
+              카테고리
+            </h3>
+            <AddCategoryButton
+              categories={categories}
+              setCategories={setCategories}
+              addCategory={addCategory}
+            />
+          </div>
           <ol>
             {categories.map((item) => {
               return (
                 <li
-                  className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 text-slate-200 ${
+                  className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 text-slate-200 text-xl ${
                     selected === item.id && 'bg-slate-900'
                   }`}
                   key={item.id}
                 >
-                  {item.name}
+                  <button
+                    className="w-full text-left"
+                    onClick={() => {
+                      setSelected(item.id);
+                    }}
+                  >
+                    {item.name}
+                  </button>
                 </li>
               );
             })}

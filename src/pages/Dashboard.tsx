@@ -9,7 +9,7 @@ import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
-import { isLink, getShortLink, saveLink } from '../utils/link';
+import { isLink, getShortLink, saveLink, fetch } from '../utils/link';
 
 const Dashboard = () => {
   const [note, onChangeNote, setNote] = useInput('');
@@ -40,20 +40,38 @@ const Dashboard = () => {
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    // if (isLink(note)) {
+    //   fetch(note).then((res) => {
+    //     if (res) {
+    //       const temp = note;
+    //       setNote('');
+    //       saveLink(note).then((res) => {
+    //         if (res) {
+    //           getContents('');
+    //         } else {
+    //           setNote(temp);
+    //         }
+    //       });
+    //     }
+    //   });
+    // }
+
     if (isLink(note)) {
+      const temp = note;
+      setNote('');
       saveLink(note).then((res) => {
         if (res) {
-          setNote('');
           getContents('');
         } else {
-          let temp = {
-            id: -1,
-            url: note,
-            linkImg: '',
-            title: '',
-            text: '',
-          };
-          setContents([temp, ...contents]);
+          // let temp = {
+          //   id: -1,
+          //   url: note,
+          //   linkImg: '',
+          //   title: '',
+          //   text: '',
+          // };
+          // setContents([temp, ...contents]);
+          setNote(temp);
         }
       });
     }
@@ -100,21 +118,27 @@ const Dashboard = () => {
         />
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  gap-2">
               {contents.map((item, idx) => {
                 return (
-                  <div key={idx}>
-                    <a href={item.url} target="_blank">
-                      <div className="max-h-28 overflow-y-hidden">
-                        <img
-                          className="min-w-full "
-                          src={item.linkImg ? item.linkImg : logo}
-                          alt="thumbnail"
-                        />
+                  <div className="flex justify-center" key={idx}>
+                    <div className="block p-6 rounded-lg shadow-lg bg-white max-h-40">
+                      <div className="h-2/3 overflow-y-hidden">
+                        <a href={item.url} target="_blank">
+                          <img
+                            className="w-full "
+                            src={item.linkImg ? item.linkImg : logo}
+                            alt="item.title"
+                          />
+                        </a>
                       </div>
-                      <p>{item.title}</p>
-                      <p>{item.text}</p>
-                    </a>
+                      <div className="h-1/3 overflow-hidden mt-4">
+                        <a href={item.url} target="_blank">
+                          <p>{item.title}</p>
+                          <p>{item.text}</p>
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 );
               })}
