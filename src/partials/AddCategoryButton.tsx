@@ -36,15 +36,8 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
   const onSubmitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      // =============
-      // API 완성하면 연동하기
-      // addCategory(name);
-
-      // 임시로 로컬에서 카테고리 추가
-      const newCategory = { id: categories.length, name: name };
-      setCategories([...categories, newCategory]);
+      addCategory(name);
       setDropdownOpen(false);
-      // =============
     },
     [setCategories, setDropdownOpen, categories, name],
   );

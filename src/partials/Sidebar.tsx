@@ -35,14 +35,15 @@ const Sidebar = (props: IProps) => {
   );
 
   useEffect(() => {
-    const total = { id: 0, name: '전체' };
+    // const total = { id: 0, name: '전체' };
 
-    const arr = [];
-    for (let i = 1; i < 3; i++) {
-      arr.push({ id: i, name: 'test' });
-    }
-    setCategories([total, ...arr]);
-  }, []);
+    // const arr = [];
+    // for (let i = 1; i < 3; i++) {
+    //   arr.push({ id: i, name: 'test' });
+    // }
+    // setCategories([total, ...arr]);
+    getCategories();
+  }, [categories]);
 
   const getCategories = useCallback(() => {
     const request = axios

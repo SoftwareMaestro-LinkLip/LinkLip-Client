@@ -18,7 +18,7 @@ const Header = (props: IProps) => {
   };
 
   return (
-    <header className="py-2 bg-white border-b border-slate-200 z-30">
+    <header className="w-full h-auto py-2 bg-white border-b border-slate-200 z-30">
       <div className=" sm:px-6 lg:px-8">
         <div className="flex items-center">
           <button
