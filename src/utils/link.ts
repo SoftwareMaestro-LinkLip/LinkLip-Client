@@ -1,10 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
 
 export const isLink = (url: string): boolean => {
-  const res = url.match(
-    /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g,
-  );
-  return !!res;
+  // const res = url.match(
+  //   /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g,
+  // );
+
+  const regExp =
+    /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+  return regExp.test(url);
 };
 
 export const fetch = async (url: string): Promise<any> => {
@@ -33,7 +36,7 @@ export const saveLink = async (url: string): Promise<any> => {
   console.log('body:', body);
   // ============
   return await axios
-    .post('/content/v1/link', body, {
+    .post(`${import.meta.env.VITE_API_URL}/content/v1/link`, body, {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },
     })
@@ -46,7 +49,7 @@ export const saveLink = async (url: string): Promise<any> => {
 
 export const getMetaData = async (url: string) => {
   const response: AxiosResponse<any> = await axios.get(
-    url.replace(/^([^?#]*).*/, '$1'),
+    getFullLink(url).replace(/^([^?#]*).*/, '$1'),
   );
 
   if (response.status >= 400) {
@@ -54,10 +57,11 @@ export const getMetaData = async (url: string) => {
   }
 
   const html = response.data;
+
   const metas: any = html.match(/<meta[^>]+>/gim);
   const res = { linkImg: '', title: '', text: '', url };
 
-  if (metas) {
+  if (!!metas) {
     for (let meta of metas) {
       meta = meta.replace(/\s*\/?>$/, ' />');
 
@@ -92,15 +96,22 @@ export const getMetaData = async (url: string) => {
         res.text = meta.slice(startIdx, endIdx);
       }
 
-      if (!!res.linkImg && !!!!res.title && !!res.text) {
+      if (!!res.linkImg && !!res.title && !!res.text) {
         break;
       }
     }
   } else {
-    const title = html
-      .match(/<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim)[0]
-      .replace(/<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim, '$1');
-    res.title = title;
+    let title = html.match(
+      /<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim,
+    );
+
+    if (!!title) {
+      title = title[0].replace(
+        /<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim,
+        '$1',
+      );
+    }
+    res.title = !!title ? title : '';
   }
 
   return res;

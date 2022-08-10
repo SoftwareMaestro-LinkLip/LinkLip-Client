@@ -33,6 +33,15 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
     dropdownOpen,
   );
 
+  useEffect(() => {
+    if (dropdownOpen) {
+      const htmlInput = document.querySelector('input');
+      if (htmlInput) {
+        htmlInput.focus();
+      }
+    }
+  }, [dropdownOpen]);
+
   const onSubmitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();

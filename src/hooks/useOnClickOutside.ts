@@ -3,7 +3,7 @@ import { RefObject, useEffect } from 'react';
 export default function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
   handler: (event: Event) => void,
-  status: boolean,
+  status: boolean = true,
 ) {
   useEffect(() => {
     const listener = (event: Event) => {
