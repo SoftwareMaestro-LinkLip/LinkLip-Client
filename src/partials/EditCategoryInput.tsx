@@ -19,13 +19,9 @@ const EditCategoryInput = (props: IProps) => {
   const ref = useRef(null);
   const [name, onChangeName] = useInput(props.editCategoryName);
 
-  useOnClickOutside(
-    ref,
-    (event) => {
-      props.setEditCategoryId(0);
-    },
-    true,
-  );
+  useOnClickOutside(ref, (event) => {
+    props.setEditCategoryId(0);
+  });
 
   useEffect(() => {
     const htmlInput = document.querySelector('input');

@@ -29,3 +29,6 @@ jobs:
 
       - name: Code style check
         run: yarn prettier -c .
+
+      # - name: Run unit tests
+      #   run: yarn test

@@ -51,7 +51,7 @@ const Notebox = (props: IProps) => {
     <div className="flex justify-center">
       <div
         className={`fixed bottom-0 w-full
-      } lg:w-9/12 lg:ml-64 p-2`}
+      } lg:w-9/12  p-2`}
       >
         <NoteContainer>
           <form onSubmit={props.onSubmitHandler}>
