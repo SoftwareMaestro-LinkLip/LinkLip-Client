@@ -1,10 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
 export const isLink = (url: string): boolean => {
-  // const res = url.match(
-  //   /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g,
-  // );
-
   const regExp =
     /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
   return regExp.test(url);
@@ -20,31 +16,15 @@ export const fetch = async (url: string): Promise<any> => {
 
 export const getFullLink = (url: string): string => {
   let res = url;
-  if (!url.startsWith('https://') || !url.startsWith('http://')) {
+  if (!url.startsWith('https://') && !url.startsWith('http://')) {
     res = 'https://' + res;
   }
   return res;
 };
 
 export const getShortLink = (url: string): string => {
-  return url.replace('https://', '');
-};
-
-export const saveLink = async (url: string): Promise<any> => {
-  let body = await getMetaData(url);
-  // ============
-  console.log('body:', body);
-  // ============
-  return await axios
-    .post(`${import.meta.env.VITE_API_URL}/content/v1/link`, body, {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
-    })
-    .then((response) => response.data.success)
-    .catch((err) => {
-      console.log(err);
-      return false;
-    });
+  // (https?:\/\/)?(www\.)?
+  return url.replace(/(https?:\/\/)?(www\.)?/g, '');
 };
 
 export const getMetaData = async (url: string) => {
@@ -121,5 +101,4 @@ export default {
   isLink,
   getFullLink,
   getShortLink,
-  saveLink,
 };
