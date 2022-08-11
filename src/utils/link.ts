@@ -20,7 +20,7 @@ export const fetch = async (url: string): Promise<any> => {
 
 export const getFullLink = (url: string): string => {
   let res = url;
-  if (!url.startsWith('https://') || !url.startsWith('https://')) {
+  if (!url.startsWith('https://') || !url.startsWith('http://')) {
     res = 'https://' + res;
   }
   return res;
