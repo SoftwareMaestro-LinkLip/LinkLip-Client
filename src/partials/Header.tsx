@@ -1,28 +1,29 @@
 import { Dispatch, FunctionComponent, useState, useEffect } from 'react';
 import '../css/reset.css';
 import { HeaderContainer } from '../css/Containers';
-import useInput from '../hooks/useInput';
 
 interface IProps {
-  getContents: (term: string) => void;
+  getContents: () => void;
   sidebarOpen: boolean;
   setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
+  setPage: Dispatch<React.SetStateAction<number>>;
+  term: string;
+  onChangeTerm: (e: any) => void;
 }
 
 const Header = (props: IProps) => {
-  const [term, onChangeTerm] = useInput('');
-
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    props.getContents(term);
+    props.getContents();
+    props.setPage(0);
   };
 
   return (
-    <header className="fixed top-0 py-2 bg-white border-b border-slate-200 z-30">
-      <div className=" sm:px-6 lg:px-8">
+    <header className="fixed top-0 py-2 bg-white border-b border-slate-200 z-30 w-full">
+      <div className="w-full">
         <div className="flex items-center">
           <button
-            className="px-4 text-slate-500 hover:text-slate-400 lg:hidden "
+            className="px-4 text-slate-400 hover:text-slate-400 lg:hidden "
             aria-controls="sidebar"
             aria-expanded={props.sidebarOpen}
             onClick={() => props.setSidebarOpen(!props.sidebarOpen)}
@@ -39,17 +40,19 @@ const Header = (props: IProps) => {
             </svg>
           </button>
           {/* Search */}
-          <form onSubmit={onSubmitHandler} className="flex">
+          <form onSubmit={onSubmitHandler} className="flex w-full">
             <input
               type="search"
-              className="form-control relative min-w-0 block px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              className="form-control w-full
+              lg:w-9/12 lg:ml-8 p-2 relative block px-3 py-1.5 text-base font-normal text-gray-700 bg-white  border border-solid border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               placeholder="Search"
               aria-label="Search"
-              onChange={onChangeTerm}
+              onChange={props.onChangeTerm}
+              value={props.term}
             />
             <button
               type="submit"
-              className="w-12 h-10 flex items-center justify-center"
+              className="w-12 h-10 flex items-center justify-center mr-10"
             >
               <svg
                 aria-hidden="true"
