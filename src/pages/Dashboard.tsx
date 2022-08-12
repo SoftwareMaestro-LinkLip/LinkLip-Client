@@ -9,7 +9,7 @@ import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
-import { isLink, getShortLink, saveLink, fetch } from '../utils/link';
+import { isLink, getShortLink, getMetaData } from '../utils/link';
 import apiServer from '../utils/api';
 
 const Dashboard = () => {
@@ -57,39 +57,24 @@ const Dashboard = () => {
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // if (isLink(note)) {
-    //   fetch(note).then((res) => {
-    //     if (res) {
-    //       const temp = note;
-    //       setNote('');
-    //       saveLink(note).then((res) => {
-    //         if (res) {
-    //           getContents('');
-    //         } else {
-    //           setNote(temp);
-    //         }
-    //       });
-    //     }
-    //   });
-    // }
-
     if (isLink(note)) {
-      const temp = note;
-      setNote('');
-      saveLink(note).then((res) => {
-        if (res) {
-          getContents('');
-        } else {
-          // let temp = {
-          //   id: -1,
-          //   url: note,
-          //   linkImg: '',
-          //   title: '',
-          //   text: '',
-          // };
-          // setContents([temp, ...contents]);
-          setNote(temp);
-        }
+      getMetaData(note).then((body) => {
+        // ============
+        console.log('body:', body);
+        // ============
+        axios
+          .post(`${import.meta.env.VITE_API_URL}/content/v1/link`, body, {
+            withCredentials: true,
+            headers: { 'Content-Type': 'application/json' },
+          })
+          .then((response) => {
+            setNote('');
+            getContents('');
+          })
+          .catch((err) => {
+            console.log(err);
+            return false;
+          });
       });
     }
   };

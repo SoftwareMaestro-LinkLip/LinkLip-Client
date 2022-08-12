@@ -27,6 +27,12 @@ export const getShortLink = (url: string): string => {
   return url.replace(/(https?:\/\/)?(www\.)?/g, '');
 };
 
+const stringToHTML = function (str: string) {
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, 'text/html');
+  return doc.body;
+};
+
 export const getMetaData = async (url: string) => {
   const response: AxiosResponse<any> = await axios.get(
     getFullLink(url).replace(/^([^?#]*).*/, '$1'),
@@ -36,62 +42,44 @@ export const getMetaData = async (url: string) => {
     throw response;
   }
 
+  const res = { linkImg: '', title: '', text: '', url };
   const html = response.data;
 
-  const metas: any = html.match(/<meta[^>]+>/gim);
-  const res = { linkImg: '', title: '', text: '', url };
+  // res.text = html
+  //   // .replaceAll(/<script[^>]*>[^<\/script>]*.*<\/script>/gim, '')
+  //   // .replaceAll(/<script[^>]*>(\r?\n|\r)*.*<\/script>/gim, '')
+  //   // .replaceAll(/<script[^>]*>(\r?\n|\r)*.*<\/script>/gim, '')
+  //   .replaceAll(/<script[^>]*>(\r?\n|\r|.)*<\/script>/gim, '')
+  //   .replaceAll(/<[^>]*>/gim, '')
+  //   .replaceAll(/(  +)|(\r)|(\n)|(\t)|(\\+r)|(\\+n)|(\\+t)|/gim, '');
 
-  if (!!metas) {
-    for (let meta of metas) {
-      meta = meta.replace(/\s*\/?>$/, ' />');
+  res.text = stringToHTML(html).innerText.replaceAll(
+    /(  +)|(\r)|(\n)|(\t)|(\\+r)|(\\+n)|(\\+t)|/gim,
+    '',
+  );
 
-      if (meta.includes('og:image')) {
-        const startIdx = meta.indexOf('content="') + 9;
-        const endIdx = meta.indexOf('"', startIdx + 9);
-        let imgURL = meta.slice(startIdx, endIdx);
+  const linkImgTags = html.match(/<meta[^>]+og:image[^>]+>/gim);
 
-        // if (!res.linkImg && isLink(imgURL)) {
-        //   fetch(imgURL).then((response) => {
-        //     if (response) {
-        //       console.log('response: ', res);
-        //       res.linkImg = imgURL;
-        //     }
-        //   });
-        // }
-        if (!res.linkImg && isLink(imgURL)) {
-          res.linkImg = imgURL;
-        }
-        // res.linkImg = isLink(imgURL) ? imgURL : '';
-      }
-
-      if (meta.includes('og:title')) {
-        const startIdx = meta.indexOf('content="') + 9;
-        const endIdx = meta.indexOf('"', startIdx + 9);
-        res.title = meta.slice(startIdx, endIdx);
-      }
-
-      if (meta.includes('og:description')) {
-        const startIdx = meta.indexOf('content="') + 9;
-        const endIdx = meta.indexOf('"', startIdx + 9);
-        res.text = meta.slice(startIdx, endIdx);
-      }
-
-      if (!!res.linkImg && !!res.title && !!res.text) {
-        break;
-      }
-    }
-  } else {
-    let title = html.match(
-      /<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim,
+  if (!!linkImgTags.length) {
+    // res.linkImg = linkImgTags[0].replace(/<meta[^content="]+content="/gim, '').replace(/"[^>]>/gim, '');
+    const imgURLs = linkImgTags[0].match(
+      /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g,
     );
 
-    if (!!title) {
-      title = title[0].replace(
-        /<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim,
-        '$1',
-      );
+    if (!!imgURLs) {
+      res.linkImg = imgURLs[0];
     }
-    res.title = !!title ? title : '';
+  }
+
+  const titles = html.match(
+    /<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim,
+  );
+
+  if (!!titles) {
+    res.title = titles[0].replace(
+      /<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim,
+      '$1',
+    );
   }
 
   return res;
