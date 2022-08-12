@@ -1,82 +1,73 @@
 import logo from '../images/logo.png';
 import '../css/style.scss';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { DashboadContainer, ContentsContainer } from '../css/Containers';
 import Header from '../partials/Header';
 import axios from 'axios';
-import useInput from '../hooks/useInput';
 import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
 import { isLink, getShortLink, getMetaData } from '../utils/link';
 import apiServer from '../utils/api';
+import useInput from '../hooks/useInput';
 
 const Dashboard = () => {
-  const [note, onChangeNote, setNote] = useInput('');
   const [show, setShow] = useState(true);
   const [lastY, setLastY] = useState(0);
   const [top, setTop] = useState(true);
+  const [bottom, setBottom] = useState(false);
   const [contents, setContents] = useState<IContent[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [page, setPage] = useState(0);
+  const contentsSize = 12;
+  const [term, onChangeTerm] = useInput('');
 
   useEffect(() => {
     // console.log('api url', import.meta.env.VITE_API_URL);
 
     const htmlTitle = document.querySelector('title');
     htmlTitle!.innerHTML = 'Linklip Dashboard';
-    getContents('');
+
+    getContents();
   }, []);
 
-  const getContents = (term: string) => {
-    // const request = apiServer
-    //   .get('/content/v1/link?term=${term}&pageNumber=0')
-    //   .then((response) => {
-    //     if (response.data.success) {
-    //       setContents([...response.data.data.pageDto.content]);
-    //       // setTerm(term);
-    //     }
-    //   })
-    //   .catch((err) => console.log(err));
+  useEffect(() => {
+    if (bottom) {
+      getContents();
+      setBottom(false);
+    }
+  }, [bottom]);
+
+  const getContents = () => {
+    if (page < 0) {
+      return;
+    }
 
     const request = axios
       .get(
         `${
           import.meta.env.VITE_API_URL
-        }/content/v1/link?term=${term}&pageNumber=0`,
+        }/content/v1/link?term=${term}&page=${page}&size=${contentsSize}`,
       )
       .then((response) => {
         if (response.data.success) {
-          setContents([...response.data.data.pageDto.content]);
-          // setTerm(term);
+          // setContents([...response.data.data.pageDto.content]);
+          console.log('==== page', page, '=======');
+          console.log(response.data.data.pageDto.content);
+          if (page > 0) {
+            setContents([...contents, ...response.data.data.pageDto.content]);
+          } else {
+            setContents([...response.data.data.pageDto.content]);
+          }
+          if (response.data.data.pageDto.content.length === contentsSize) {
+            setPage(page + 1);
+          } else {
+            setPage(-1);
+          }
         }
       })
       .catch((err) => console.log(err));
-  };
-
-  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (isLink(note)) {
-      getMetaData(note).then((body) => {
-        // ============
-        console.log('body:', body);
-        // ============
-        axios
-          .post(`${import.meta.env.VITE_API_URL}/content/v1/link`, body, {
-            withCredentials: true,
-            headers: { 'Content-Type': 'application/json' },
-          })
-          .then((response) => {
-            setNote('');
-            getContents('');
-          })
-          .catch((err) => {
-            console.log(err);
-            return false;
-          });
-      });
-    }
   };
 
   const onScroll = (e: any) => {
@@ -84,20 +75,28 @@ const Dashboard = () => {
     // console.log('scroll detected!');
 
     const { scrollHeight, scrollTop, clientHeight } = e.target;
-    const scroll = scrollHeight - scrollTop - clientHeight;
+    let scroll = scrollHeight - scrollTop - clientHeight;
 
-    if (scrollTop === 0) {
-      setTop(true);
-    } else {
-      setTop(false);
+    if (scroll < 10) {
+      setBottom(true);
     }
 
-    if (lastY < scroll) {
-      setShow(true);
-    } else if (lastY > scroll) {
-      setShow(false);
-    }
-    setLastY(scroll);
+    // console.log('scroll:', scroll);
+    // console.log('scrollTop:', scrollTop);
+    // console.log('scrollHeight:', scrollHeight);
+    // console.log('clientHeight:', clientHeight);
+    // if (scrollTop === 0) {
+    //   setTop(true);
+    // } else {
+    //   setTop(false);
+    // }
+
+    // if (lastY < scroll) {
+    //   setShow(true);
+    // } else if (lastY > scroll) {
+    //   setShow(false);
+    // }
+    // setLastY(scroll);
   };
 
   return (
@@ -117,29 +116,46 @@ const Dashboard = () => {
           getContents={getContents}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
+          setPage={setPage}
+          onChangeTerm={onChangeTerm}
+          term={term}
         />
 
-        <main className="mt-10">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full mb-36">
+        <main onScroll={onScroll} className="mt-10 h-screen overflow-scroll">
+          <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full mb-36 ">
             {contents.map((item, idx) => {
               return (
-                <div className="flex justify-center" key={idx}>
-                  <div className="block p-6 rounded-lg shadow-lg bg-white max-h-40">
-                    <div className="h-2/3 overflow-y-hidden">
-                      <a href={item.url} target="_blank">
-                        <img
-                          className="w-full "
-                          src={item.linkImg ? item.linkImg : logo}
-                          alt="item.title"
-                        />
-                      </a>
-                    </div>
-                    <div className="h-1/3 overflow-hidden mt-4">
-                      <a href={item.url} target="_blank">
-                        <p>{item.title}</p>
-                        <p>{item.text}</p>
-                      </a>
-                    </div>
+                <div
+                  className="flex overflow-hidden rounded-lg shadow-lg bg-white h-52 w-full"
+                  key={idx}
+                >
+                  <div className="flex flex-col w-full">
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      className=" flex justify-center w-full h-2/3 overflow-hidden"
+                    >
+                      <img
+                        className=" block my-0 mx-auto w-full object-cover"
+                        src={item.linkImg ? item.linkImg : logo}
+                        alt="item.title"
+                      />
+                    </a>
+
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      className=" mx-2 mt-2 break-all h-8 overflow-hidden text-ellipsis"
+                    >
+                      {item.title}
+                    </a>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      className="text-slate-400 mx-2 my-2 break-all h-4 overflow-hidden"
+                    >
+                      {getShortLink(item.url)}
+                    </a>
                   </div>
                 </div>
               );
@@ -147,9 +163,8 @@ const Dashboard = () => {
           </div>
         </main>
         <Notebox
-          note={note}
-          onChangeNote={onChangeNote}
-          onSubmitHandler={onSubmitHandler}
+          setPage={setPage}
+          getContents={getContents}
           sidebarOpen={sidebarOpen}
         ></Notebox>
       </div>
