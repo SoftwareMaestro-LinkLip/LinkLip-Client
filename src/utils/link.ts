@@ -48,9 +48,11 @@ export const getMetaData = async (url: string) => {
   // res.text = html
   //   // .replaceAll(/<script[^>]*>[^<\/script>]*.*<\/script>/gim, '')
   //   // .replaceAll(/<script[^>]*>(\r?\n|\r)*.*<\/script>/gim, '')
-  //   .replaceAll(/<script[^>]*>(\r?\n|\r)*.*<\/script>/gim, '')
+  //   // .replaceAll(/<script[^>]*>(\r?\n|\r)*.*<\/script>/gim, '')
+  //   .replaceAll(/<script[^>]*>(\r?\n|\r|.)*<\/script>/gim, '')
   //   .replaceAll(/<[^>]*>/gim, '')
   //   .replaceAll(/(  +)|(\r)|(\n)|(\t)|(\\+r)|(\\+n)|(\\+t)|/gim, '');
+
   res.text = stringToHTML(html).innerText.replaceAll(
     /(  +)|(\r)|(\n)|(\t)|(\\+r)|(\\+n)|(\\+t)|/gim,
     '',
