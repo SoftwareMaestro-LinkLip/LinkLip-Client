@@ -9,15 +9,15 @@ import useOnClickOutside from '../hooks/useOnClickOutside';
 import useInput from '../hooks/useInput';
 
 interface IProps {
-  editCategoryId: number;
-  editCategoryName: string;
-  setEditCategoryId: Dispatch<React.SetStateAction<number>>;
   categoryId: number;
+  categoryName: string;
+  setEditCategoryId: Dispatch<React.SetStateAction<number>>;
+  editCategory: (id: number, name: string) => Promise<boolean | void>;
 }
 
 const EditCategoryInput = (props: IProps) => {
   const ref = useRef(null);
-  const [name, onChangeName] = useInput(props.editCategoryName);
+  const [name, onChangeName] = useInput(props.categoryName);
 
   useOnClickOutside(ref, (event) => {
     props.setEditCategoryId(0);
@@ -30,8 +30,17 @@ const EditCategoryInput = (props: IProps) => {
     }
   }, []);
 
+  const onSubmitHandler = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      props.editCategory(props.categoryId, name);
+      props.setEditCategoryId(0);
+    },
+    [name],
+  );
+
   return (
-    <form ref={ref}>
+    <form ref={ref} onSubmit={onSubmitHandler}>
       <div className="flex justify-between w-full">
         <input
           className="w-full outline-none border-b-2 border-slate-400 bg-transparent px-3 py-1.5 text-xl"
