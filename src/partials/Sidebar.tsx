@@ -35,13 +35,6 @@ const Sidebar = (props: IProps) => {
   );
 
   useEffect(() => {
-    // const total = { id: 0, name: '전체' };
-
-    // const arr = [];
-    // for (let i = 1; i < 3; i++) {
-    //   arr.push({ id: i, name: 'test' });
-    // }
-    // setCategories([total, ...arr]);
     getCategories();
   }, []);
 
@@ -50,7 +43,8 @@ const Sidebar = (props: IProps) => {
       .get(`${import.meta.env.VITE_API_URL}/category/v1`)
       .then((response) => {
         if (response.data.success) {
-          setCategories([...response.data.data.category]);
+          const total = { id: 0, name: '전체' };
+          setCategories([total, ...response.data.data.category]);
         }
       })
       .catch((err) => console.log(err));
@@ -63,6 +57,29 @@ const Sidebar = (props: IProps) => {
       };
       return await axios
         .post(`${import.meta.env.VITE_API_URL}/category/v1`, body, {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then((response) => {
+          if (response.data.success) {
+            getCategories();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          return false;
+        });
+    },
+    [categories, setCategories, getCategories],
+  );
+
+  const editCategory = useCallback(
+    async (id: number, name: string) => {
+      const body = {
+        name,
+      };
+      return await axios
+        .patch(`${import.meta.env.VITE_API_URL}/category/v1/${id}`, body, {
           withCredentials: true,
           headers: { 'Content-Type': 'application/json' },
         })
@@ -147,10 +164,10 @@ const Sidebar = (props: IProps) => {
                   </>
                 ) : (
                   <EditCategoryInput
-                    editCategoryId={editCategoryId}
-                    editCategoryName={item.name}
+                    categoryName={item.name}
                     setEditCategoryId={setEditCategoryId}
                     categoryId={item.id}
+                    editCategory={editCategory}
                   />
                 )}
               </li>
