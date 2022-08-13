@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-export const isLink = (url: string): boolean => {
+export const isURL = (url: string): boolean => {
   const regExp =
     /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
   return regExp.test(url);
@@ -14,7 +14,7 @@ export const fetch = async (url: string): Promise<any> => {
   return response.data;
 };
 
-export const getFullLink = (url: string): string => {
+export const getFullURL = (url: string): string => {
   let res = url;
   if (!url.startsWith('https://') && !url.startsWith('http://')) {
     res = 'https://' + res;
@@ -22,7 +22,7 @@ export const getFullLink = (url: string): string => {
   return res;
 };
 
-export const getShortLink = (url: string): string => {
+export const getShortURL = (url: string): string => {
   // (https?:\/\/)?(www\.)?
   return url.replace(/(https?:\/\/)?(www\.)?/g, '');
 };
@@ -35,14 +35,14 @@ const stringToHTML = function (str: string) {
 
 export const getMetaData = async (url: string) => {
   const response: AxiosResponse<any> = await axios.get(
-    getFullLink(url).replace(/^([^?#]*).*/, '$1'),
+    getFullURL(url).replace(/^([^?#]*).*/, '$1'),
   );
 
   if (response.status >= 400) {
     throw response;
   }
 
-  const res = { linkImg: '', title: '', text: '', url };
+  const res = { linkImg: '', title: '', text: '', url: getFullURL(url) };
   const html = response.data;
 
   // res.text = html
@@ -60,14 +60,12 @@ export const getMetaData = async (url: string) => {
 
   const linkImgTags = html.match(/<meta[^>]+og:image[^>]+>/gim);
 
-  if (!!linkImgTags.length) {
+  if (!!linkImgTags && !!linkImgTags.length) {
     // res.linkImg = linkImgTags[0].replace(/<meta[^content="]+content="/gim, '').replace(/"[^>]>/gim, '');
-    const imgURLs = linkImgTags[0].match(
-      /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g,
-    );
+    const imgURLs = linkImgTags[0].match(/(https?:\/\/)[^("|')]+("|')/g);
 
     if (!!imgURLs) {
-      res.linkImg = imgURLs[0];
+      res.linkImg = imgURLs[0].slice(0, -1);
     }
   }
 
@@ -86,7 +84,7 @@ export const getMetaData = async (url: string) => {
 };
 
 export default {
-  isLink,
-  getFullLink,
-  getShortLink,
+  isLink: isURL,
+  getFullLink: getFullURL,
+  getShortLink: getShortURL,
 };

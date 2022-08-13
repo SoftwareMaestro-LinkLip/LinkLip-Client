@@ -2,17 +2,20 @@ import { RefObject, useEffect } from 'react';
 
 export default function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
-  handler: (event: Event) => void,
+  handler: () => void,
   status: boolean = true,
+  stopOpt: boolean = true,
 ) {
   useEffect(() => {
     const listener = (event: Event) => {
       if (!ref.current || ref.current.contains(event.target as Node)) {
         return;
       }
-      event.preventDefault();
-      event.stopPropagation();
-      handler(event);
+      if (stopOpt) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      handler();
     };
     if (status) {
       document.addEventListener('click', listener, true);
