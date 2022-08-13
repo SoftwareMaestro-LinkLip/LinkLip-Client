@@ -6,14 +6,6 @@ export const isURL = (url: string): boolean => {
   return regExp.test(url);
 };
 
-export const fetch = async (url: string): Promise<any> => {
-  const response: AxiosResponse<any> = await axios.get(
-    url.replace(/^([^?#]*).*/, '$1'),
-  );
-
-  return response.data;
-};
-
 export const getFullURL = (url: string): string => {
   let res = url;
   if (!url.startsWith('https://') && !url.startsWith('http://')) {
@@ -27,64 +19,25 @@ export const getShortURL = (url: string): string => {
   return url.replace(/(https?:\/\/)?(www\.)?/g, '');
 };
 
-const stringToHTML = function (str: string) {
-  var parser = new DOMParser();
-  var doc = parser.parseFromString(str, 'text/html');
-  return doc.body;
-};
-
-export const getMetaData = async (url: string) => {
+export const parse = async (url: string): Promise<any> => {
   const response: AxiosResponse<any> = await axios.get(
-    getFullURL(url).replace(/^([^?#]*).*/, '$1'),
+    `${import.meta.env.VITE_API_PARSER}/link/v1?url=${getFullURL(url).replace(
+      /^([^?#]*).*/,
+      '$1',
+    )}`,
   );
 
   if (response.status >= 400) {
     throw response;
   }
 
-  const res = { linkImg: '', title: '', text: '', url: getFullURL(url) };
-  const html = response.data;
-
-  // res.text = html
-  //   // .replaceAll(/<script[^>]*>[^<\/script>]*.*<\/script>/gim, '')
-  //   // .replaceAll(/<script[^>]*>(\r?\n|\r)*.*<\/script>/gim, '')
-  //   // .replaceAll(/<script[^>]*>(\r?\n|\r)*.*<\/script>/gim, '')
-  //   .replaceAll(/<script[^>]*>(\r?\n|\r|.)*<\/script>/gim, '')
-  //   .replaceAll(/<[^>]*>/gim, '')
-  //   .replaceAll(/(  +)|(\r)|(\n)|(\t)|(\\+r)|(\\+n)|(\\+t)|/gim, '');
-
-  res.text = stringToHTML(html).innerText.replaceAll(
-    /(  +)|(\r)|(\n)|(\t)|(\\+r)|(\\+n)|(\\+t)|/gim,
-    '',
-  );
-
-  const linkImgTags = html.match(/<meta[^>]+og:image[^>]+>/gim);
-
-  if (!!linkImgTags && !!linkImgTags.length) {
-    // res.linkImg = linkImgTags[0].replace(/<meta[^content="]+content="/gim, '').replace(/"[^>]>/gim, '');
-    const imgURLs = linkImgTags[0].match(/(https?:\/\/)[^("|')]+("|')/g);
-
-    if (!!imgURLs) {
-      res.linkImg = imgURLs[0].slice(0, -1);
-    }
-  }
-
-  const titles = html.match(
-    /<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim,
-  );
-
-  if (!!titles) {
-    res.title = titles[0].replace(
-      /<title[^>]*>[\r\n\t\s]*([^<]+)[\r\n\t\s]*<\/title>/gim,
-      '$1',
-    );
-  }
-
-  return res;
+  // console.log(response.data);
+  return response.data.data;
 };
 
 export default {
   isLink: isURL,
   getFullLink: getFullURL,
   getShortLink: getShortURL,
+  parse: parse,
 };

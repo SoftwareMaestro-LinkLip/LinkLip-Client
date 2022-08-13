@@ -40,7 +40,7 @@ const Sidebar = (props: IProps) => {
 
   const getCategories = useCallback(() => {
     const request = axios
-      .get(`${import.meta.env.VITE_API_URL}/category/v1`)
+      .get(`${import.meta.env.VITE_API_SERVER}/category/v1`)
       .then((response) => {
         if (response.data.success) {
           const total = { id: 0, name: '전체' };
@@ -56,7 +56,7 @@ const Sidebar = (props: IProps) => {
         name,
       };
       return await axios
-        .post(`${import.meta.env.VITE_API_URL}/category/v1`, body, {
+        .post(`${import.meta.env.VITE_API_SERVER}/category/v1`, body, {
           withCredentials: true,
           headers: { 'Content-Type': 'application/json' },
         })
@@ -79,7 +79,7 @@ const Sidebar = (props: IProps) => {
         name,
       };
       return await axios
-        .patch(`${import.meta.env.VITE_API_URL}/category/v1/${id}`, body, {
+        .patch(`${import.meta.env.VITE_API_SERVER}/category/v1/${id}`, body, {
           withCredentials: true,
           headers: { 'Content-Type': 'application/json' },
         })

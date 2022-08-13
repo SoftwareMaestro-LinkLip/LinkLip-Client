@@ -8,7 +8,7 @@ import axios from 'axios';
 import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
-import { isURL, getShortURL, getMetaData } from '../utils/link';
+import { isURL, getShortURL } from '../utils/link';
 import apiServer from '../utils/api';
 import useInput from '../hooks/useInput';
 import LinkCard from '../partials/LinkCard';
@@ -38,7 +38,7 @@ const Dashboard = () => {
     const request = axios
       .get(
         `${
-          import.meta.env.VITE_API_URL
+          import.meta.env.VITE_API_SERVER
         }/content/v1/link?term=${term}&page=${page}&size=${contentsSize}`,
       )
       .then((response) => {

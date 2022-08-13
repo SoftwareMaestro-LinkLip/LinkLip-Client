@@ -3,7 +3,7 @@ import { ToolArea } from '../css/Conponents';
 import { NoteContainer } from '../css/Containers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import { isURL, getMetaData } from '../utils/link';
+import { isURL, parse } from '../utils/link';
 import useInput from '../hooks/useInput';
 import axios from 'axios';
 
@@ -38,12 +38,12 @@ const Notebox = (props: IProps) => {
       event.preventDefault();
 
       if (isURL(note)) {
-        getMetaData(note).then((body) => {
+        parse(note).then((body) => {
           // ============
           console.log('body:', body);
           // ============
           axios
-            .post(`${import.meta.env.VITE_API_URL}/content/v1/link`, body, {
+            .post(`${import.meta.env.VITE_API_SERVER}/content/v1/link`, body, {
               withCredentials: true,
               headers: { 'Content-Type': 'application/json' },
             })
