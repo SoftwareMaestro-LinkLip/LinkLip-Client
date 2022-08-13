@@ -3,14 +3,14 @@ import { ToolArea } from '../css/Conponents';
 import { NoteContainer } from '../css/Containers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import { isLink, getMetaData } from '../utils/link';
+import { isURL, getMetaData } from '../utils/link';
 import useInput from '../hooks/useInput';
 import axios from 'axios';
 
 interface IProps {
   sidebarOpen: boolean;
   setPage: Dispatch<React.SetStateAction<number>>;
-  getContents: (page: number, term: string) => void;
+  getContents: () => void;
 }
 
 const Notebox = (props: IProps) => {
@@ -37,7 +37,7 @@ const Notebox = (props: IProps) => {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      if (isLink(note)) {
+      if (isURL(note)) {
         getMetaData(note).then((body) => {
           // ============
           console.log('body:', body);
@@ -49,8 +49,8 @@ const Notebox = (props: IProps) => {
             })
             .then((response) => {
               props.setPage(0);
+              props.getContents();
               setNote('');
-              props.getContents(0, '');
               if (ref !== null) {
                 ref.current!.style.height = '38px';
               }

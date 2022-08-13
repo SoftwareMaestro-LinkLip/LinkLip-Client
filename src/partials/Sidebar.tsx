@@ -10,7 +10,7 @@ import useOnClickOutside from '../hooks/useOnClickOutside';
 import { ICategory } from '../typings/types';
 import { SidebarContainer } from '../css/Containers';
 import AddCategoryButton from './AddCategoryButton';
-import EditCategoryButton from './EditCategoryButton';
+import CategoryOptionButton from './CategoryOptionButton';
 import EditCategoryInput from './EditCategoryInput';
 import axios from 'axios';
 
@@ -27,7 +27,7 @@ const Sidebar = (props: IProps) => {
 
   useOnClickOutside(
     ref,
-    (event) => {
+    () => {
       // event.preventDefault();
       props.setSidebarOpen(false);
     },
@@ -125,7 +125,10 @@ const Sidebar = (props: IProps) => {
       </div>
       <nav className="space-y-8">
         <div className="flex justify-between">
-          <h3 className="text-lg uppercase text-slate-400 font-semibold pl-3">
+          <h3
+            className="text-lg uppercase text-slate-400 font-semibold pl-3"
+            tabIndex={3}
+          >
             카테고리
           </h3>
           <AddCategoryButton
@@ -154,7 +157,7 @@ const Sidebar = (props: IProps) => {
                       {item.name}
                     </button>
                     {item.id !== 0 ? (
-                      <EditCategoryButton
+                      <CategoryOptionButton
                         setEditCategoryId={setEditCategoryId}
                         categoryId={item.id}
                       />

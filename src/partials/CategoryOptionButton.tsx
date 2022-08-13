@@ -1,5 +1,6 @@
 import React, { useRef, useState, Dispatch, useCallback } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import useKeyPressESC from '../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,24 +9,28 @@ interface IProps {
   categoryId: number;
 }
 
-const EditCategoryButton = (props: IProps) => {
+const CategoryOptionButton = (props: IProps) => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
 
   useOnClickOutside(
     ref,
-    (event) => {
+    () => {
       setDropdownOpen(false);
     },
     dropdownOpen,
   );
 
+  useKeyPressESC(() => {
+    setDropdownOpen(false);
+  });
+
   const onDropHandler = useCallback(() => {
     setDropdownOpen(!dropdownOpen);
   }, [setDropdownOpen, dropdownOpen]);
 
-  const onClickHandler = useCallback(() => {
+  const onEditHandler = useCallback(() => {
     props.setEditCategoryId(props.categoryId);
     setDropdownOpen(false);
   }, [dropdownOpen, editorOpen, setDropdownOpen, setEditorOpen]);
@@ -37,8 +42,9 @@ const EditCategoryButton = (props: IProps) => {
         aria-haspopup="true"
         onClick={onDropHandler}
         aria-expanded={dropdownOpen}
+        aria-label="옵션 더보기"
       >
-        <FontAwesomeIcon icon={faEllipsisVertical} />
+        <FontAwesomeIcon icon={faEllipsisVertical} aria-hidden="true" />
       </button>
 
       {dropdownOpen && (
@@ -48,7 +54,7 @@ const EditCategoryButton = (props: IProps) => {
         >
           <button
             className="inline-block px-4 py-2 bg-transparent text-blue-600 font-medium text-sm leading-tight uppercase rounded hover:text-blue-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out"
-            onClick={onClickHandler}
+            onClick={onEditHandler}
           >
             수정
           </button>
@@ -69,4 +75,4 @@ const EditCategoryButton = (props: IProps) => {
   );
 };
 
-export default EditCategoryButton;
+export default CategoryOptionButton;

@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import useKeyPressESC from '../hooks/useKeyPressESC';
 import useInput from '../hooks/useInput';
 
 interface IProps {
@@ -19,7 +20,11 @@ const EditCategoryInput = (props: IProps) => {
   const ref = useRef(null);
   const [name, onChangeName] = useInput(props.categoryName);
 
-  useOnClickOutside(ref, (event) => {
+  useOnClickOutside(ref, () => {
+    props.setEditCategoryId(0);
+  });
+
+  useKeyPressESC(() => {
     props.setEditCategoryId(0);
   });
 
@@ -53,6 +58,7 @@ const EditCategoryInput = (props: IProps) => {
           className="w-10 text-slate-400 font-medium text-xs rounded"
           type="button"
           id="button-addon3"
+          aria-label="수정 완료"
         >
           수정
         </button>

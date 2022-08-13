@@ -7,6 +7,7 @@ import React, {
   useCallback,
 } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import useKeyPressESC from '../hooks/useKeyPressESC';
 import useInput from '../hooks/useInput';
 import { ICategory } from '../typings/types';
 
@@ -27,11 +28,19 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
 
   useOnClickOutside(
     ref,
-    (event) => {
+    () => {
       setDropdownOpen(false);
     },
     dropdownOpen,
   );
+
+  useKeyPressESC(() => {
+    setDropdownOpen(false);
+    const htmlButtons = document.querySelectorAll('button');
+    if (!!htmlButtons) {
+      htmlButtons[1].focus();
+    }
+  });
 
   useEffect(() => {
     if (dropdownOpen) {
@@ -64,12 +73,6 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
           onClick={onDropHandler}
           aria-expanded={dropdownOpen}
         >
-          {/* <svg
-            className={`w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 transform rotate-180`}
-            viewBox="0 0 12 12"
-          >
-            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-          </svg> */}
           ∆
         </button>
       ) : (
@@ -78,8 +81,13 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
           aria-haspopup="true"
           onClick={onDropHandler}
           aria-expanded={dropdownOpen}
+          aria-label="카테고리 추가"
         >
-          <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
+          <svg
+            className="w-4 h-4 fill-current"
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+          >
             <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
           </svg>
         </button>

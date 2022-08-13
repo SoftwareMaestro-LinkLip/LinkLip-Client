@@ -10,8 +10,3 @@ export interface ICategory {
   id: number;
   name: string;
 }
-
-interface IProps {
-  term: string;
-  onChangeTerm: (e: any) => void;
-}
