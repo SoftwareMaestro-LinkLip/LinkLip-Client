@@ -8,7 +8,7 @@ const proxy = import.meta.env.DEV
   : false;
 
 const apiServer = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_SERVER,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
   proxy: proxy,
