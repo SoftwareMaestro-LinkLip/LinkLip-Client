@@ -18,6 +18,8 @@ const Header = (props: IProps) => {
     props.setPage(0);
   };
 
+  useEffect(() => {}, [props.term]);
+
   return (
     <header className="flex justify-center py-2  z-30 ">
       <div className="fixed top-0 w-full lg:w-9/12  p-2">

@@ -3,7 +3,9 @@ import { ToolArea } from '../css/Conponents';
 import { NoteContainer } from '../css/Containers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import { isURL, parse } from '../utils/link';
+import { isURL, getFullURL } from '../utils/link';
+import { IContent } from '../typings/types';
+
 import useInput from '../hooks/useInput';
 import axios from 'axios';
 
@@ -11,6 +13,8 @@ interface IProps {
   sidebarOpen: boolean;
   setPage: Dispatch<React.SetStateAction<number>>;
   getContents: () => void;
+  setContents: Dispatch<React.SetStateAction<IContent[]>>;
+  contents: IContent[];
 }
 
 const Notebox = (props: IProps) => {
@@ -38,28 +42,43 @@ const Notebox = (props: IProps) => {
       event.preventDefault();
 
       if (isURL(note)) {
-        parse(note).then((body) => {
-          // ============
-          console.log('body:', body);
-          // ============
-          axios
-            .post(`${import.meta.env.VITE_API_SERVER}/content/v1/link`, body, {
-              withCredentials: true,
-              headers: { 'Content-Type': 'application/json' },
-            })
-            .then((response) => {
-              props.setPage(0);
-              props.getContents();
-              setNote('');
-              if (ref !== null) {
-                ref.current!.style.height = '38px';
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-              return false;
-            });
-        });
+        const tempContent = {
+          id: 0,
+          url: note,
+          linkImg: '',
+          title: '',
+          text: '',
+        };
+        setNote('');
+        props.setContents([tempContent, ...props.contents]);
+        axios
+          .get(
+            `${import.meta.env.VITE_API_PARSER}/link/v1?url=${getFullURL(
+              note,
+            ).replace(/^([^?#]*).*/, '$1')}`,
+          )
+          .then((response) => {
+            axios
+              .post(
+                `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
+                response.data.data,
+                {
+                  withCredentials: true,
+                  headers: { 'Content-Type': 'application/json' },
+                },
+              )
+              .then(() => {
+                props.setPage(0);
+
+                if (ref !== null) {
+                  ref.current!.style.height = '38px';
+                }
+                props.getContents();
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
     [note, setNote, props.setPage, props.getContents],
