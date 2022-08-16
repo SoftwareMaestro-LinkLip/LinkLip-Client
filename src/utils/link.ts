@@ -15,7 +15,6 @@ export const getFullURL = (url: string): string => {
 };
 
 export const getShortURL = (url: string): string => {
-  // (https?:\/\/)?(www\.)?
   return url.replace(/(https?:\/\/)?(www\.)?/g, '');
 };
 
@@ -36,8 +35,8 @@ export const parse = async (url: string): Promise<any> => {
 };
 
 export default {
-  isLink: isURL,
-  getFullLink: getFullURL,
-  getShortLink: getShortURL,
-  parse: parse,
+  isURL,
+  getFullURL,
+  getShortURL,
+  parse,
 };

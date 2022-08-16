@@ -1,15 +1,11 @@
-import logo from '../images/logo.png';
 import '../css/style.scss';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { DashboadContainer, ContentsContainer } from '../css/Containers';
 import Header from '../partials/Header';
 import axios from 'axios';
 import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
-import { isURL, getShortURL } from '../utils/link';
-import apiServer from '../utils/api';
 import useInput from '../hooks/useInput';
 import LinkCard from '../partials/LinkCard';
 
@@ -35,6 +31,7 @@ const Dashboard = () => {
   }, [bottom]);
 
   const getContents = useCallback(() => {
+    console.log('term', term, 'page', page, 'contentsSize', contentsSize);
     const request = axios
       .get(
         `${
@@ -54,7 +51,7 @@ const Dashboard = () => {
         }
       })
       .catch((err) => console.log(err));
-  }, [page, setContents, contents]);
+  }, [page, setContents, contents, term]);
 
   const onScroll = (e: any) => {
     const { scrollHeight, scrollTop, clientHeight } = e.target;
@@ -95,6 +92,8 @@ const Dashboard = () => {
           setPage={setPage}
           getContents={getContents}
           sidebarOpen={sidebarOpen}
+          setContents={setContents}
+          contents={contents}
         ></Notebox>
       </div>
     </div>

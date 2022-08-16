@@ -1,13 +1,16 @@
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch, useState, CSSProperties } from 'react';
 import { IContent } from '../typings/types';
 import logo from '../images/logo.png';
 import { getShortURL } from '../utils/link';
 import CardOptionButton from './CardOptionButton';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 interface IProps {
   content: IContent;
   getContents: () => void;
 }
+
+const override: CSSProperties = {};
 
 const LinkCard = (props: IProps) => {
   return (
@@ -18,11 +21,22 @@ const LinkCard = (props: IProps) => {
           target="_blank"
           className=" flex justify-center w-full h-2/3 overflow-hidden "
         >
-          <img
-            className=" block my-0 mx-auto w-full object-cover transition  duration-300"
-            src={props.content.linkImg ? props.content.linkImg : logo}
-            alt="props.content.title"
-          />
+          {props.content.id > 0 ? (
+            <img
+              className=" block my-0 mx-auto w-full object-cover transition  duration-300"
+              src={props.content.linkImg ? props.content.linkImg : logo}
+              alt="props.content.title"
+            />
+          ) : (
+            <div className="mt-10">
+              <ClipLoader
+                color={'rgb(96 165 250)'}
+                loading={true}
+                cssOverride={override}
+                size={80}
+              />
+            </div>
+          )}
         </a>
 
         <a
