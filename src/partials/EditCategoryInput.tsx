@@ -56,7 +56,7 @@ const EditCategoryInput = (props: IProps) => {
         />
         <button
           className="w-10 text-slate-400 font-medium text-xs rounded"
-          type="button"
+          type="submit"
           id="button-addon3"
           aria-label="수정 완료"
         >
