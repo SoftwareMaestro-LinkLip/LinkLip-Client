@@ -28,7 +28,7 @@ const Dashboard = () => {
       getContents();
       setBottom(false);
     }
-  }, [bottom]);
+  }, [bottom, page]);
 
   const getContents = useCallback(() => {
     console.log('term', term, 'page', page, 'contentsSize', contentsSize);
@@ -40,23 +40,23 @@ const Dashboard = () => {
       )
       .then((response) => {
         if (response.data.success) {
-          if (page < 0) {
-            return;
-          }
+          // console.log('data', response.data);
+          // console.log('res', response.data.data.pageDto.content);
           if (page > 0) {
             setContents([...contents, ...response.data.data.pageDto.content]);
-          } else {
+          } else if (page === 0) {
             setContents([...response.data.data.pageDto.content]);
           }
-          if (response.data.data.pageDto.content.length === contentsSize) {
-            setPage(page + 1);
-          } else {
-            setPage(-1);
-          }
+          // if (response.data.data.pageDto.content.length === contentsSize) {
+          //   setPage(page + 1);
+          // }
+          // else {
+          //   setPage(-1);
+          // }
         }
       })
       .catch((err) => console.log(err));
-  }, [page, setContents, contents, term]);
+  }, [page, setContents, contents, term, setPage]);
 
   const onScroll = (e: any) => {
     const { scrollHeight, scrollTop, clientHeight } = e.target;
@@ -64,15 +64,16 @@ const Dashboard = () => {
 
     if (scroll < 10) {
       setBottom(true);
+      setPage(page + 1);
     }
   };
 
   return (
-    <div className="flex h-screen overflow-scroll" onScroll={onScroll}>
+    <div className="flex h-screen ">
       {/* Side Bar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       {/* Content area */}
-      <div className="w-full">
+      <div className="w-full overflow-y-scroll" onScroll={onScroll}>
         {/* Header */}
         <Header
           getContents={getContents}

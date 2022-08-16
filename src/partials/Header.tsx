@@ -14,8 +14,8 @@ interface IProps {
 const Header = (props: IProps) => {
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    props.getContents();
     props.setPage(0);
+    props.getContents();
   };
 
   useEffect(() => {}, [props.term]);
