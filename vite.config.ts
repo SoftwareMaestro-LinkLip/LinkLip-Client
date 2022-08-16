@@ -12,7 +12,7 @@ export default defineConfig({
       // Using the proxy instance
       '/content': 'http://localhost:8080',
       '/category': 'http://localhost:8080',
-      '/link': 'http://localhost:5000',
+      '/link': 'http://localhost:5050',
     },
   },
   plugins: [react()],

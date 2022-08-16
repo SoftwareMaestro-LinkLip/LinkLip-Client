@@ -14,7 +14,7 @@ const override: CSSProperties = {};
 
 const LinkCard = (props: IProps) => {
   return (
-    <div className="flex overflow-hidden rounded-lg shadow-lg bg-white h-52  hover:-translate-y-1 hover:scale-110 duration-300 relative">
+    <div className="flex overflow-hidden rounded-lg shadow-lg bg-white h-52  hover:-translate-y-1 hover:scale-110 hover:z-50 duration-300 relative">
       <div className="flex flex-col w-full">
         <a
           href={props.content.url}

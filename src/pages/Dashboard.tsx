@@ -40,6 +40,9 @@ const Dashboard = () => {
       )
       .then((response) => {
         if (response.data.success) {
+          if (page < 0) {
+            return;
+          }
           if (page > 0) {
             setContents([...contents, ...response.data.data.pageDto.content]);
           } else {
@@ -47,6 +50,8 @@ const Dashboard = () => {
           }
           if (response.data.data.pageDto.content.length === contentsSize) {
             setPage(page + 1);
+          } else {
+            setPage(-1);
           }
         }
       })
@@ -63,7 +68,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen ">
+    <div className="flex h-screen overflow-scroll" onScroll={onScroll}>
       {/* Side Bar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       {/* Content area */}
@@ -78,7 +83,7 @@ const Dashboard = () => {
           term={term}
         />
         {/* Cards */}
-        <main onScroll={onScroll} className="mt-10 h-auto pb-32">
+        <main className="mt-10 h-auto pb-32">
           <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full ">
             {contents.map((item, idx) => {
               return (
