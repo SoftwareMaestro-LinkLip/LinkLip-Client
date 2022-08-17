@@ -69,6 +69,9 @@ const Notebox = (props: IProps) => {
               )
               .then(() => {
                 props.setPage(0);
+                getContents().then((res) => {
+                  props.setContents([...res]);
+                });
 
                 if (ref !== null) {
                   ref.current!.style.height = '38px';
@@ -77,9 +80,6 @@ const Notebox = (props: IProps) => {
           })
           .catch((err) => {
             console.log(err);
-            getContents().then((res) => {
-              props.setContents([...res]);
-            });
           });
       }
     },
