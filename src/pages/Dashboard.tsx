@@ -2,101 +2,77 @@ import '../css/style.scss';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../partials/Header';
-import axios from 'axios';
 import { IContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
 import useInput from '../hooks/useInput';
 import LinkCard from '../partials/LinkCard';
+import { getContents } from '../utils/content';
 
 const Dashboard = () => {
   const [bottom, setBottom] = useState(false);
   const [contents, setContents] = useState<IContent[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [page, setPage] = useState(0);
-  const contentsSize = 12;
+  const [pageIdx, setPageIdx] = useState(0);
   const [term, onChangeTerm] = useInput('');
+  const [categoryId, setCategoryId] = useState(0);
+  const ref = useRef(null);
 
   useEffect(() => {
     const htmlTitle = document.querySelector('title');
     htmlTitle!.innerHTML = 'Linklip Dashboard';
-    getContents();
+
+    getContents().then((res) => {
+      setContents([...res]);
+    });
   }, []);
 
   useEffect(() => {
     if (bottom) {
-      getContents();
-      setBottom(false);
+      getContents(term, pageIdx + 1).then((res) => {
+        setContents([...contents, ...res]);
+        setPageIdx(pageIdx + 1);
+        setBottom(false);
+      });
     }
-  }, [bottom, page]);
-
-  const getContents = useCallback(() => {
-    console.log('term', term, 'page', page, 'contentsSize', contentsSize);
-    const request = axios
-      .get(
-        `${
-          import.meta.env.VITE_API_SERVER
-        }/content/v1/link?term=${term}&page=${page}&size=${contentsSize}`,
-      )
-      .then((response) => {
-        if (response.data.success) {
-          // console.log('data', response.data);
-          // console.log('res', response.data.data.pageDto.content);
-          if (page > 0) {
-            setContents([...contents, ...response.data.data.pageDto.content]);
-          } else if (page === 0) {
-            setContents([...response.data.data.pageDto.content]);
-          }
-          // if (response.data.data.pageDto.content.length === contentsSize) {
-          //   setPage(page + 1);
-          // }
-          // else {
-          //   setPage(-1);
-          // }
-        }
-      })
-      .catch((err) => console.log(err));
-  }, [page, setContents, contents, term, setPage]);
+  }, [bottom, pageIdx]);
 
   const onScroll = (e: any) => {
     const { scrollHeight, scrollTop, clientHeight } = e.target;
     let scroll = scrollHeight - scrollTop - clientHeight;
-
     if (scroll < 10) {
       setBottom(true);
-      setPage(page + 1);
     }
   };
 
   return (
-    <div className="flex h-screen ">
+    <div className="flex h-screen " id="pageContainer">
       {/* Side Bar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       {/* Content area */}
       <div className="w-full overflow-y-scroll" onScroll={onScroll}>
         {/* Header */}
         <Header
-          getContents={getContents}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
-          setPage={setPage}
-          onChangeTerm={onChangeTerm}
+          setPage={setPageIdx}
+          setContents={setContents}
           term={term}
+          onChangeTerm={onChangeTerm}
         />
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
           <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full ">
             {contents.map((item, idx) => {
               return (
-                <LinkCard key={idx} content={item} getContents={getContents} />
+                <LinkCard key={idx} content={item} setContents={setContents} />
               );
             })}
           </div>
         </main>
         {/* TextArea */}
         <Notebox
-          setPage={setPage}
-          getContents={getContents}
+          setPage={setPageIdx}
           sidebarOpen={sidebarOpen}
           setContents={setContents}
           contents={contents}
