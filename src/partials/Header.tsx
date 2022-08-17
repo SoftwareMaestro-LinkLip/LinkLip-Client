@@ -12,6 +12,7 @@ interface IProps {
   setContents: Dispatch<React.SetStateAction<IContent[]>>;
   term: string;
   onChangeTerm: (e: any) => void;
+  contentsSize: number;
 }
 
 const Header = (props: IProps) => {
@@ -21,7 +22,7 @@ const Header = (props: IProps) => {
     event.preventDefault();
     props.setPage(0);
 
-    getContents(props.term, 0).then((res) => {
+    getContents(props.term, 0, 0, props.contentsSize).then((res) => {
       props.setContents([...res]);
     });
 

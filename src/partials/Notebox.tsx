@@ -15,6 +15,7 @@ interface IProps {
   setPage: Dispatch<React.SetStateAction<number>>;
   setContents: Dispatch<React.SetStateAction<IContent[]>>;
   contents: IContent[];
+  contentsSize: number;
 }
 
 const Notebox = (props: IProps) => {
@@ -69,7 +70,7 @@ const Notebox = (props: IProps) => {
               )
               .then(() => {
                 props.setPage(0);
-                getContents().then((res) => {
+                getContents('', 0, 0, props.contentsSize).then((res) => {
                   props.setContents([...res]);
                 });
 
