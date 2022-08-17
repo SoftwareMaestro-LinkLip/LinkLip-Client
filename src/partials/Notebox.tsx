@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { isURL, getFullURL } from '../utils/link';
 import { IContent } from '../typings/types';
+import { getContents } from '../utils/content';
 
 import useInput from '../hooks/useInput';
 import axios from 'axios';
@@ -12,7 +13,6 @@ import axios from 'axios';
 interface IProps {
   sidebarOpen: boolean;
   setPage: Dispatch<React.SetStateAction<number>>;
-  getContents: () => void;
   setContents: Dispatch<React.SetStateAction<IContent[]>>;
   contents: IContent[];
 }
@@ -73,15 +73,17 @@ const Notebox = (props: IProps) => {
                 if (ref !== null) {
                   ref.current!.style.height = '38px';
                 }
-                props.getContents();
               });
           })
           .catch((err) => {
             console.log(err);
+            getContents().then((res) => {
+              props.setContents([...res]);
+            });
           });
       }
     },
-    [note, setNote, props.setPage, props.getContents],
+    [note, setNote, props.setPage],
   );
 
   const onKeyDown = useCallback(
@@ -97,7 +99,7 @@ const Notebox = (props: IProps) => {
   );
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center z-50 hover:z-50">
       <div
         className={`fixed bottom-0 w-full
        lg:w-9/12  p-2`}

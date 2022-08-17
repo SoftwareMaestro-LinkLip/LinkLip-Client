@@ -1,24 +1,33 @@
 import { Dispatch, FunctionComponent, useState, useEffect } from 'react';
 import '../css/reset.css';
 import { HeaderContainer } from '../css/Containers';
+import useInput from '../hooks/useInput';
+import { getContents } from '../utils/content';
+import { IContent } from '../typings/types';
 
 interface IProps {
-  getContents: () => void;
   sidebarOpen: boolean;
   setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
   setPage: Dispatch<React.SetStateAction<number>>;
+  setContents: Dispatch<React.SetStateAction<IContent[]>>;
   term: string;
   onChangeTerm: (e: any) => void;
 }
 
 const Header = (props: IProps) => {
+  // const [term, onChangeTerm] = useInput('');
+
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     props.setPage(0);
-    props.getContents();
-  };
 
-  useEffect(() => {}, [props.term]);
+    getContents(props.term, 0).then((res) => {
+      props.setContents([...res]);
+    });
+
+    // const res = getContents(term, 0);
+    // props.setContents([...res]);
+  };
 
   return (
     <header className="flex justify-center py-2  z-30 ">

@@ -166,7 +166,7 @@ export const ContentsContainer = styled.div`
 `;
 
 export const NoteContainer = styled.div`
-  // z-index: 10;
+  // z-index: 50;
   // position: fixed;
   // bottom: 0;
   display: flex;
