@@ -16,15 +16,41 @@ const Dashboard = () => {
   const [pageIdx, setPageIdx] = useState(0);
   const [term, onChangeTerm] = useInput('');
   const [categoryId, setCategoryId] = useState(0);
-  const ref = useRef(null);
+  const [contentsSize, setContentsSize] = useState(12);
 
   useEffect(() => {
     const htmlTitle = document.querySelector('title');
     htmlTitle!.innerHTML = 'Linklip Dashboard';
+    const scrollHeight = document.getElementById('pageContainer');
+    const cardHeight = 208;
+    //13rem/* 208px
+    console.log(scrollHeight?.clientHeight);
+    let cnt = (Math.floor(scrollHeight?.clientHeight! / cardHeight) + 1) * 4;
 
-    getContents().then((res) => {
+    if (cnt > 12) {
+      setContentsSize(cnt);
+    } else {
+      cnt = 12;
+    }
+    getContents(term, 0, categoryId, cnt).then((res) => {
+      console.log(res);
       setContents([...res]);
     });
+
+    // if (
+    //   scrollHeight?.clientHeight &&
+    //   scrollHeight?.clientHeight <= cardHeight * 4
+    // ) {
+    //   getContents(term).then((res) => {
+    //     setContents([...contents, ...res]);
+    //   });
+    // } else {
+    //   getContents(term, 0, categoryId, 24).then((res) => {
+    //     setContents([...contents, ...res]);
+    //     setPageIdx(1);
+    //   });
+    // }
+    // console.log(contents);
   }, []);
 
   useEffect(() => {
@@ -46,11 +72,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen " id="pageContainer">
+    <div className="flex h-screen ">
       {/* Side Bar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       {/* Content area */}
-      <div className="w-full overflow-y-scroll" onScroll={onScroll}>
+      <div
+        className="w-full overflow-y-scroll"
+        id="pageContainer"
+        onScroll={onScroll}
+      >
         {/* Header */}
         <Header
           sidebarOpen={sidebarOpen}
@@ -59,6 +89,7 @@ const Dashboard = () => {
           setContents={setContents}
           term={term}
           onChangeTerm={onChangeTerm}
+          contentsSize={contentsSize}
         />
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
@@ -76,6 +107,7 @@ const Dashboard = () => {
           sidebarOpen={sidebarOpen}
           setContents={setContents}
           contents={contents}
+          contentsSize={contentsSize}
         ></Notebox>
       </div>
     </div>
