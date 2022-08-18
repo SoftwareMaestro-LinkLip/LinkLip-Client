@@ -13,16 +13,19 @@ import AddCategoryButton from './AddCategoryButton';
 import CategoryOptionButton from './CategoryOptionButton';
 import EditCategoryInput from './EditCategoryInput';
 import axios from 'axios';
+import { getContents } from '../utils/content';
 
 interface IProps {
   sidebarOpen: boolean;
   setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
+  curCategoryId: number;
+  setCurCategoryId: Dispatch<React.SetStateAction<number>>;
 }
 
 const Sidebar = (props: IProps) => {
   const ref = useRef(null);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [selected, setSelected] = useState(0);
+  // const [selected, setSelected] = useState(0);
   const [editCategoryId, setEditCategoryId] = useState(0);
 
   useOnClickOutside(
@@ -100,12 +103,12 @@ const Sidebar = (props: IProps) => {
     <div
       ref={ref}
       id="sidebar"
-      className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
+      className={`flex flex-col absolute z-50 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
         props.sidebarOpen ? 'translate-x-0' : '-translate-x-64'
       }`}
     >
       {/* Sidebar header */}
-      <div className="flex justify-between mb-10 pr-3 sm:px-2">
+      <div className="flex justify-between mb-10 pr-3 sm:px-2 z-50">
         {/* Close button */}
         <button
           className="lg:hidden text-slate-500 hover:text-slate-400"
@@ -142,7 +145,7 @@ const Sidebar = (props: IProps) => {
             return (
               <li
                 className={`flex py-2 rounded-sm mb-0.5 last:mb-0 text-slate-200 text-xl ${
-                  selected === item.id && 'bg-slate-900'
+                  props.curCategoryId === item.id && 'bg-slate-900'
                 }`}
                 key={item.id}
               >
@@ -151,7 +154,7 @@ const Sidebar = (props: IProps) => {
                     <button
                       className="w-full px-3 text-left overflow-hidden"
                       onClick={() => {
-                        setSelected(item.id);
+                        props.setCurCategoryId(item.id);
                       }}
                     >
                       {item.name}
