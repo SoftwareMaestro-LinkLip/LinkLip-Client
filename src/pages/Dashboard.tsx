@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pageIdx, setPageIdx] = useState(0);
   const [term, onChangeTerm] = useInput('');
-  const [categoryId, setCategoryId] = useState(0);
+  const [curCategoryId, setCurCategoryId] = useState(0);
   const [contentsSize, setContentsSize] = useState(12);
 
   useEffect(() => {
@@ -23,8 +23,7 @@ const Dashboard = () => {
     htmlTitle!.innerHTML = 'Linklip Dashboard';
     const scrollHeight = document.getElementById('pageContainer');
     const cardHeight = 208;
-    //13rem/* 208px
-    console.log(scrollHeight?.clientHeight);
+
     let cnt = (Math.floor(scrollHeight?.clientHeight! / cardHeight) + 1) * 4;
 
     if (cnt > 12) {
@@ -32,26 +31,18 @@ const Dashboard = () => {
     } else {
       cnt = 12;
     }
-    getContents(term, 0, categoryId, cnt).then((res) => {
+    getContents(term, 0, curCategoryId, cnt).then((res) => {
       console.log(res);
       setContents([...res]);
     });
-
-    // if (
-    //   scrollHeight?.clientHeight &&
-    //   scrollHeight?.clientHeight <= cardHeight * 4
-    // ) {
-    //   getContents(term).then((res) => {
-    //     setContents([...contents, ...res]);
-    //   });
-    // } else {
-    //   getContents(term, 0, categoryId, 24).then((res) => {
-    //     setContents([...contents, ...res]);
-    //     setPageIdx(1);
-    //   });
-    // }
-    // console.log(contents);
   }, []);
+
+  useEffect(() => {
+    getContents(term, 0, curCategoryId, contentsSize).then((res) => {
+      console.log(res);
+      setContents([...res]);
+    });
+  }, [curCategoryId]);
 
   useEffect(() => {
     if (bottom) {
@@ -74,7 +65,12 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen ">
       {/* Side Bar */}
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <Sidebar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        curCategoryId={curCategoryId}
+        setCurCategoryId={setCurCategoryId}
+      />
       {/* Content area */}
       <div
         className="w-full overflow-y-scroll"
@@ -90,6 +86,7 @@ const Dashboard = () => {
           term={term}
           onChangeTerm={onChangeTerm}
           contentsSize={contentsSize}
+          curCategoryId={curCategoryId}
         />
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
@@ -108,6 +105,7 @@ const Dashboard = () => {
           setContents={setContents}
           contents={contents}
           contentsSize={contentsSize}
+          curCategoryId={curCategoryId}
         ></Notebox>
       </div>
     </div>

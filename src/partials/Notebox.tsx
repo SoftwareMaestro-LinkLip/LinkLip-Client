@@ -16,6 +16,7 @@ interface IProps {
   setContents: Dispatch<React.SetStateAction<IContent[]>>;
   contents: IContent[];
   contentsSize: number;
+  curCategoryId: number;
 }
 
 const Notebox = (props: IProps) => {
@@ -59,10 +60,12 @@ const Notebox = (props: IProps) => {
             ).replace(/^([^?#]*).*/, '$1')}`,
           )
           .then((response) => {
+            const body = response.data.data;
+            body.categoryId = props.curCategoryId;
             axios
               .post(
                 `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
-                response.data.data,
+                body,
                 {
                   withCredentials: true,
                   headers: { 'Content-Type': 'application/json' },
@@ -70,7 +73,12 @@ const Notebox = (props: IProps) => {
               )
               .then(() => {
                 props.setPage(0);
-                getContents('', 0, 0, props.contentsSize).then((res) => {
+                getContents(
+                  '',
+                  0,
+                  props.curCategoryId,
+                  props.contentsSize,
+                ).then((res) => {
                   props.setContents([...res]);
                 });
 
@@ -100,10 +108,10 @@ const Notebox = (props: IProps) => {
   );
 
   return (
-    <div className="flex justify-center z-50 hover:z-50">
+    <div className="flex justify-center z-40 hover:z-40">
       <div
         className={`fixed bottom-0 w-full
-       lg:w-9/12  p-2`}
+       lg:w-9/12  p-2 z-40`}
       >
         <NoteContainer>
           <form onSubmit={onSubmitHandler}>

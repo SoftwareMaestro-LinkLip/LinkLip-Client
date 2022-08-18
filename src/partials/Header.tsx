@@ -13,6 +13,7 @@ interface IProps {
   term: string;
   onChangeTerm: (e: any) => void;
   contentsSize: number;
+  curCategoryId: number;
 }
 
 const Header = (props: IProps) => {
@@ -22,17 +23,19 @@ const Header = (props: IProps) => {
     event.preventDefault();
     props.setPage(0);
 
-    getContents(props.term, 0, 0, props.contentsSize).then((res) => {
-      props.setContents([...res]);
-    });
+    getContents(props.term, 0, props.curCategoryId, props.contentsSize).then(
+      (res) => {
+        props.setContents([...res]);
+      },
+    );
 
     // const res = getContents(term, 0);
     // props.setContents([...res]);
   };
 
   return (
-    <header className="flex justify-center py-2  z-30 ">
-      <div className="fixed top-0 w-full lg:w-9/12  p-2">
+    <header className="flex justify-center py-2  z-30">
+      <div className="fixed top-0 w-full lg:w-9/12 p-2 z-30">
         <div className="flex items-center">
           <button
             className="px-4 text-slate-400 hover:text-slate-400 lg:hidden "
