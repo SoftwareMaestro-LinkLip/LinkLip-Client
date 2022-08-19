@@ -27,6 +27,7 @@ export const parse = async (url: string): Promise<any> => {
   );
 
   if (response.status >= 400) {
+    console.log('response failed');
     throw response;
   }
 
