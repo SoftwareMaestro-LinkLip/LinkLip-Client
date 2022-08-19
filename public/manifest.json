@@ -1,11 +1,11 @@
 {
   "name": "Linklip",
   "short_name": "linklip",
-  "start_url": "",
+  "start_url": "https://develop.d2q3btuxg9ucoe.amplifyapp.com/",
   "display": "standalone",
-  "background_color": "#F8F7DA",
-  "theme_color": "#8C383A",
-  "description": "PWA realized with Vite.js, React.js and React Router",
+  "background_color": "#282c34",
+  "theme_color": "#282c34",
+  "description": "LinkLip",
   "icons": [
     {
       "src": "icons/favicon.ico",

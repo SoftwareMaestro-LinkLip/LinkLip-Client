@@ -31,7 +31,9 @@ export const parse = async (url: string): Promise<any> => {
     throw response;
   }
 
+  console.log('----------------------------------');
   console.log('response.data.data', response.data.data);
+  console.log('----------------------------------');
 
   return response.data.data;
 };

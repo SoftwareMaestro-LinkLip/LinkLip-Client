@@ -59,11 +59,8 @@ const Notebox = (props: IProps) => {
         setNote('');
         props.setContents([loadingContent, ...props.contents]);
 
-        console.log('======================');
-
         parse(note).then((body) => {
           body.categoryId = curCategoryId;
-          console.log('body', body);
           addLinkContent(body).then(() => {
             resetPageIdx();
             resetTerm();
