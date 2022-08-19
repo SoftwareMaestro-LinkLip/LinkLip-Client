@@ -1,36 +1,41 @@
-import { Dispatch, FunctionComponent, useState, useEffect } from 'react';
+import { Dispatch, FunctionComponent, useCallback, useEffect } from 'react';
 import '../css/reset.css';
-import { HeaderContainer } from '../css/Containers';
-import useInput from '../hooks/useInput';
 import { getContents } from '../utils/content';
-import { IContent } from '../typings/types';
+import { ILinkContent } from '../typings/types';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import {
+  termState,
+  curCategoryIdState,
+  contentsSizeState,
+  pageIdxState,
+} from '../stores/atoms';
 
 interface IProps {
   sidebarOpen: boolean;
   setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
-  setPage: Dispatch<React.SetStateAction<number>>;
-  setContents: Dispatch<React.SetStateAction<IContent[]>>;
-  term: string;
-  onChangeTerm: (e: any) => void;
-  contentsSize: number;
-  curCategoryId: number;
+  setContents: Dispatch<React.SetStateAction<ILinkContent[]>>;
 }
 
 const Header = (props: IProps) => {
-  // const [term, onChangeTerm] = useInput('');
+  const [term, setTerm] = useRecoilState(termState);
+  const curCategoryId = useRecoilValue(curCategoryIdState);
+  const contentsSize = useRecoilValue(contentsSizeState);
+  const resetPageIdx = useResetRecoilState(pageIdxState);
+
+  const onChangeHandler = useCallback(
+    (event: any) => {
+      setTerm(event.target.value);
+    },
+    [term, setTerm],
+  );
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    props.setPage(0);
+    resetPageIdx();
 
-    getContents(props.term, 0, props.curCategoryId, props.contentsSize).then(
-      (res) => {
-        props.setContents([...res]);
-      },
-    );
-
-    // const res = getContents(term, 0);
-    // props.setContents([...res]);
+    getContents(term, 0, curCategoryId, contentsSize).then((res) => {
+      props.setContents([...res]);
+    });
   };
 
   return (
@@ -63,8 +68,8 @@ const Header = (props: IProps) => {
               p-2 relative block px-3 py-1.5 text-base font-normal text-gray-700 bg-white  border border-solid border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                 placeholder="Search"
                 aria-label="Search"
-                onChange={props.onChangeTerm}
-                value={props.term}
+                onChange={onChangeHandler}
+                value={term}
                 tabIndex={1}
               />
               <button

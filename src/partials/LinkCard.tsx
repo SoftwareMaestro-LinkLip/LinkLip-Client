@@ -1,5 +1,5 @@
 import React, { Dispatch, useState, CSSProperties } from 'react';
-import { IContent } from '../typings/types';
+import { ILinkContent } from '../typings/types';
 import logo from '../images/logo.png';
 import { getShortURL } from '../utils/link';
 import CardOptionButton from './CardOptionButton';
@@ -7,8 +7,8 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import { getContents } from '../utils/content';
 
 interface IProps {
-  content: IContent;
-  setContents: Dispatch<React.SetStateAction<IContent[]>>;
+  content: ILinkContent;
+  setContents: Dispatch<React.SetStateAction<ILinkContent[]>>;
 }
 
 const override: CSSProperties = {};

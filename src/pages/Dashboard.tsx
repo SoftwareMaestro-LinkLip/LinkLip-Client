@@ -2,44 +2,50 @@ import '../css/style.scss';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../partials/Header';
-import { IContent } from '../typings/types';
+import { ILinkContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
-import useInput from '../hooks/useInput';
 import LinkCard from '../partials/LinkCard';
 import { getContents } from '../utils/content';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  termState,
+  curCategoryIdState,
+  contentsSizeState,
+  pageIdxState,
+} from '../stores/atoms';
 
 const Dashboard = () => {
   const [bottom, setBottom] = useState(false);
-  const [contents, setContents] = useState<IContent[]>([]);
+  const [contents, setContents] = useState<ILinkContent[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [pageIdx, setPageIdx] = useState(0);
-  const [term, onChangeTerm] = useInput('');
-  const [curCategoryId, setCurCategoryId] = useState(0);
-  const [contentsSize, setContentsSize] = useState(12);
+  const [pageIdx, setPageIdx] = useRecoilState(pageIdxState);
+  const term = useRecoilValue(termState);
+  const curCategoryId = useRecoilValue(curCategoryIdState);
+  const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
 
   useEffect(() => {
+    // change page title tag
     const htmlTitle = document.querySelector('title');
     htmlTitle!.innerHTML = 'Linklip Dashboard';
+
+    // 페이지당 불러오는 컨텐츠 개수 설정
+    // 화면 높이가 높을 수록 한 번에 더 많은 컨텐츠를 불러옴
     const scrollHeight = document.getElementById('pageContainer');
-    const cardHeight = 208;
-
+    const cardHeight = 208; // 기본 컨텐츠 카드 높이
     let cnt = (Math.floor(scrollHeight?.clientHeight! / cardHeight) + 1) * 4;
-
     if (cnt > 12) {
       setContentsSize(cnt);
     } else {
       cnt = 12;
     }
     getContents(term, 0, curCategoryId, cnt).then((res) => {
-      console.log(res);
       setContents([...res]);
     });
   }, []);
 
   useEffect(() => {
     getContents(term, 0, curCategoryId, contentsSize).then((res) => {
-      console.log(res);
       setContents([...res]);
     });
   }, [curCategoryId]);
@@ -65,12 +71,7 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen ">
       {/* Side Bar */}
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-        curCategoryId={curCategoryId}
-        setCurCategoryId={setCurCategoryId}
-      />
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       {/* Content area */}
       <div
         className="w-full overflow-y-scroll"
@@ -81,12 +82,7 @@ const Dashboard = () => {
         <Header
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
-          setPage={setPageIdx}
           setContents={setContents}
-          term={term}
-          onChangeTerm={onChangeTerm}
-          contentsSize={contentsSize}
-          curCategoryId={curCategoryId}
         />
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
@@ -100,12 +96,9 @@ const Dashboard = () => {
         </main>
         {/* TextArea */}
         <Notebox
-          setPage={setPageIdx}
           sidebarOpen={sidebarOpen}
           setContents={setContents}
           contents={contents}
-          contentsSize={contentsSize}
-          curCategoryId={curCategoryId}
         ></Notebox>
       </div>
     </div>

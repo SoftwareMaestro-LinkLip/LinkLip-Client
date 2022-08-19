@@ -1,19 +1,15 @@
-import React, {
-  useRef,
-  useState,
-  Dispatch,
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useRef, Dispatch, useCallback, useEffect } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import useInput from '../hooks/useInput';
+import { getCategories, editCategory } from '../utils/category';
+import { ICategory } from '../typings/types';
 
 interface IProps {
   categoryId: number;
   categoryName: string;
   setEditCategoryId: Dispatch<React.SetStateAction<number>>;
-  editCategory: (id: number, name: string) => Promise<boolean | void>;
+  setCategories: Dispatch<React.SetStateAction<ICategory[]>>;
 }
 
 const EditCategoryInput = (props: IProps) => {
@@ -38,7 +34,11 @@ const EditCategoryInput = (props: IProps) => {
   const onSubmitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      props.editCategory(props.categoryId, name);
+      editCategory(props.categoryId, name).then(() => {
+        getCategories().then((res) => {
+          props.setCategories([...res]);
+        });
+      });
       props.setEditCategoryId(0);
     },
     [name],

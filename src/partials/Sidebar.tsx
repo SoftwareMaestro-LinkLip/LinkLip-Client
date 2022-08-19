@@ -2,31 +2,29 @@ import React, {
   useState,
   useEffect,
   useRef,
-  FunctionComponent,
   Dispatch,
   useCallback,
 } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import { ICategory } from '../typings/types';
-import { SidebarContainer } from '../css/Containers';
 import AddCategoryButton from './AddCategoryButton';
 import CategoryOptionButton from './CategoryOptionButton';
 import EditCategoryInput from './EditCategoryInput';
 import axios from 'axios';
-import { getContents } from '../utils/content';
+import { useRecoilState } from 'recoil';
+import { curCategoryIdState } from '../stores/atoms';
+import { getCategories } from '../utils/category';
 
 interface IProps {
   sidebarOpen: boolean;
   setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
-  curCategoryId: number;
-  setCurCategoryId: Dispatch<React.SetStateAction<number>>;
 }
 
 const Sidebar = (props: IProps) => {
   const ref = useRef(null);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  // const [selected, setSelected] = useState(0);
   const [editCategoryId, setEditCategoryId] = useState(0);
+  const [curCategoryId, setCurCategoryId] = useRecoilState(curCategoryIdState);
 
   useOnClickOutside(
     ref,
@@ -38,66 +36,10 @@ const Sidebar = (props: IProps) => {
   );
 
   useEffect(() => {
-    getCategories();
+    getCategories().then((res) => {
+      setCategories([...res]);
+    });
   }, []);
-
-  const getCategories = useCallback(() => {
-    const request = axios
-      .get(`${import.meta.env.VITE_API_SERVER}/category/v1`)
-      .then((response) => {
-        if (response.data.success) {
-          const total = { id: 0, name: '전체' };
-          setCategories([total, ...response.data.data.category]);
-        }
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  const addCategory = useCallback(
-    async (name: string) => {
-      const body = {
-        name,
-      };
-      return await axios
-        .post(`${import.meta.env.VITE_API_SERVER}/category/v1`, body, {
-          withCredentials: true,
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then((response) => {
-          if (response.data.success) {
-            getCategories();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          return false;
-        });
-    },
-    [categories, setCategories, getCategories],
-  );
-
-  const editCategory = useCallback(
-    async (id: number, name: string) => {
-      const body = {
-        name,
-      };
-      return await axios
-        .patch(`${import.meta.env.VITE_API_SERVER}/category/v1/${id}`, body, {
-          withCredentials: true,
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then((response) => {
-          if (response.data.success) {
-            getCategories();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          return false;
-        });
-    },
-    [categories, setCategories, getCategories],
-  );
 
   return (
     <div
@@ -137,7 +79,6 @@ const Sidebar = (props: IProps) => {
           <AddCategoryButton
             categories={categories}
             setCategories={setCategories}
-            addCategory={addCategory}
           />
         </div>
         <ol>
@@ -145,7 +86,7 @@ const Sidebar = (props: IProps) => {
             return (
               <li
                 className={`flex py-2 rounded-sm mb-0.5 last:mb-0 text-slate-200 text-xl ${
-                  props.curCategoryId === item.id && 'bg-slate-900'
+                  curCategoryId === item.id && 'bg-slate-900'
                 }`}
                 key={item.id}
               >
@@ -154,7 +95,7 @@ const Sidebar = (props: IProps) => {
                     <button
                       className="w-full px-3 text-left overflow-hidden"
                       onClick={() => {
-                        props.setCurCategoryId(item.id);
+                        setCurCategoryId(item.id);
                       }}
                     >
                       {item.name}
@@ -173,7 +114,7 @@ const Sidebar = (props: IProps) => {
                     categoryName={item.name}
                     setEditCategoryId={setEditCategoryId}
                     categoryId={item.id}
-                    editCategory={editCategory}
+                    setCategories={setCategories}
                   />
                 )}
               </li>

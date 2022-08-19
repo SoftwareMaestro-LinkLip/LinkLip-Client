@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import AOS from 'aos';
+import { RecoilRoot } from 'recoil';
 
 function App() {
   useEffect(() => {
@@ -12,9 +13,11 @@ function App() {
 
   return (
     <div>
-      <Routes>
-        <Route path="/" element={<Dashboard />}></Route>
-      </Routes>
+      <RecoilRoot>
+        <Routes>
+          <Route path="/" element={<Dashboard />}></Route>
+        </Routes>
+      </RecoilRoot>
     </div>
   );
 }
