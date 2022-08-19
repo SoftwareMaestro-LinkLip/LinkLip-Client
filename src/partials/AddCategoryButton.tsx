@@ -3,25 +3,20 @@ import React, {
   useRef,
   useState,
   Dispatch,
-  FunctionComponent,
   useCallback,
 } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import useInput from '../hooks/useInput';
 import { ICategory } from '../typings/types';
+import { addCategory, getCategories } from '../utils/category';
 
 interface IProps {
   setCategories: Dispatch<React.SetStateAction<ICategory[]>>;
   categories: ICategory[];
-  addCategory: (name: string) => Promise<boolean | void>;
 }
 
-const AddCategoryButton: FunctionComponent<IProps> = ({
-  setCategories,
-  categories,
-  addCategory,
-}) => {
+const AddCategoryButton = (props: IProps) => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [name, onChangeName] = useInput('');
@@ -54,10 +49,14 @@ const AddCategoryButton: FunctionComponent<IProps> = ({
   const onSubmitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      addCategory(name);
+      addCategory(name).then(() => {
+        getCategories().then((res) => {
+          props.setCategories([...res]);
+        });
+      });
       setDropdownOpen(false);
     },
-    [setCategories, setDropdownOpen, categories, name],
+    [props.setCategories, setDropdownOpen, props.categories, name],
   );
 
   const onDropHandler = useCallback(() => {

@@ -3,31 +3,36 @@ import { ToolArea } from '../css/Conponents';
 import { NoteContainer } from '../css/Containers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import { isURL, getFullURL } from '../utils/link';
-import { IContent } from '../typings/types';
-import { getContents } from '../utils/content';
-
+import { isURL, getFullURL, parse } from '../utils/link';
+import { ILinkContent } from '../typings/types';
+import { getContents, addLinkContent } from '../utils/content';
+import { useResetRecoilState, useRecoilValue } from 'recoil';
+import {
+  termState,
+  curCategoryIdState,
+  contentsSizeState,
+  pageIdxState,
+} from '../stores/atoms';
 import useInput from '../hooks/useInput';
-import axios from 'axios';
 
 interface IProps {
   sidebarOpen: boolean;
-  setPage: Dispatch<React.SetStateAction<number>>;
-  setContents: Dispatch<React.SetStateAction<IContent[]>>;
-  contents: IContent[];
-  contentsSize: number;
-  curCategoryId: number;
+  setContents: Dispatch<React.SetStateAction<ILinkContent[]>>;
+  contents: ILinkContent[];
 }
 
 const Notebox = (props: IProps) => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [note, onChangeNote, setNote] = useInput('');
+  const resetTerm = useResetRecoilState(termState);
+  const curCategoryId = useRecoilValue(curCategoryIdState);
+  const contentsSize = useRecoilValue(contentsSizeState);
+  const resetPageIdx = useResetRecoilState(pageIdxState);
 
   useEffect(() => {
     if (ref === null || ref.current === null) {
       return;
     }
-    // ref.current.style.height = '38px';
     ref.current.style.height = ref.current.scrollHeight + 'px';
   }, []);
 
@@ -44,7 +49,7 @@ const Notebox = (props: IProps) => {
       event.preventDefault();
 
       if (isURL(note)) {
-        const tempContent = {
+        const loadingContent = {
           id: 0,
           url: note,
           linkImg: '',
@@ -52,47 +57,26 @@ const Notebox = (props: IProps) => {
           text: '',
         };
         setNote('');
-        props.setContents([tempContent, ...props.contents]);
-        axios
-          .get(
-            `${import.meta.env.VITE_API_PARSER}/link/v1?url=${getFullURL(
-              note,
-            ).replace(/^([^?#]*).*/, '$1')}`,
-          )
-          .then((response) => {
-            const body = response.data.data;
-            body.categoryId = props.curCategoryId;
-            axios
-              .post(
-                `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
-                body,
-                {
-                  withCredentials: true,
-                  headers: { 'Content-Type': 'application/json' },
-                },
-              )
-              .then(() => {
-                props.setPage(0);
-                getContents(
-                  '',
-                  0,
-                  props.curCategoryId,
-                  props.contentsSize,
-                ).then((res) => {
-                  props.setContents([...res]);
-                });
+        props.setContents([loadingContent, ...props.contents]);
 
-                if (ref !== null) {
-                  ref.current!.style.height = '38px';
-                }
-              });
-          })
-          .catch((err) => {
-            console.log(err);
+        parse(note).then((body) => {
+          body.categoryId = curCategoryId;
+          console.log('body', body);
+          addLinkContent(body).then(() => {
+            resetPageIdx();
+            resetTerm();
+            getContents('', 0, curCategoryId, contentsSize).then((res) => {
+              props.setContents([...res]);
+            });
+
+            if (ref !== null) {
+              ref.current!.style.height = '38px';
+            }
           });
+        });
       }
     },
-    [note, setNote, props.setPage],
+    [note, setNote],
   );
 
   const onKeyDown = useCallback(

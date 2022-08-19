@@ -1,4 +1,4 @@
-export interface IContent {
+export interface ILinkContent {
   id: number;
   url: string;
   linkImg: string;

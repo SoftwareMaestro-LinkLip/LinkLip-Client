@@ -3,10 +3,10 @@ import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { IContent } from '../typings/types';
+import { ILinkContent } from '../typings/types';
 
 interface IProps {
-  content: IContent;
+  content: ILinkContent;
 }
 
 const CardOptionButton = (props: IProps) => {

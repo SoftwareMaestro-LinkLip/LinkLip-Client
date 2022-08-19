@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import { IContent } from '../typings/types';
+import { ILinkContent } from '../typings/types';
+import { parse } from './link';
 
 export const getContents = async (
   term: string = '',
@@ -17,16 +18,18 @@ export const getContents = async (
 
   const response: AxiosResponse<any> = await axios.get(target);
 
-  // .then((response) => {
-  //   if (response.data.success) {
-  //     res = [...response.data.data.pageDto.content];
-  //   }
-  // })
-  // .catch((err) => console.log(err));
-
   return [...response.data.data.pageDto.content];
 };
 
-export default {
-  getContents,
+export const addLinkContent = async (content: ILinkContent): Promise<any> => {
+  const response = await axios.post(
+    `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
+    content,
+    {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+
+  return response.data;
 };
