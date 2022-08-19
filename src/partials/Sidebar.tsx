@@ -12,27 +12,23 @@ import CategoryOptionButton from './CategoryOptionButton';
 import EditCategoryInput from './EditCategoryInput';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { curCategoryIdState } from '../stores/atoms';
+import { curCategoryIdState, sidebarOpenState } from '../stores/atoms';
 import { getCategories } from '../utils/category';
 
-interface IProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Sidebar = (props: IProps) => {
+const Sidebar = () => {
   const ref = useRef(null);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [editCategoryId, setEditCategoryId] = useState(0);
   const [curCategoryId, setCurCategoryId] = useRecoilState(curCategoryIdState);
+  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenState);
 
   useOnClickOutside(
     ref,
     () => {
       // event.preventDefault();
-      props.setSidebarOpen(false);
+      setSidebarOpen(false);
     },
-    props.sidebarOpen,
+    sidebarOpen,
   );
 
   useEffect(() => {
@@ -46,7 +42,7 @@ const Sidebar = (props: IProps) => {
       ref={ref}
       id="sidebar"
       className={`flex flex-col absolute z-50 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
-        props.sidebarOpen ? 'translate-x-0' : '-translate-x-64'
+        sidebarOpen ? 'translate-x-0' : '-translate-x-64'
       }`}
     >
       {/* Sidebar header */}
@@ -54,9 +50,9 @@ const Sidebar = (props: IProps) => {
         {/* Close button */}
         <button
           className="lg:hidden text-slate-500 hover:text-slate-400"
-          onClick={() => props.setSidebarOpen(!props.sidebarOpen)}
+          onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-controls="sidebar"
-          aria-expanded={props.sidebarOpen}
+          aria-expanded={sidebarOpen}
         >
           <span className="sr-only">Close sidebar</span>
           <svg

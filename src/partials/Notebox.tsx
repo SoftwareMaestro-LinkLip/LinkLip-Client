@@ -4,30 +4,27 @@ import { NoteContainer } from '../css/Containers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { isURL, getFullURL, parse } from '../utils/link';
-import { ILinkContent } from '../typings/types';
 import { getContents, addLinkContent } from '../utils/content';
-import { useResetRecoilState, useRecoilValue } from 'recoil';
+import { useResetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 import {
   termState,
   curCategoryIdState,
   contentsSizeState,
   pageIdxState,
+  contentsState,
+  sidebarOpenState,
 } from '../stores/atoms';
 import useInput from '../hooks/useInput';
 
-interface IProps {
-  sidebarOpen: boolean;
-  setContents: Dispatch<React.SetStateAction<ILinkContent[]>>;
-  contents: ILinkContent[];
-}
-
-const Notebox = (props: IProps) => {
+const Notebox = () => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [note, onChangeNote, setNote] = useInput('');
   const resetTerm = useResetRecoilState(termState);
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const contentsSize = useRecoilValue(contentsSizeState);
   const resetPageIdx = useResetRecoilState(pageIdxState);
+  const [contents, setContents] = useRecoilState(contentsState);
+  const sidebarOpen = useRecoilValue(sidebarOpenState);
 
   useEffect(() => {
     if (ref === null || ref.current === null) {
@@ -57,15 +54,16 @@ const Notebox = (props: IProps) => {
           text: '',
         };
         setNote('');
-        props.setContents([loadingContent, ...props.contents]);
+        setContents([loadingContent, ...contents]);
 
         parse(note).then((body) => {
           body.categoryId = curCategoryId;
+          // console.log('body', body);
           addLinkContent(body).then(() => {
             resetPageIdx();
             resetTerm();
-            getContents('', 0, curCategoryId, contentsSize).then((res) => {
-              props.setContents([...res]);
+            getContents(contentsSize, curCategoryId).then((res) => {
+              setContents([...res]);
             });
 
             if (ref !== null) {
@@ -94,10 +92,13 @@ const Notebox = (props: IProps) => {
     <div className="flex justify-center z-40 hover:z-40">
       <div
         className={`fixed bottom-0 w-full
-       lg:w-9/12  p-2 z-40`}
+       lg:w-9/12  m-4 z-40`}
       >
-        <NoteContainer>
-          <form onSubmit={onSubmitHandler}>
+        <div className="flex w-full">
+          <form
+            onSubmit={onSubmitHandler}
+            className="w-full rounded border-slate-300 bg-slate-300 "
+          >
             <textarea
               onChange={onChangeNote}
               onKeyPress={onKeyDown}
@@ -106,14 +107,18 @@ const Notebox = (props: IProps) => {
               rows={1}
               ref={ref}
               onInput={handleResizeHeight}
+              className="w-full border-slate-300 rounded-t resize-none outline-0 shadow-none overflow-hidden ring-0 focus:ring-0"
             ></textarea>
-            <ToolArea>
-              <button type="submit">
+            <div className="relative bg-slate-300 h-8 flex border-t-slate-300 items-center rounded-b">
+              <button
+                type="submit"
+                className="absolute right-1  p-2 text-slate-800"
+              >
                 <FontAwesomeIcon icon={faPaperPlane} />
               </button>
-            </ToolArea>
+            </div>
           </form>
-        </NoteContainer>
+        </div>
       </div>
     </div>
   );

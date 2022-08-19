@@ -4,11 +4,11 @@ import logo from '../images/logo.png';
 import { getShortURL } from '../utils/link';
 import CardOptionButton from './CardOptionButton';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { getContents } from '../utils/content';
+import { useSetRecoilState } from 'recoil';
+import { contentsState } from '../stores/atoms';
 
 interface IProps {
   content: ILinkContent;
-  setContents: Dispatch<React.SetStateAction<ILinkContent[]>>;
 }
 
 const override: CSSProperties = {};

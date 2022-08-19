@@ -1,4 +1,5 @@
-import { atom } from 'recoil';
+import { atom, RecoilState } from 'recoil';
+import { ILinkContent } from '../typings/types';
 
 export const termState = atom({
   key: 'termState',
@@ -18,6 +19,16 @@ export const contentsSizeState = atom({
 export const pageIdxState = atom({
   key: 'pageIdxState',
   default: 0,
+});
+
+export const contentsState: RecoilState<ILinkContent[]> = atom<ILinkContent[]>({
+  key: 'contentsState',
+  default: [],
+});
+
+export const sidebarOpenState = atom({
+  key: 'sidebarOpenState',
+  default: false,
 });
 
 export const dashboardInfoAtom = atom({

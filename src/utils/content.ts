@@ -3,14 +3,14 @@ import { ILinkContent } from '../typings/types';
 import { parse } from './link';
 
 export const getContents = async (
-  term: string = '',
-  page: number = 0,
-  categoryId: number = 0,
   contentsSize: number = 12,
+  categoryId: number = 0,
+  term: string = '',
+  pageIdx: number = 0,
 ): Promise<any> => {
   const target = `${
     import.meta.env.VITE_API_SERVER
-  }/content/v1/link?page=${page}&size=${contentsSize}${
+  }/content/v1/link?page=${pageIdx}&size=${contentsSize}${
     !!term ? `&term=${term}` : ''
   }${!!categoryId ? `&categoryId=${categoryId}` : ''}`;
 
