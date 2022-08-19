@@ -30,5 +30,7 @@ export const parse = async (url: string): Promise<any> => {
     throw response;
   }
 
+  console.log('response.data.data', response.data.data);
+
   return response.data.data;
 };
