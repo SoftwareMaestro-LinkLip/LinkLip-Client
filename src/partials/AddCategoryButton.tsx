@@ -10,16 +10,14 @@ import useKeyPressESC from '../hooks/useKeyPressESC';
 import useInput from '../hooks/useInput';
 import { ICategory } from '../typings/types';
 import { addCategory, getCategories } from '../utils/category';
+import { useRecoilState } from 'recoil';
+import { categoriesSelector } from '../stores/selectors';
 
-interface IProps {
-  setCategories: Dispatch<React.SetStateAction<ICategory[]>>;
-  categories: ICategory[];
-}
-
-const AddCategoryButton = (props: IProps) => {
+const AddCategoryButton = () => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [name, onChangeName] = useInput('');
+  const [categories, setCategories] = useRecoilState(categoriesSelector);
 
   useOnClickOutside(
     ref,
@@ -51,12 +49,12 @@ const AddCategoryButton = (props: IProps) => {
       event.preventDefault();
       addCategory(name).then(() => {
         getCategories().then((res) => {
-          props.setCategories([...res]);
+          setCategories([...res]);
         });
       });
       setDropdownOpen(false);
     },
-    [props.setCategories, setDropdownOpen, props.categories, name],
+    [setCategories, setDropdownOpen, categories, name],
   );
 
   const onDropHandler = useCallback(() => {

@@ -1,26 +1,27 @@
-import { Dispatch, FunctionComponent, useCallback, useEffect } from 'react';
-import '../css/reset.css';
+import { useCallback } from 'react';
 import { getContents } from '../utils/content';
-import { ILinkContent } from '../typings/types';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import {
-  termState,
-  curCategoryIdState,
-  contentsSizeState,
-  pageIdxState,
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil';
+import {
+  termAtom,
+  curCategoryIdAtom,
+  contentsSizeAtom,
+  pageIdxAtom,
+  contentsAtom,
+  sidebarOpenAtom,
 } from '../stores/atoms';
 
-interface IProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
-  setContents: Dispatch<React.SetStateAction<ILinkContent[]>>;
-}
-
-const Header = (props: IProps) => {
-  const [term, setTerm] = useRecoilState(termState);
-  const curCategoryId = useRecoilValue(curCategoryIdState);
-  const contentsSize = useRecoilValue(contentsSizeState);
-  const resetPageIdx = useResetRecoilState(pageIdxState);
+const Header = () => {
+  const [term, setTerm] = useRecoilState(termAtom);
+  const curCategoryId = useRecoilValue(curCategoryIdAtom);
+  const contentsSize = useRecoilValue(contentsSizeAtom);
+  const resetPageIdx = useResetRecoilState(pageIdxAtom);
+  const setContents = useSetRecoilState(contentsAtom);
+  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenAtom);
 
   const onChangeHandler = useCallback(
     (event: any) => {
@@ -33,8 +34,8 @@ const Header = (props: IProps) => {
     event.preventDefault();
     resetPageIdx();
 
-    getContents(term, 0, curCategoryId, contentsSize).then((res) => {
-      props.setContents([...res]);
+    getContents(contentsSize, curCategoryId, term).then((res) => {
+      setContents([...res]);
     });
   };
 
@@ -45,8 +46,8 @@ const Header = (props: IProps) => {
           <button
             className="px-4 text-slate-400 hover:text-slate-400 lg:hidden "
             aria-controls="sidebar"
-            aria-expanded={props.sidebarOpen}
-            onClick={() => props.setSidebarOpen(!props.sidebarOpen)}
+            aria-expanded={sidebarOpen}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             <span className="sr-only">Open sidebar</span>
             <svg

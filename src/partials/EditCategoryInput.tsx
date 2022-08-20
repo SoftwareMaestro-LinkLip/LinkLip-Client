@@ -3,25 +3,27 @@ import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import useInput from '../hooks/useInput';
 import { getCategories, editCategory } from '../utils/category';
+import { useSetRecoilState, useResetRecoilState } from 'recoil';
+import { categoriesSelector } from '../stores/selectors';
+import { editCategoryIdAtom } from '../stores/atoms';
 import { ICategory } from '../typings/types';
 
 interface IProps {
-  categoryId: number;
-  categoryName: string;
-  setEditCategoryId: Dispatch<React.SetStateAction<number>>;
-  setCategories: Dispatch<React.SetStateAction<ICategory[]>>;
+  categoryInfo: ICategory;
 }
 
 const EditCategoryInput = (props: IProps) => {
   const ref = useRef(null);
-  const [name, onChangeName] = useInput(props.categoryName);
+  const [name, onChangeName] = useInput(props.categoryInfo.name);
+  const setCategories = useSetRecoilState(categoriesSelector);
+  const resetEditCategoryId = useResetRecoilState(editCategoryIdAtom);
 
   useOnClickOutside(ref, () => {
-    props.setEditCategoryId(0);
+    resetEditCategoryId();
   });
 
   useKeyPressESC(() => {
-    props.setEditCategoryId(0);
+    resetEditCategoryId();
   });
 
   useEffect(() => {
@@ -34,12 +36,12 @@ const EditCategoryInput = (props: IProps) => {
   const onSubmitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      editCategory(props.categoryId, name).then(() => {
+      editCategory(props.categoryInfo.id, name).then(() => {
         getCategories().then((res) => {
-          props.setCategories([...res]);
+          setCategories([...res]);
         });
       });
-      props.setEditCategoryId(0);
+      resetEditCategoryId();
     },
     [name],
   );

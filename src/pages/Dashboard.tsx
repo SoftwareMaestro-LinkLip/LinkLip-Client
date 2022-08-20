@@ -1,4 +1,3 @@
-import '../css/style.scss';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../partials/Header';
@@ -9,20 +8,20 @@ import LinkCard from '../partials/LinkCard';
 import { getContents } from '../utils/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
-  termState,
-  curCategoryIdState,
-  contentsSizeState,
-  pageIdxState,
+  termAtom,
+  curCategoryIdAtom,
+  contentsSizeAtom,
+  pageIdxAtom,
+  contentsAtom,
 } from '../stores/atoms';
 
 const Dashboard = () => {
   const [bottom, setBottom] = useState(false);
-  const [contents, setContents] = useState<ILinkContent[]>([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [pageIdx, setPageIdx] = useRecoilState(pageIdxState);
-  const term = useRecoilValue(termState);
-  const curCategoryId = useRecoilValue(curCategoryIdState);
-  const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
+  const [contents, setContents] = useRecoilState<ILinkContent[]>(contentsAtom);
+  const [pageIdx, setPageIdx] = useRecoilState(pageIdxAtom);
+  const term = useRecoilValue(termAtom);
+  const curCategoryId = useRecoilValue(curCategoryIdAtom);
+  const [contentsSize, setContentsSize] = useRecoilState(contentsSizeAtom);
 
   useEffect(() => {
     // change page title tag
@@ -39,24 +38,26 @@ const Dashboard = () => {
     } else {
       cnt = 12;
     }
-    getContents(term, 0, curCategoryId, cnt).then((res) => {
+    getContents(cnt, curCategoryId, term).then((res) => {
       setContents([...res]);
     });
   }, []);
 
   useEffect(() => {
-    getContents(term, 0, curCategoryId, contentsSize).then((res) => {
+    getContents(contentsSize, curCategoryId, term).then((res) => {
       setContents([...res]);
     });
   }, [curCategoryId]);
 
   useEffect(() => {
     if (bottom) {
-      getContents(term, pageIdx + 1).then((res) => {
-        setContents([...contents, ...res]);
-        setPageIdx(pageIdx + 1);
-        setBottom(false);
-      });
+      getContents(contentsSize, curCategoryId, term, pageIdx + 1).then(
+        (res) => {
+          setContents([...contents, ...res]);
+          setPageIdx(pageIdx + 1);
+          setBottom(false);
+        },
+      );
     }
   }, [bottom, pageIdx]);
 
@@ -71,7 +72,7 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen ">
       {/* Side Bar */}
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <Sidebar />
       {/* Content area */}
       <div
         className="w-full overflow-y-scroll"
@@ -79,27 +80,17 @@ const Dashboard = () => {
         onScroll={onScroll}
       >
         {/* Header */}
-        <Header
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-          setContents={setContents}
-        />
+        <Header />
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
           <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full ">
             {contents.map((item, idx) => {
-              return (
-                <LinkCard key={idx} content={item} setContents={setContents} />
-              );
+              return <LinkCard key={idx} content={item} />;
             })}
           </div>
         </main>
         {/* TextArea */}
-        <Notebox
-          sidebarOpen={sidebarOpen}
-          setContents={setContents}
-          contents={contents}
-        ></Notebox>
+        <Notebox />
       </div>
     </div>
   );

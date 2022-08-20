@@ -1,38 +1,31 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  Dispatch,
-  useCallback,
-} from 'react';
+import React, { useEffect, useRef } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
-import { ICategory } from '../typings/types';
 import AddCategoryButton from './AddCategoryButton';
 import CategoryOptionButton from './CategoryOptionButton';
 import EditCategoryInput from './EditCategoryInput';
-import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { curCategoryIdState } from '../stores/atoms';
+import { categoriesSelector } from '../stores/selectors';
 import { getCategories } from '../utils/category';
+import {
+  curCategoryIdAtom,
+  sidebarOpenAtom,
+  editCategoryIdAtom,
+} from '../stores/atoms';
 
-interface IProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Sidebar = (props: IProps) => {
+const Sidebar = () => {
   const ref = useRef(null);
-  const [categories, setCategories] = useState<ICategory[]>([]);
-  const [editCategoryId, setEditCategoryId] = useState(0);
-  const [curCategoryId, setCurCategoryId] = useRecoilState(curCategoryIdState);
+  const [curCategoryId, setCurCategoryId] = useRecoilState(curCategoryIdAtom);
+  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenAtom);
+  const [categories, setCategories] = useRecoilState(categoriesSelector);
+  const [editCategoryId, setEditCategoryId] =
+    useRecoilState(editCategoryIdAtom);
 
   useOnClickOutside(
     ref,
     () => {
-      // event.preventDefault();
-      props.setSidebarOpen(false);
+      setSidebarOpen(false);
     },
-    props.sidebarOpen,
+    sidebarOpen,
   );
 
   useEffect(() => {
@@ -45,8 +38,8 @@ const Sidebar = (props: IProps) => {
     <div
       ref={ref}
       id="sidebar"
-      className={`flex flex-col absolute z-50 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
-        props.sidebarOpen ? 'translate-x-0' : '-translate-x-64'
+      className={`flex flex-col absolute z-50 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll scrollbar-hide lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-64'
       }`}
     >
       {/* Sidebar header */}
@@ -54,11 +47,11 @@ const Sidebar = (props: IProps) => {
         {/* Close button */}
         <button
           className="lg:hidden text-slate-500 hover:text-slate-400"
-          onClick={() => props.setSidebarOpen(!props.sidebarOpen)}
+          onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-controls="sidebar"
-          aria-expanded={props.sidebarOpen}
+          aria-expanded={sidebarOpen}
         >
-          <span className="sr-only">Close sidebar</span>
+          <span className="sr-only">사이드바 닫기</span>
           <svg
             className="w-6 h-6 fill-current"
             viewBox="0 0 24 24"
@@ -68,6 +61,7 @@ const Sidebar = (props: IProps) => {
           </svg>
         </button>
       </div>
+      {/* 카테고리 목록 */}
       <nav className="space-y-8">
         <div className="flex justify-between">
           <h3
@@ -76,10 +70,7 @@ const Sidebar = (props: IProps) => {
           >
             카테고리
           </h3>
-          <AddCategoryButton
-            categories={categories}
-            setCategories={setCategories}
-          />
+          <AddCategoryButton />
         </div>
         <ol>
           {categories.map((item) => {
@@ -101,21 +92,13 @@ const Sidebar = (props: IProps) => {
                       {item.name}
                     </button>
                     {item.id !== 0 ? (
-                      <CategoryOptionButton
-                        setEditCategoryId={setEditCategoryId}
-                        categoryId={item.id}
-                      />
+                      <CategoryOptionButton categoryId={item.id} />
                     ) : (
                       <></>
                     )}
                   </>
                 ) : (
-                  <EditCategoryInput
-                    categoryName={item.name}
-                    setEditCategoryId={setEditCategoryId}
-                    categoryId={item.id}
-                    setCategories={setCategories}
-                  />
+                  <EditCategoryInput categoryInfo={item} />
                 )}
               </li>
             );

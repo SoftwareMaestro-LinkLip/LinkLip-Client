@@ -17,7 +17,7 @@ export const getCategories = async (
     alert('카테고리를 불러오지 못했습니다');
   }
 
-  return [total, ...response.data.data.category];
+  return [...response.data.data.category];
 };
 
 export const addCategory = async (name: string) => {
