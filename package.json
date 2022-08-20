@@ -27,6 +27,7 @@
     "react-spinners": "^0.13.4",
     "recoil": "^0.7.5",
     "sass": "^1.53.0",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "ts-jest": "^28.0.7"
   },
   "devDependencies": {

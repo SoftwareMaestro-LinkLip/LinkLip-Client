@@ -1,11 +1,9 @@
-import React, { Dispatch, useState, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import { ILinkContent } from '../typings/types';
-import logo from '../images/logo.png';
+import logo from '../assets/images/logo.png';
 import { getShortURL } from '../utils/link';
 import CardOptionButton from './CardOptionButton';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { useSetRecoilState } from 'recoil';
-import { contentsState } from '../stores/atoms';
 
 interface IProps {
   content: ILinkContent;
@@ -50,7 +48,7 @@ const LinkCard = (props: IProps) => {
         <a
           href={props.content.url}
           target="_blank"
-          className="text-slate-400 mx-2 my-2 break-all h-4 overflow-hidden"
+          className="text-slate-400 mx-2 break-all h-8 overflow-hidden"
         >
           {getShortURL(props.content.url)}
         </a>

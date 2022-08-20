@@ -3,9 +3,10 @@ import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { useSetRecoilState } from 'recoil';
+import { editCategoryIdAtom } from '../stores/atoms';
 
 interface IProps {
-  setEditCategoryId: Dispatch<React.SetStateAction<number>>;
   categoryId: number;
 }
 
@@ -13,6 +14,7 @@ const CategoryOptionButton = (props: IProps) => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
+  const setEditCategoryId = useSetRecoilState(editCategoryIdAtom);
 
   useOnClickOutside(
     ref,
@@ -31,7 +33,7 @@ const CategoryOptionButton = (props: IProps) => {
   }, [setDropdownOpen, dropdownOpen]);
 
   const onEditHandler = useCallback(() => {
-    props.setEditCategoryId(props.categoryId);
+    setEditCategoryId(props.categoryId);
     setDropdownOpen(false);
   }, [dropdownOpen, editorOpen, setDropdownOpen, setEditorOpen]);
 

@@ -3,8 +3,8 @@
   "short_name": "linklip",
   "start_url": "https://develop.d2q3btuxg9ucoe.amplifyapp.com/",
   "display": "standalone",
-  "background_color": "#282c34",
-  "theme_color": "#282c34",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
   "description": "LinkLip",
   "icons": [
     {

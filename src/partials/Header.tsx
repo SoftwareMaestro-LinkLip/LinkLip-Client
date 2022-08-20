@@ -1,5 +1,4 @@
-import { Dispatch, FunctionComponent, useCallback, useEffect } from 'react';
-import '../css/reset.css';
+import { useCallback } from 'react';
 import { getContents } from '../utils/content';
 import {
   useRecoilState,
@@ -8,21 +7,21 @@ import {
   useSetRecoilState,
 } from 'recoil';
 import {
-  termState,
-  curCategoryIdState,
-  contentsSizeState,
-  pageIdxState,
-  contentsState,
-  sidebarOpenState,
+  termAtom,
+  curCategoryIdAtom,
+  contentsSizeAtom,
+  pageIdxAtom,
+  contentsAtom,
+  sidebarOpenAtom,
 } from '../stores/atoms';
 
 const Header = () => {
-  const [term, setTerm] = useRecoilState(termState);
-  const curCategoryId = useRecoilValue(curCategoryIdState);
-  const contentsSize = useRecoilValue(contentsSizeState);
-  const resetPageIdx = useResetRecoilState(pageIdxState);
-  const setContents = useSetRecoilState(contentsState);
-  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenState);
+  const [term, setTerm] = useRecoilState(termAtom);
+  const curCategoryId = useRecoilValue(curCategoryIdAtom);
+  const contentsSize = useRecoilValue(contentsSizeAtom);
+  const resetPageIdx = useResetRecoilState(pageIdxAtom);
+  const setContents = useSetRecoilState(contentsAtom);
+  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenAtom);
 
   const onChangeHandler = useCallback(
     (event: any) => {

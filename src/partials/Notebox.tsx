@@ -1,30 +1,26 @@
 import React, { Dispatch, useCallback, useRef, useEffect } from 'react';
-import { ToolArea } from '../css/Conponents';
-import { NoteContainer } from '../css/Containers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { isURL, getFullURL, parse } from '../utils/link';
 import { getContents, addLinkContent } from '../utils/content';
 import { useResetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 import {
-  termState,
-  curCategoryIdState,
-  contentsSizeState,
-  pageIdxState,
-  contentsState,
-  sidebarOpenState,
+  termAtom,
+  curCategoryIdAtom,
+  contentsSizeAtom,
+  pageIdxAtom,
+  contentsAtom,
 } from '../stores/atoms';
 import useInput from '../hooks/useInput';
 
 const Notebox = () => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [note, onChangeNote, setNote] = useInput('');
-  const resetTerm = useResetRecoilState(termState);
-  const curCategoryId = useRecoilValue(curCategoryIdState);
-  const contentsSize = useRecoilValue(contentsSizeState);
-  const resetPageIdx = useResetRecoilState(pageIdxState);
-  const [contents, setContents] = useRecoilState(contentsState);
-  const sidebarOpen = useRecoilValue(sidebarOpenState);
+  const resetTerm = useResetRecoilState(termAtom);
+  const curCategoryId = useRecoilValue(curCategoryIdAtom);
+  const contentsSize = useRecoilValue(contentsSizeAtom);
+  const resetPageIdx = useResetRecoilState(pageIdxAtom);
+  const [contents, setContents] = useRecoilState(contentsAtom);
 
   useEffect(() => {
     if (ref === null || ref.current === null) {
@@ -91,7 +87,7 @@ const Notebox = () => {
   return (
     <div className="flex justify-center z-40 hover:z-40">
       <div
-        className={`fixed bottom-0 w-full
+        className={`fixed bottom-0 w-11/12 
        lg:w-9/12  m-4 z-40`}
       >
         <div className="flex w-full">

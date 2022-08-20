@@ -1,4 +1,3 @@
-import '../css/style.scss';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../partials/Header';
@@ -7,24 +6,22 @@ import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
 import LinkCard from '../partials/LinkCard';
 import { getContents } from '../utils/content';
-import { useRecoilState, useRecoilValue, RecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
-  termState,
-  curCategoryIdState,
-  contentsSizeState,
-  pageIdxState,
-  contentsState,
-  sidebarOpenState,
+  termAtom,
+  curCategoryIdAtom,
+  contentsSizeAtom,
+  pageIdxAtom,
+  contentsAtom,
 } from '../stores/atoms';
 
 const Dashboard = () => {
   const [bottom, setBottom] = useState(false);
-  const [contents, setContents] = useRecoilState<ILinkContent[]>(contentsState);
-  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenState);
-  const [pageIdx, setPageIdx] = useRecoilState(pageIdxState);
-  const term = useRecoilValue(termState);
-  const curCategoryId = useRecoilValue(curCategoryIdState);
-  const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
+  const [contents, setContents] = useRecoilState<ILinkContent[]>(contentsAtom);
+  const [pageIdx, setPageIdx] = useRecoilState(pageIdxAtom);
+  const term = useRecoilValue(termAtom);
+  const curCategoryId = useRecoilValue(curCategoryIdAtom);
+  const [contentsSize, setContentsSize] = useRecoilState(contentsSizeAtom);
 
   useEffect(() => {
     // change page title tag

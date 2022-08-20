@@ -1,31 +1,28 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  Dispatch,
-  useCallback,
-} from 'react';
+import React, { useEffect, useRef } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
-import { ICategory } from '../typings/types';
 import AddCategoryButton from './AddCategoryButton';
 import CategoryOptionButton from './CategoryOptionButton';
 import EditCategoryInput from './EditCategoryInput';
-import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { curCategoryIdState, sidebarOpenState } from '../stores/atoms';
+import { categoriesSelector } from '../stores/selectors';
 import { getCategories } from '../utils/category';
+import {
+  curCategoryIdAtom,
+  sidebarOpenAtom,
+  editCategoryIdAtom,
+} from '../stores/atoms';
 
 const Sidebar = () => {
   const ref = useRef(null);
-  const [categories, setCategories] = useState<ICategory[]>([]);
-  const [editCategoryId, setEditCategoryId] = useState(0);
-  const [curCategoryId, setCurCategoryId] = useRecoilState(curCategoryIdState);
-  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenState);
+  const [curCategoryId, setCurCategoryId] = useRecoilState(curCategoryIdAtom);
+  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenAtom);
+  const [categories, setCategories] = useRecoilState(categoriesSelector);
+  const [editCategoryId, setEditCategoryId] =
+    useRecoilState(editCategoryIdAtom);
 
   useOnClickOutside(
     ref,
     () => {
-      // event.preventDefault();
       setSidebarOpen(false);
     },
     sidebarOpen,
@@ -41,7 +38,7 @@ const Sidebar = () => {
     <div
       ref={ref}
       id="sidebar"
-      className={`flex flex-col absolute z-50 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
+      className={`flex flex-col absolute z-50 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll scrollbar-hide lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-64'
       }`}
     >
@@ -54,7 +51,7 @@ const Sidebar = () => {
           aria-controls="sidebar"
           aria-expanded={sidebarOpen}
         >
-          <span className="sr-only">Close sidebar</span>
+          <span className="sr-only">사이드바 닫기</span>
           <svg
             className="w-6 h-6 fill-current"
             viewBox="0 0 24 24"
@@ -64,6 +61,7 @@ const Sidebar = () => {
           </svg>
         </button>
       </div>
+      {/* 카테고리 목록 */}
       <nav className="space-y-8">
         <div className="flex justify-between">
           <h3
@@ -72,10 +70,7 @@ const Sidebar = () => {
           >
             카테고리
           </h3>
-          <AddCategoryButton
-            categories={categories}
-            setCategories={setCategories}
-          />
+          <AddCategoryButton />
         </div>
         <ol>
           {categories.map((item) => {
@@ -97,21 +92,13 @@ const Sidebar = () => {
                       {item.name}
                     </button>
                     {item.id !== 0 ? (
-                      <CategoryOptionButton
-                        setEditCategoryId={setEditCategoryId}
-                        categoryId={item.id}
-                      />
+                      <CategoryOptionButton categoryId={item.id} />
                     ) : (
                       <></>
                     )}
                   </>
                 ) : (
-                  <EditCategoryInput
-                    categoryName={item.name}
-                    setEditCategoryId={setEditCategoryId}
-                    categoryId={item.id}
-                    setCategories={setCategories}
-                  />
+                  <EditCategoryInput categoryInfo={item} />
                 )}
               </li>
             );
