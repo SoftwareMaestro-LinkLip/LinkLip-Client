@@ -9,8 +9,6 @@ interface IProps {
   content: ILinkContent;
 }
 
-const override: CSSProperties = {};
-
 const LinkCard = (props: IProps) => {
   return (
     <div className="flex overflow-hidden rounded-lg shadow-lg bg-white h-52 hover:-translate-y-1 hover:scale-110 hover:z-10 duration-300 relative">
@@ -28,12 +26,7 @@ const LinkCard = (props: IProps) => {
             />
           ) : (
             <div className="mt-10">
-              <ClipLoader
-                color={'rgb(96 165 250)'}
-                loading={true}
-                cssOverride={override}
-                size={80}
-              />
+              <ClipLoader color={'rgb(96 165 250)'} loading={true} size={80} />
             </div>
           )}
         </a>
