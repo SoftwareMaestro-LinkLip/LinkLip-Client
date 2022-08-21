@@ -24,3 +24,8 @@ export const sidebarOpenState = atom({
   key: 'sidebarOpenState',
   default: false,
 });
+
+export const modalOpenState = atom({
+  key: 'modalOpenState',
+  default: false,
+});

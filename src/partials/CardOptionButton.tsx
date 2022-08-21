@@ -4,6 +4,8 @@ import useKeyPressESC from '../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { ILinkContent } from '../typings/types';
+import { modalOpenState } from '../stores/dashboard';
+import { useRecoilState } from 'recoil';
 
 interface IProps {
   content: ILinkContent;
@@ -12,6 +14,7 @@ interface IProps {
 const CardOptionButton = (props: IProps) => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useRecoilState(modalOpenState);
 
   useOnClickOutside(
     ref,
@@ -28,10 +31,11 @@ const CardOptionButton = (props: IProps) => {
 
   const onDropHandler = useCallback(() => {
     setDropdownOpen(!dropdownOpen);
-  }, [setDropdownOpen, dropdownOpen]);
+  }, [setDropdownOpen, dropdownOpen, setModalOpen]);
 
   const onEditHandler = useCallback(() => {
     setDropdownOpen(false);
+    setModalOpen(true);
   }, [dropdownOpen, setDropdownOpen]);
 
   return (
@@ -53,7 +57,7 @@ const CardOptionButton = (props: IProps) => {
             <ol>
               <button
                 className="inline-block px-4 py-2 bg-transparent text-blue-600 font-medium text-sm leading-tight uppercase rounded hover:text-blue-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out"
-                onClick={onDropHandler}
+                onClick={onEditHandler}
               >
                 수정
               </button>

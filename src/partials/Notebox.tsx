@@ -85,10 +85,10 @@ const Notebox = () => {
   );
 
   return (
-    <div className="flex justify-center z-40 hover:z-40">
+    <div className="flex justify-center z-30 ">
       <div
         className={`fixed bottom-0 w-11/12 
-       lg:w-9/12  m-4 z-40`}
+       lg:w-9/12 m-4 z-30`}
       >
         <div className="flex w-full">
           <form

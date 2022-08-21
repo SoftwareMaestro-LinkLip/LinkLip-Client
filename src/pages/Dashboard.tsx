@@ -5,6 +5,7 @@ import { ILinkContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
 import LinkCard from '../partials/LinkCard';
+import Modal from '../partials/Modal';
 import { getContents } from '../utils/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { contentsState } from '../stores/content';
@@ -13,6 +14,7 @@ import {
   curCategoryIdState,
   contentsSizeState,
   pageIdxState,
+  modalOpenState,
 } from '../stores/dashboard';
 
 const Dashboard = () => {
@@ -22,6 +24,7 @@ const Dashboard = () => {
   const term = useRecoilValue(termState);
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
+  const modalOpen = useRecoilValue(modalOpenState);
 
   useEffect(() => {
     // change page title tag
@@ -74,11 +77,10 @@ const Dashboard = () => {
       {/* Side Bar */}
       <Sidebar />
       {/* Content area */}
-      <div
-        className="w-full overflow-y-scroll"
-        id="pageContainer"
-        onScroll={onScroll}
-      >
+
+      <div className="w-full overflow-y-scroll relative" onScroll={onScroll}>
+        {modalOpen && <Modal />}
+
         {/* Header */}
         <Header />
         {/* Cards */}

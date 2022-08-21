@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import useKeyPressESC from '../hooks/useKeyPressESC';
 import AddCategoryButton from './AddCategoryButton';
 import CategoryOptionButton from './CategoryOptionButton';
 import EditCategoryInput from './EditCategoryInput';
@@ -24,6 +25,10 @@ const Sidebar = () => {
     },
     sidebarOpen,
   );
+
+  useKeyPressESC(() => {
+    setSidebarOpen(false);
+  });
 
   useEffect(() => {
     getCategories().then((res) => {
@@ -62,7 +67,7 @@ const Sidebar = () => {
       <nav className="space-y-8">
         <div className="flex justify-between">
           <h3
-            className="text-lg uppercase text-slate-400 font-semibold pl-3"
+            className="text-lg text-slate-400 font-semibold pl-3"
             tabIndex={3}
           >
             카테고리
