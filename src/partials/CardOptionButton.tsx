@@ -1,4 +1,4 @@
-import React, { useRef, useState, Dispatch, useCallback } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

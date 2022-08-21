@@ -4,7 +4,7 @@ import useKeyPressESC from '../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { useSetRecoilState } from 'recoil';
-import { editCategoryIdAtom } from '../stores/atoms';
+import { editCategoryIdState } from '../stores/category';
 
 interface IProps {
   categoryId: number;
@@ -14,7 +14,7 @@ const CategoryOptionButton = (props: IProps) => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
-  const setEditCategoryId = useSetRecoilState(editCategoryIdAtom);
+  const setEditCategoryId = useSetRecoilState(editCategoryIdState);
 
   useOnClickOutside(
     ref,

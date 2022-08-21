@@ -4,21 +4,18 @@ import AddCategoryButton from './AddCategoryButton';
 import CategoryOptionButton from './CategoryOptionButton';
 import EditCategoryInput from './EditCategoryInput';
 import { useRecoilState } from 'recoil';
-import { categoriesSelector } from '../stores/selectors';
+import { categoriesState } from '../stores/category';
 import { getCategories } from '../utils/category';
-import {
-  curCategoryIdAtom,
-  sidebarOpenAtom,
-  editCategoryIdAtom,
-} from '../stores/atoms';
+import { editCategoryIdState } from '../stores/category';
+import { curCategoryIdState, sidebarOpenState } from '../stores/dashboard';
 
 const Sidebar = () => {
   const ref = useRef(null);
-  const [curCategoryId, setCurCategoryId] = useRecoilState(curCategoryIdAtom);
-  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenAtom);
-  const [categories, setCategories] = useRecoilState(categoriesSelector);
+  const [curCategoryId, setCurCategoryId] = useRecoilState(curCategoryIdState);
+  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenState);
+  const [categories, setCategories] = useRecoilState(categoriesState);
   const [editCategoryId, setEditCategoryId] =
-    useRecoilState(editCategoryIdAtom);
+    useRecoilState(editCategoryIdState);
 
   useOnClickOutside(
     ref,

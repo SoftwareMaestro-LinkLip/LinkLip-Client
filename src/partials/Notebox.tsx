@@ -1,26 +1,26 @@
 import React, { Dispatch, useCallback, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import { isURL, getFullURL, parse } from '../utils/link';
+import { isURL, parse } from '../utils/link';
 import { getContents, addLinkContent } from '../utils/content';
 import { useResetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 import {
-  termAtom,
-  curCategoryIdAtom,
-  contentsSizeAtom,
-  pageIdxAtom,
-  contentsAtom,
-} from '../stores/atoms';
+  termState,
+  curCategoryIdState,
+  contentsSizeState,
+  pageIdxState,
+} from '../stores/dashboard';
+import { contentsState } from '../stores/content';
 import useInput from '../hooks/useInput';
 
 const Notebox = () => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [note, onChangeNote, setNote] = useInput('');
-  const resetTerm = useResetRecoilState(termAtom);
-  const curCategoryId = useRecoilValue(curCategoryIdAtom);
-  const contentsSize = useRecoilValue(contentsSizeAtom);
-  const resetPageIdx = useResetRecoilState(pageIdxAtom);
-  const [contents, setContents] = useRecoilState(contentsAtom);
+  const resetTerm = useResetRecoilState(termState);
+  const curCategoryId = useRecoilValue(curCategoryIdState);
+  const contentsSize = useRecoilValue(contentsSizeState);
+  const resetPageIdx = useResetRecoilState(pageIdxState);
+  const [contents, setContents] = useRecoilState(contentsState);
 
   useEffect(() => {
     if (ref === null || ref.current === null) {

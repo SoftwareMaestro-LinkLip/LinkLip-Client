@@ -1,23 +1,16 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  Dispatch,
-  useCallback,
-} from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import useInput from '../hooks/useInput';
-import { ICategory } from '../typings/types';
 import { addCategory, getCategories } from '../utils/category';
 import { useRecoilState } from 'recoil';
-import { categoriesSelector } from '../stores/selectors';
+import { categoriesState } from '../stores/category';
 
 const AddCategoryButton = () => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [name, onChangeName] = useInput('');
-  const [categories, setCategories] = useRecoilState(categoriesSelector);
+  const [categories, setCategories] = useRecoilState(categoriesState);
 
   useOnClickOutside(
     ref,

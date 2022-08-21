@@ -7,21 +7,21 @@ import {
   useSetRecoilState,
 } from 'recoil';
 import {
-  termAtom,
-  curCategoryIdAtom,
-  contentsSizeAtom,
-  pageIdxAtom,
-  contentsAtom,
-  sidebarOpenAtom,
-} from '../stores/atoms';
+  termState,
+  curCategoryIdState,
+  contentsSizeState,
+  pageIdxState,
+  sidebarOpenState,
+} from '../stores/dashboard';
+import { contentsState } from '../stores/content';
 
 const Header = () => {
-  const [term, setTerm] = useRecoilState(termAtom);
-  const curCategoryId = useRecoilValue(curCategoryIdAtom);
-  const contentsSize = useRecoilValue(contentsSizeAtom);
-  const resetPageIdx = useResetRecoilState(pageIdxAtom);
-  const setContents = useSetRecoilState(contentsAtom);
-  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenAtom);
+  const [term, setTerm] = useRecoilState(termState);
+  const curCategoryId = useRecoilValue(curCategoryIdState);
+  const contentsSize = useRecoilValue(contentsSizeState);
+  const resetPageIdx = useResetRecoilState(pageIdxState);
+  const setContents = useSetRecoilState(contentsState);
+  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenState);
 
   const onChangeHandler = useCallback(
     (event: any) => {

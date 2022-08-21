@@ -1,11 +1,10 @@
-import React, { useRef, Dispatch, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import useInput from '../hooks/useInput';
 import { getCategories, editCategory } from '../utils/category';
 import { useSetRecoilState, useResetRecoilState } from 'recoil';
-import { categoriesSelector } from '../stores/selectors';
-import { editCategoryIdAtom } from '../stores/atoms';
+import { categoriesState, editCategoryIdState } from '../stores/category';
 import { ICategory } from '../typings/types';
 
 interface IProps {
@@ -15,8 +14,8 @@ interface IProps {
 const EditCategoryInput = (props: IProps) => {
   const ref = useRef(null);
   const [name, onChangeName] = useInput(props.categoryInfo.name);
-  const setCategories = useSetRecoilState(categoriesSelector);
-  const resetEditCategoryId = useResetRecoilState(editCategoryIdAtom);
+  const setCategories = useSetRecoilState(categoriesState);
+  const resetEditCategoryId = useResetRecoilState(editCategoryIdState);
 
   useOnClickOutside(ref, () => {
     resetEditCategoryId();
