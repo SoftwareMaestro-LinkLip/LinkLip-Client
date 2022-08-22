@@ -4,7 +4,7 @@ import useKeyPressESC from '../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { ILinkContent } from '../typings/types';
-import { modalOpenState } from '../stores/dashboard';
+import { modalOpenState, openedContentState } from '../stores/dashboard';
 import { useRecoilState } from 'recoil';
 
 interface IProps {
@@ -15,6 +15,7 @@ const CardOptionButton = (props: IProps) => {
   const ref = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [modalOpen, setModalOpen] = useRecoilState(modalOpenState);
+  const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
 
   useOnClickOutside(
     ref,
@@ -34,9 +35,10 @@ const CardOptionButton = (props: IProps) => {
   }, [setDropdownOpen, dropdownOpen, setModalOpen]);
 
   const onEditHandler = useCallback(() => {
+    setOpenedContent(props.content);
     setDropdownOpen(false);
     setModalOpen(true);
-  }, [dropdownOpen, setDropdownOpen]);
+  }, [dropdownOpen, setDropdownOpen, setOpenedContent]);
 
   return (
     <div className="relative">

@@ -1,11 +1,21 @@
 import axios, { AxiosResponse } from 'axios';
 
+/**
+ * 문자열이 URL인지 체크하는 함수
+ * @param {string} url
+ * @returns {boolean}
+ */
 export const isURL = (url: string): boolean => {
   const regExp =
     /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
   return regExp.test(url);
 };
 
+/**
+ * https 포함된 URL로 변환하는 함수
+ * @param {string} url
+ * @returns {string}
+ */
 export const getFullURL = (url: string): string => {
   let res = url;
   if (!url.startsWith('https://') && !url.startsWith('http://')) {
@@ -14,10 +24,20 @@ export const getFullURL = (url: string): string => {
   return res;
 };
 
+/**
+ * 사용자 보여주기용 url 변환 함수
+ * @param {string} url
+ * @returns {string}
+ */
 export const getShortURL = (url: string): string => {
   return url.replace(/(https?:\/\/)?(www\.)?/g, '');
 };
 
+/**
+ * 링크 데이터 불러오는 함수
+ * @param {string} url
+ * @returns {Promise<any>}
+ */
 export const parse = async (url: string): Promise<any> => {
   const response: AxiosResponse<any> = await axios.get(
     `${import.meta.env.VITE_API_PARSER}/link/v1?url=${getFullURL(url).replace(
