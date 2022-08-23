@@ -22,7 +22,7 @@ const Dashboard = () => {
   const [bottom, setBottom] = useState(false);
   const [contents, setContents] = useRecoilState<ILinkContent[]>(contentsState);
   const [pageIdx, setPageIdx] = useRecoilState(pageIdxState);
-  const term = useRecoilValue(termState);
+  const [term, setTerm] = useRecoilState(termState);
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
   const modalOpen = useRecoilValue(modalOpenState);
@@ -38,6 +38,9 @@ const Dashboard = () => {
     const scrollHeight = document.getElementById('pageContainer');
     const cardHeight = 208; // 기본 컨텐츠 카드 높이
     let cnt = (Math.floor(scrollHeight?.clientHeight! / cardHeight) + 1) * 4;
+
+    console.log('cnt', scrollHeight);
+
     if (cnt > 12) {
       setContentsSize(cnt);
     } else {
@@ -50,6 +53,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     setPageIdx(0);
+    setTerm('');
     getContents(contentsSize, curCategoryId, term).then((res) => {
       setContents([...res]);
     });
@@ -76,7 +80,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen ">
+    <div className="flex h-screen " id="pageContainer">
       {/* Side Bar */}
       <Sidebar />
       {/* Content area */}
