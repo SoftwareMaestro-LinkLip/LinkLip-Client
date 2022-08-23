@@ -1,6 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 import { ICategory } from '../typings/types';
 
+/**
+ * 사용자 카테고리 불러오기 함수
+ * @param {string} term
+ * @param {number} page
+ * @param {number} categoryId
+ * @param {number} contentsSize
+ * @returns {Promise<any>}
+ */
 export const getCategories = async (
   term: string = '',
   page: number = 0,
@@ -20,6 +28,11 @@ export const getCategories = async (
   return [...response.data.data.category];
 };
 
+/**
+ * 카테고리 저장 함수
+ * @param {string} name
+ * @returns {Promise<any>}
+ */
 export const addCategory = async (name: string) => {
   const body = {
     name,
@@ -38,6 +51,12 @@ export const addCategory = async (name: string) => {
     });
 };
 
+/**
+ * 카테고리명 수정 함수
+ * @param {number} id
+ * @param {string} name
+ * @returns {Promise<any>}
+ */
 export const editCategory = async (id: number, name: string) => {
   const body = {
     name,

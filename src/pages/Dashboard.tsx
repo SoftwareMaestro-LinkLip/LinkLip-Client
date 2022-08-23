@@ -5,6 +5,7 @@ import { ILinkContent } from '../typings/types';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
 import LinkCard from '../partials/LinkCard';
+import Modal from '../partials/Modal';
 import { getContents } from '../utils/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { contentsState } from '../stores/content';
@@ -13,6 +14,8 @@ import {
   curCategoryIdState,
   contentsSizeState,
   pageIdxState,
+  modalOpenState,
+  openedContentState,
 } from '../stores/dashboard';
 
 const Dashboard = () => {
@@ -22,6 +25,8 @@ const Dashboard = () => {
   const term = useRecoilValue(termState);
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
+  const modalOpen = useRecoilValue(modalOpenState);
+  const openedContent = useRecoilState(openedContentState);
 
   useEffect(() => {
     // change page title tag
@@ -74,13 +79,11 @@ const Dashboard = () => {
       {/* Side Bar */}
       <Sidebar />
       {/* Content area */}
-      <div
-        className="w-full overflow-y-scroll"
-        id="pageContainer"
-        onScroll={onScroll}
-      >
+
+      <div className="w-full overflow-y-scroll relative" onScroll={onScroll}>
         {/* Header */}
         <Header />
+        {modalOpen && <Modal />}
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
           <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full ">
@@ -89,6 +92,7 @@ const Dashboard = () => {
             })}
           </div>
         </main>
+
         {/* TextArea */}
         <Notebox />
       </div>

@@ -1,4 +1,5 @@
-import { atom } from 'recoil';
+import { atom, RecoilState } from 'recoil';
+import { ILinkContent } from '../typings/types';
 
 export const termState = atom({
   key: 'termAtom',
@@ -24,3 +25,21 @@ export const sidebarOpenState = atom({
   key: 'sidebarOpenState',
   default: false,
 });
+
+export const modalOpenState = atom({
+  key: 'modalOpenState',
+  default: false,
+});
+
+export const openedContentState: RecoilState<ILinkContent> = atom<ILinkContent>(
+  {
+    key: 'openedContentState',
+    default: {
+      id: 0,
+      url: '',
+      linkImg: '',
+      title: '',
+      text: '',
+    },
+  },
+);

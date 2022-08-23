@@ -2,6 +2,14 @@ import axios, { AxiosResponse } from 'axios';
 import { ILinkContent } from '../typings/types';
 import { parse } from './link';
 
+/**
+ * 저장된 컨텐츠 불러오는 함수
+ * @param {number} contentsSize
+ * @param {number} categoryId
+ * @param {string} term
+ * @param {number} pageIdx
+ * @returns {Promise<any>}
+ */
 export const getContents = async (
   contentsSize: number = 12,
   categoryId: number = 0,
@@ -21,6 +29,11 @@ export const getContents = async (
   return [...response.data.data.pageDto.content];
 };
 
+/**
+ * 링크 컨텐츠 저장 함수
+ * @param {ILinkContent} content
+ * @returns {Promise<any>}
+ */
 export const addLinkContent = async (content: ILinkContent): Promise<any> => {
   const response = await axios.post(
     `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
