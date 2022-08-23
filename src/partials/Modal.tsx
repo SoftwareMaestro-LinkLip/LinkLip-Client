@@ -2,12 +2,14 @@ import React, { useCallback, useRef } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import { modalOpenState, openedContentState } from '../stores/dashboard';
-import { useRecoilState } from 'recoil';
+import { userCategoriesState } from '../stores/category';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const Modal = () => {
   const ref = useRef(null);
   const [modalOpen, setModalOpen] = useRecoilState(modalOpenState);
   const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
+  const categories = useRecoilValue(userCategoriesState);
 
   useOnClickOutside(
     ref,
@@ -57,6 +59,33 @@ const Modal = () => {
         </div>
         {/* <!-- Modal body --> */}
         <div className="my-3 mx-6 space-y-6 h-auto overflow-y-scroll scrollbar-hide">
+          <form className="flex max-w-1/2 items-center">
+            <label
+              htmlFor="category"
+              className="inline shrink-0 text-md font-medium text-gray-900 dark:text-gray-400 mr-2"
+            >
+              카테고리
+            </label>
+            <select
+              id="category"
+              className="inline bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option defaultValue={openedContent.categoryName}>
+                {openedContent.categoryName
+                  ? openedContent.categoryName
+                  : '없음'}
+              </option>
+              ;<option value={0}>선택안함</option>
+              {categories.map((item) => {
+                return (
+                  <option value={item.id} key={item.id}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </select>
+          </form>
+
           <div className="flex justify-center w-full max-h-64 overflow-hidden">
             <img
               className=" block my-0 mx-auto w-full object-cover transition  duration-300"
