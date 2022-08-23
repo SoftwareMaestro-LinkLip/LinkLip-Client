@@ -40,6 +40,7 @@ export const openedContentState: RecoilState<ILinkContent> = atom<ILinkContent>(
       linkImg: '',
       title: '',
       text: '',
+      categoryName: '',
     },
   },
 );

@@ -49,6 +49,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    setPageIdx(0);
     getContents(contentsSize, curCategoryId, term).then((res) => {
       setContents([...res]);
     });
