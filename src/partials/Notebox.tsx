@@ -48,6 +48,7 @@ const Notebox = () => {
           linkImg: '',
           title: '',
           text: '',
+          categoryName: '',
         };
         setNote('');
         setContents([loadingContent, ...contents]);
