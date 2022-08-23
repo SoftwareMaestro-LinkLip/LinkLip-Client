@@ -59,7 +59,7 @@ const Modal = () => {
         </div>
         {/* <!-- Modal body --> */}
         <div className="my-3 mx-6 space-y-6 h-auto overflow-y-scroll scrollbar-hide">
-          <form className="flex max-w-1/2 items-center">
+          <form className="flex min-w-1/2 items-center">
             <label
               htmlFor="category"
               className="inline shrink-0 text-md font-medium text-gray-900 dark:text-gray-400 mr-2"
@@ -75,7 +75,7 @@ const Modal = () => {
                   ? openedContent.categoryName
                   : '없음'}
               </option>
-              ;<option value={0}>선택안함</option>
+              ;<option value={-1}>선택안함</option>
               {categories.map((item) => {
                 return (
                   <option value={item.id} key={item.id}>
