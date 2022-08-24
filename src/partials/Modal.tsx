@@ -1,15 +1,18 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import { modalOpenState, openedContentState } from '../stores/dashboard';
 import { userCategoriesState } from '../stores/category';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { editLinkContent } from '../utils/content';
+import { IEditContentInfo } from '../typings/types';
 
 const Modal = () => {
   const ref = useRef(null);
   const [modalOpen, setModalOpen] = useRecoilState(modalOpenState);
   const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
   const categories = useRecoilValue(userCategoriesState);
+  const [selectedCategory, setSelectedCategory] = useState(-1);
 
   useOnClickOutside(
     ref,
@@ -23,7 +26,18 @@ const Modal = () => {
     editHandler();
   });
 
+  useEffect(() => {
+    console.log('content', openedContent);
+  }, [openedContent]);
+
   const editHandler = useCallback(() => {
+    if (selectedCategory >= 0) {
+      const body: IEditContentInfo = {
+        categoryId: selectedCategory,
+        title: openedContent.title,
+      };
+      editLinkContent(openedContent.id, body);
+    }
     setModalOpen(false);
   }, []);
 

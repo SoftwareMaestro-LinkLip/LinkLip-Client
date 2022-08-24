@@ -13,7 +13,7 @@ export const curCategoryIdState = atom({
 
 export const contentsSizeState = atom({
   key: 'contentsSizeState',
-  default: 12,
+  default: 24,
 });
 
 export const pageIdxState = atom({

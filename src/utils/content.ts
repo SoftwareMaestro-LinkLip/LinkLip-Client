@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { ILinkContent } from '../typings/types';
+import { ILinkContent, IEditContentInfo } from '../typings/types';
 import { parse } from './link';
 
 /**
@@ -38,6 +38,28 @@ export const addLinkContent = async (content: ILinkContent): Promise<any> => {
   const response = await axios.post(
     `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
     content,
+    {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+
+  return response.data;
+};
+
+/**
+ * 컨텐츠의 내용 수정 함수
+ * @param {number} contentId
+ * @param {IEditContentInfo} body
+ * @returns {Promise<any>}
+ */
+export const editLinkContent = async (
+  contentId: number,
+  body: IEditContentInfo,
+): Promise<any> => {
+  const response = await axios.patch(
+    `${import.meta.env.VITE_API_SERVER}/content/v1/link/?${contentId}`,
+    body,
     {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },
