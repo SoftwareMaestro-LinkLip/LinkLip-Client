@@ -49,13 +49,13 @@ const Notebox = () => {
           linkImg: '',
           title: '',
           text: '',
-          categoryId: 0,
+          // categoryId: 0,
+          categoryName: '',
         };
         setNote('');
         setContents([loadingContent, ...contents]);
 
-        parse(note).then((contentInfo) => {
-          const body: ILinkContent = contentInfo;
+        parse(note).then((body) => {
           body.categoryId = curCategoryId;
           console.log('body', body);
           addLinkContent(body).then(() => {

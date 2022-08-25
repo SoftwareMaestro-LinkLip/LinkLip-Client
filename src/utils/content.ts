@@ -58,8 +58,20 @@ export const editLinkContent = async (
   body: IEditContentInfo,
 ): Promise<any> => {
   const response = await axios.patch(
-    `${import.meta.env.VITE_API_SERVER}/content/v1/link/?${contentId}`,
+    `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
     body,
+    {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+
+  return response.data;
+};
+
+export const deleteLinkContent = async (contentId: number): Promise<any> => {
+  const response = await axios.delete(
+    `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
     {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },

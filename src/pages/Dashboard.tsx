@@ -86,6 +86,8 @@ const Dashboard = () => {
       <div className="w-full overflow-y-scroll relative" onScroll={onScroll}>
         {/* Header */}
         <Header />
+        {/* TextArea */}
+        <Notebox />
         {modalOpen && <Modal />}
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
@@ -95,9 +97,6 @@ const Dashboard = () => {
             })}
           </div>
         </main>
-
-        {/* TextArea */}
-        <Notebox />
       </div>
     </div>
   );

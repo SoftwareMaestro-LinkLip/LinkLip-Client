@@ -1,45 +1,70 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
-import { modalOpenState, openedContentState } from '../stores/dashboard';
-import { userCategoriesState } from '../stores/category';
+import {
+  modalOpenState,
+  openedContentState,
+  termState,
+  curCategoryIdState,
+  contentsSizeState,
+} from '../stores/dashboard';
+import { userCategoriesState, categoriesState } from '../stores/category';
+import { contentsState } from '../stores/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { editLinkContent } from '../utils/content';
+import { editLinkContent, getContents } from '../utils/content';
 import { IEditContentInfo } from '../typings/types';
+import useInput from '../hooks/useInput';
 
 const Modal = () => {
   const ref = useRef(null);
   const [modalOpen, setModalOpen] = useRecoilState(modalOpenState);
   const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
-  const categories = useRecoilValue(userCategoriesState);
-  const [selectedCategory, setSelectedCategory] = useState(-1);
+  const [userCategories, setUserCategories] =
+    useRecoilState(userCategoriesState);
+  const [contents, setContents] = useRecoilState(contentsState);
+  const [selectedCategory, onChangeSelectedCategory] = useInput(-1);
+  const [title, onChangeTitle] = useInput(openedContent.title);
+  const term = useRecoilValue(termState);
+  const curCategoryId = useRecoilValue(curCategoryIdState);
+  const contentsSize = useRecoilValue(contentsSizeState);
 
   useOnClickOutside(
     ref,
     () => {
-      editHandler();
+      // editHandler();
+      setModalOpen(false);
     },
     modalOpen,
   );
 
   useKeyPressESC(() => {
-    editHandler();
+    // editHandler();
+    setModalOpen(false);
   });
 
   useEffect(() => {
-    console.log('content', openedContent);
-  }, [openedContent]);
+    const htmlLabel = document.querySelectorAll('label');
+    if (!!htmlLabel) {
+      htmlLabel[0].focus();
+    }
+  }, []);
 
   const editHandler = useCallback(() => {
-    if (selectedCategory >= 0) {
-      const body: IEditContentInfo = {
-        categoryId: selectedCategory,
-        title: openedContent.title,
-      };
-      editLinkContent(openedContent.id, body);
-    }
-    setModalOpen(false);
-  }, []);
+    const body: IEditContentInfo = {
+      categoryId: selectedCategory > 0 ? selectedCategory : 1,
+      title,
+    };
+    editLinkContent(openedContent.id, body).then((res) => {
+      // setContents([
+      //   ...contents.filter((item) => item.categoryName !== selectedCategory),
+      // ]);
+    });
+
+    getContents(contentsSize, curCategoryId, term).then((res) => {
+      setContents([...res]);
+      setModalOpen(false);
+    });
+  }, [selectedCategory, title]);
 
   return (
     <div className="flex justify-center w-full">
@@ -73,7 +98,7 @@ const Modal = () => {
         </div>
         {/* <!-- Modal body --> */}
         <div className="my-3 mx-6 space-y-6 h-auto overflow-y-scroll scrollbar-hide">
-          <form className="flex min-w-1/2 items-center">
+          <div className="flex min-w-1/2 items-center">
             <label
               htmlFor="category"
               className="inline shrink-0 text-md font-medium text-gray-900 dark:text-gray-400 mr-2"
@@ -82,15 +107,16 @@ const Modal = () => {
             </label>
             <select
               id="category"
-              className="inline bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={onChangeSelectedCategory}
+              className="inline bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 w-32 max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option defaultValue={openedContent.categoryName}>
                 {openedContent.categoryName
                   ? openedContent.categoryName
                   : '없음'}
               </option>
-              ;<option value={-1}>선택안함</option>
-              {categories.map((item) => {
+              ;<option value={0}>선택안함</option>
+              {userCategories.map((item) => {
                 return (
                   <option value={item.id} key={item.id}>
                     {item.name}
@@ -98,7 +124,7 @@ const Modal = () => {
                 );
               })}
             </select>
-          </form>
+          </div>
 
           <div className="flex justify-center w-full max-h-64 overflow-hidden">
             <img
@@ -107,12 +133,47 @@ const Modal = () => {
               alt={openedContent.title}
             />
           </div>
-          <p className="text-base leading-relaxed text-white ">
-            {openedContent.title}
-          </p>
-          <p className="text-base leading-relaxed text-white">
+          <form>
+            <div className="flex items-center">
+              <label
+                htmlFor="title"
+                className="shrink-0 text-sm mr-2 font-medium text-gray-900 dark:text-gray-300"
+              >
+                제목
+              </label>
+              <input
+                type="text"
+                id="title"
+                onChange={onChangeTitle}
+                value={title}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+          </form>
+          <p className="text-base leading-relaxed text-gray-300">
             {openedContent.url}
           </p>
+        </div>
+        {/* 버튼 */}
+        <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+          <button
+            onClick={editHandler}
+            data-modal-toggle="defaultModal"
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            수정
+          </button>
+          <button
+            onClick={() => {
+              setModalOpen(false);
+            }}
+            data-modal-toggle="defaultModal"
+            type="button"
+            className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          >
+            취소
+          </button>
         </div>
       </div>
     </div>

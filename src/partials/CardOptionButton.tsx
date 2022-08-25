@@ -5,7 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { ILinkContent } from '../typings/types';
 import { modalOpenState, openedContentState } from '../stores/dashboard';
+import { contentsState } from '../stores/content';
 import { useRecoilState } from 'recoil';
+import { deleteLinkContent } from '../utils/content';
 
 interface IProps {
   content: ILinkContent;
@@ -16,6 +18,7 @@ const CardOptionButton = (props: IProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [modalOpen, setModalOpen] = useRecoilState(modalOpenState);
   const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
+  const [contents, setContents] = useRecoilState(contentsState);
 
   useOnClickOutside(
     ref,
@@ -40,6 +43,13 @@ const CardOptionButton = (props: IProps) => {
     setModalOpen(true);
   }, [dropdownOpen, setDropdownOpen, setOpenedContent]);
 
+  const onDeleteHandler = useCallback(() => {
+    setDropdownOpen(false);
+    deleteLinkContent(props.content.id).then(() => {
+      setContents([...contents.filter((item) => item.id !== props.content.id)]);
+    });
+  }, [setDropdownOpen]);
+
   return (
     <div className="relative">
       <button
@@ -62,6 +72,14 @@ const CardOptionButton = (props: IProps) => {
                 onClick={onEditHandler}
               >
                 수정
+              </button>
+            </ol>
+            <ol>
+              <button
+                className="inline-block px-4 py-2 bg-transparent text-red-600 font-medium text-sm leading-tight uppercase rounded hover:text-red-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out"
+                onClick={onDeleteHandler}
+              >
+                삭제
               </button>
             </ol>
           </li>
