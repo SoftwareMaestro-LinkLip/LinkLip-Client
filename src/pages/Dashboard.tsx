@@ -15,7 +15,6 @@ import {
   contentsSizeState,
   pageIdxState,
   modalOpenState,
-  openedContentState,
 } from '../stores/dashboard';
 
 const Dashboard = () => {
@@ -26,7 +25,6 @@ const Dashboard = () => {
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
   const modalOpen = useRecoilValue(modalOpenState);
-  const openedContent = useRecoilState(openedContentState);
 
   useEffect(() => {
     // change page title tag
@@ -39,7 +37,7 @@ const Dashboard = () => {
     const cardHeight = 208; // 기본 컨텐츠 카드 높이
     let cnt = (Math.floor(scrollHeight?.clientHeight! / cardHeight) + 1) * 4;
 
-    console.log('cnt', scrollHeight);
+    console.log('cnt', cnt);
 
     if (cnt > 12) {
       setContentsSize(cnt);
@@ -88,6 +86,8 @@ const Dashboard = () => {
       <div className="w-full overflow-y-scroll relative" onScroll={onScroll}>
         {/* Header */}
         <Header />
+        {/* TextArea */}
+        <Notebox />
         {modalOpen && <Modal />}
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
@@ -97,9 +97,6 @@ const Dashboard = () => {
             })}
           </div>
         </main>
-
-        {/* TextArea */}
-        <Notebox />
       </div>
     </div>
   );

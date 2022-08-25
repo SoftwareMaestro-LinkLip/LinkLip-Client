@@ -12,6 +12,7 @@ import {
 } from '../stores/dashboard';
 import { contentsState } from '../stores/content';
 import useInput from '../hooks/useInput';
+import { ILinkContent } from '../typings/types';
 
 const Notebox = () => {
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -48,6 +49,7 @@ const Notebox = () => {
           linkImg: '',
           title: '',
           text: '',
+          // categoryId: 0,
           categoryName: '',
         };
         setNote('');
@@ -55,7 +57,7 @@ const Notebox = () => {
 
         parse(note).then((body) => {
           body.categoryId = curCategoryId;
-          // console.log('body', body);
+          console.log('body', body);
           addLinkContent(body).then(() => {
             resetPageIdx();
             resetTerm();
