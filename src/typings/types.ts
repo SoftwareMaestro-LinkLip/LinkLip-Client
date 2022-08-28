@@ -9,11 +9,11 @@ export interface ILinkContent {
 }
 
 export interface ICategory {
-  id: number;
+  id: number | null;
   name: string;
 }
 
 export interface IEditContentInfo {
-  categoryId: number;
+  categoryId: number | null;
   title: string;
 }

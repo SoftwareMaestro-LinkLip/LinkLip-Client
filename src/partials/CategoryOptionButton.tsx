@@ -7,7 +7,7 @@ import { useSetRecoilState } from 'recoil';
 import { editCategoryIdState } from '../stores/category';
 
 interface IProps {
-  categoryId: number;
+  categoryId: number | null;
 }
 
 const CategoryOptionButton = (props: IProps) => {
@@ -33,7 +33,9 @@ const CategoryOptionButton = (props: IProps) => {
   }, [setDropdownOpen, dropdownOpen]);
 
   const onEditHandler = useCallback(() => {
-    setEditCategoryId(props.categoryId);
+    if (props.categoryId) {
+      setEditCategoryId(props.categoryId);
+    }
     setDropdownOpen(false);
   }, [dropdownOpen, editorOpen, setDropdownOpen, setEditorOpen]);
 

@@ -22,7 +22,7 @@ const Modal = () => {
   const [userCategories, setUserCategories] =
     useRecoilState(userCategoriesState);
   const [contents, setContents] = useRecoilState(contentsState);
-  const [selectedCategory, onChangeSelectedCategory] = useInput(-1);
+  const [selectedCategory, onChangeSelectedCategory] = useInput(null);
   const [title, onChangeTitle] = useInput(openedContent.title);
   const term = useRecoilValue(termState);
   const curCategoryId = useRecoilValue(curCategoryIdState);
@@ -51,9 +51,10 @@ const Modal = () => {
 
   const editHandler = useCallback(() => {
     const body: IEditContentInfo = {
-      categoryId: selectedCategory > 0 ? selectedCategory : 1,
+      categoryId: selectedCategory != 0 ? selectedCategory : null,
       title,
     };
+
     editLinkContent(openedContent.id, body).then((res) => {
       // setContents([
       //   ...contents.filter((item) => item.categoryName !== selectedCategory),
@@ -117,11 +118,13 @@ const Modal = () => {
               </option>
               ;<option value={0}>선택안함</option>
               {userCategories.map((item) => {
-                return (
-                  <option value={item.id} key={item.id}>
-                    {item.name}
-                  </option>
-                );
+                if (item.id) {
+                  return (
+                    <option value={item.id} key={item.id}>
+                      {item.name}
+                    </option>
+                  );
+                }
               })}
             </select>
           </div>
