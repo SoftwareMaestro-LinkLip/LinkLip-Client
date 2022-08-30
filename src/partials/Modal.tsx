@@ -106,7 +106,7 @@ const Modal = () => {
               onChange={onChangeSelectedCategoryId}
               className="inline bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 w-32 max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option defaultValue={openedContent.categoryId}>
+              <option defaultValue={openedContent.categoryId!}>
                 {openedContent.categoryId ? openedContent.categoryId : '없음'}
               </option>
               ;<option value={0}>선택안함</option>
