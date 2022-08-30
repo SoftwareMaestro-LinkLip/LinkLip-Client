@@ -12,7 +12,7 @@ import { parse } from './link';
  */
 export const getContents = async (
   contentsSize: number = 12,
-  categoryId: number = 0,
+  categoryId: number | null = null,
   term: string = '',
   pageIdx: number = 0,
 ): Promise<any> => {
@@ -57,6 +57,7 @@ export const editLinkContent = async (
   contentId: number,
   body: IEditContentInfo,
 ): Promise<any> => {
+  console.log('body', body);
   const response = await axios.patch(
     `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
     body,

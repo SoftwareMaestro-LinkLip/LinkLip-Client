@@ -6,9 +6,9 @@ export const termState = atom({
   default: '',
 });
 
-export const curCategoryIdState = atom({
+export const curCategoryIdState = atom<number | null>({
   key: 'curCategoryIdState',
-  default: 0,
+  default: null,
 });
 
 export const contentsSizeState = atom({

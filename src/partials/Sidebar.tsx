@@ -93,11 +93,7 @@ const Sidebar = () => {
                     >
                       {item.name}
                     </button>
-                    {item.id !== 0 ? (
-                      <CategoryOptionButton categoryId={item.id} />
-                    ) : (
-                      <></>
-                    )}
+                    {!!item.id && <CategoryOptionButton categoryId={item.id} />}
                   </>
                 ) : (
                   <EditCategoryInput categoryInfo={item} />

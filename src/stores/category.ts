@@ -14,7 +14,7 @@ export const userCategoriesState: RecoilState<ICategory[]> = atom<ICategory[]>({
 export const categoriesState: RecoilState<ICategory[]> = selector<ICategory[]>({
   key: 'categoriesState',
   get: ({ get }) => {
-    const totalCategory = { id: 0, name: '전체' };
+    const totalCategory = { id: null, name: '전체' };
     const userCategories = get(userCategoriesState);
     return [totalCategory, ...userCategories];
   },

@@ -4,16 +4,15 @@ export interface ILinkContent {
   linkImg: string;
   title: string;
   text: string;
-  // categoryId: number;
-  categoryName: string;
+  categoryId: number;
 }
 
 export interface ICategory {
-  id: number;
+  id: number | null;
   name: string;
 }
 
 export interface IEditContentInfo {
-  categoryId: number;
+  categoryId: number | null;
   title: string;
 }
