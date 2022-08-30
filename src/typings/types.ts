@@ -4,8 +4,7 @@ export interface ILinkContent {
   linkImg: string;
   title: string;
   text: string;
-  // categoryId: number;
-  categoryName: string;
+  categoryId: number;
 }
 
 export interface ICategory {

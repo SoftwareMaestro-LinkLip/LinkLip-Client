@@ -11,7 +11,7 @@ import {
 import { userCategoriesState, categoriesState } from '../stores/category';
 import { contentsState } from '../stores/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { editLinkContent, getContents } from '../utils/content';
+import { editLinkContent } from '../utils/content';
 import { IEditContentInfo } from '../typings/types';
 import useInput from '../hooks/useInput';
 
@@ -22,7 +22,7 @@ const Modal = () => {
   const [userCategories, setUserCategories] =
     useRecoilState(userCategoriesState);
   const [contents, setContents] = useRecoilState(contentsState);
-  const [selectedCategory, onChangeSelectedCategory] = useInput(null);
+  const [selectedCategoryId, onChangeSelectedCategoryId] = useInput(null);
   const [title, onChangeTitle] = useInput(openedContent.title);
   const term = useRecoilValue(termState);
   const curCategoryId = useRecoilValue(curCategoryIdState);
@@ -31,14 +31,12 @@ const Modal = () => {
   useOnClickOutside(
     ref,
     () => {
-      // editHandler();
       setModalOpen(false);
     },
     modalOpen,
   );
 
   useKeyPressESC(() => {
-    // editHandler();
     setModalOpen(false);
   });
 
@@ -51,21 +49,16 @@ const Modal = () => {
 
   const editHandler = useCallback(() => {
     const body: IEditContentInfo = {
-      categoryId: selectedCategory != 0 ? selectedCategory : null,
+      categoryId: selectedCategoryId != 0 ? selectedCategoryId : null,
       title,
     };
 
     editLinkContent(openedContent.id, body).then((res) => {
-      // setContents([
-      //   ...contents.filter((item) => item.categoryName !== selectedCategory),
-      // ]);
+      setContents([
+        ...contents.filter((item) => item.categoryId !== curCategoryId),
+      ]);
     });
-
-    getContents(contentsSize, curCategoryId, term).then((res) => {
-      setContents([...res]);
-      setModalOpen(false);
-    });
-  }, [selectedCategory, title]);
+  }, [curCategoryId, selectedCategoryId, title]);
 
   return (
     <div className="flex justify-center w-full">
@@ -79,7 +72,9 @@ const Modal = () => {
             type="button"
             className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
             data-modal-toggle="defaultModal"
-            onClick={editHandler}
+            onClick={() => {
+              setModalOpen(false);
+            }}
           >
             <svg
               aria-hidden="true"
@@ -108,13 +103,11 @@ const Modal = () => {
             </label>
             <select
               id="category"
-              onChange={onChangeSelectedCategory}
+              onChange={onChangeSelectedCategoryId}
               className="inline bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 w-32 max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option defaultValue={openedContent.categoryName}>
-                {openedContent.categoryName
-                  ? openedContent.categoryName
-                  : '없음'}
+              <option defaultValue={openedContent.categoryId}>
+                {openedContent.categoryId ? openedContent.categoryId : '없음'}
               </option>
               ;<option value={0}>선택안함</option>
               {userCategories.map((item) => {
