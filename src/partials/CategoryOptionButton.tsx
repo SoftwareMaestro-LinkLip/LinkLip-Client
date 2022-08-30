@@ -3,8 +3,9 @@ import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
-import { useSetRecoilState } from 'recoil';
-import { editCategoryIdState } from '../stores/category';
+import { useSetRecoilState, useRecoilState } from 'recoil';
+import { editCategoryIdState, userCategoriesState } from '../stores/category';
+import { deleteCategory } from '../utils/category';
 
 interface IProps {
   categoryId: number | null;
@@ -15,6 +16,7 @@ const CategoryOptionButton = (props: IProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
   const setEditCategoryId = useSetRecoilState(editCategoryIdState);
+  const [categories, setCategories] = useRecoilState(userCategoriesState);
 
   useOnClickOutside(
     ref,
@@ -39,6 +41,20 @@ const CategoryOptionButton = (props: IProps) => {
     setDropdownOpen(false);
   }, [dropdownOpen, editorOpen, setDropdownOpen, setEditorOpen]);
 
+  const onDeleteHandler = useCallback(() => {
+    if (props.categoryId) {
+      deleteCategory(props.categoryId).then((res) => {
+        setCategories([
+          ...categories.filter((item) => {
+            if (item.id && item.id !== props.categoryId) {
+              return item;
+            }
+          }),
+        ]);
+      });
+    }
+  }, []);
+
   return (
     <div>
       <button
@@ -56,12 +72,21 @@ const CategoryOptionButton = (props: IProps) => {
           ref={ref}
           className="origin-top-right z-50 absolute right-5 w-30 bg-white border border-slate-200 p-2 rounded shadow-lg mt-1"
         >
-          <button
-            className="inline-block px-4 py-2 bg-transparent text-blue-600 font-medium text-sm leading-tight uppercase rounded hover:text-blue-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out"
-            onClick={onEditHandler}
-          >
-            수정
-          </button>
+          <div className="flex flex-col">
+            <button
+              className="inline-block px-4 py-2 bg-transparent text-blue-600 font-medium text-sm leading-tight uppercase rounded hover:text-blue-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out"
+              onClick={onEditHandler}
+            >
+              수정
+            </button>
+
+            <button
+              className="inline-block px-4 py-2 bg-transparent text-red-600 font-medium text-sm leading-tight uppercase rounded hover:text-red-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out"
+              onClick={onDeleteHandler}
+            >
+              삭제
+            </button>
+          </div>
         </div>
       )}
 

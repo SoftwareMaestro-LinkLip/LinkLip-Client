@@ -76,3 +76,23 @@ export const editCategory = async (id: number, name: string) => {
       return false;
     });
 };
+
+/**
+ * 카테고리 삭제 함수
+ * @param {number} categoryId
+ * @returns {Promise<any>}
+ */
+export const deleteCategory = async (categoryId: number) => {
+  return await axios
+    .delete(`${import.meta.env.VITE_API_SERVER}/category/v1/${categoryId}`, {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((response) => {
+      return response.data.success;
+    })
+    .catch((err) => {
+      alert('카테고리 삭제 실패');
+      return false;
+    });
+};
