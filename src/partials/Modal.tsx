@@ -57,8 +57,9 @@ const Modal = () => {
       setContents([
         ...contents.filter((item) => item.categoryId !== curCategoryId),
       ]);
+      setModalOpen(false);
     });
-  }, [curCategoryId, selectedCategoryId, title]);
+  }, [curCategoryId, selectedCategoryId, title, setModalOpen]);
 
   return (
     <div className="flex justify-center w-full">

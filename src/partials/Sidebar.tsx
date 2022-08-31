@@ -81,7 +81,7 @@ const Sidebar = () => {
                 className={`flex py-2 rounded-sm mb-0.5 last:mb-0 text-slate-200 text-xl ${
                   curCategoryId === item.id && 'bg-slate-900'
                 }`}
-                key={item.id}
+                key={item.id ? item.id : 0}
               >
                 {!editCategoryId || editCategoryId !== item.id ? (
                   <>
