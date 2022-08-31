@@ -36,7 +36,7 @@ const Notebox = () => {
     if (ref === null || ref.current === null) {
       return;
     }
-    ref.current.style.height = '46px';
+    ref.current.style.height = '42px';
     ref.current.style.height = ref.current.scrollHeight + 'px';
   }, []);
 
@@ -48,7 +48,7 @@ const Notebox = () => {
     if (ref === null || ref.current === null) {
       return;
     }
-    ref.current.style.height = '46px';
+    ref.current.style.height = '42px';
     ref.current.style.height = ref.current.scrollHeight + 'px';
   }, []);
 
@@ -79,7 +79,7 @@ const Notebox = () => {
             });
 
             if (ref !== null) {
-              ref.current!.style.height = '46px';
+              ref.current!.style.height = '42px';
             }
           });
         });
@@ -114,7 +114,7 @@ const Notebox = () => {
        lg:w-9/12 m-4 z-30`}
       >
         <div className="w-full rounded border-solid border-2 border-slate-200">
-          <form onSubmit={onSubmitHandler} className="w-full ">
+          <form onSubmit={onSubmitHandler} className="w-full bg-white">
             <textarea
               onChange={onChangeNote}
               onKeyPress={onKeyDown}
