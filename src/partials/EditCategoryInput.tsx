@@ -35,11 +35,13 @@ const EditCategoryInput = (props: IProps) => {
   const onSubmitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      editCategory(props.categoryInfo.id!, name).then(() => {
-        getCategories().then((res) => {
-          setCategories([...res]);
+      if (!!name?.trim()) {
+        editCategory(props.categoryInfo.id!, name).then(() => {
+          getCategories().then((res) => {
+            setCategories([...res]);
+          });
         });
-      });
+      }
       resetEditCategoryId();
     },
     [name],
@@ -51,7 +53,7 @@ const EditCategoryInput = (props: IProps) => {
         <input
           className="w-full outline-none border-b-2 border-slate-400 bg-transparent px-3 py-1.5 text-xl"
           aria-label="카테고리명 수정"
-          value={name}
+          value={name!}
           tabIndex={1}
           onChange={onChangeName}
         />

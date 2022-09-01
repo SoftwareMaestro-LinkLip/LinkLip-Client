@@ -1,4 +1,5 @@
 export interface ILinkContent {
+  category: ICategory;
   id: number;
   url: string;
   linkImg: string;
@@ -9,7 +10,7 @@ export interface ILinkContent {
 
 export interface ICategory {
   id: number | null;
-  name: string;
+  name: string | null;
 }
 
 export interface IEditContentInfo {

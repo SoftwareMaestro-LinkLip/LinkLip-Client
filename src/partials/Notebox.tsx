@@ -58,6 +58,7 @@ const Notebox = () => {
 
       if (isURL(note)) {
         const loadingContent = {
+          category: { id: null, name: null },
           id: 0,
           url: note,
           linkImg: '',

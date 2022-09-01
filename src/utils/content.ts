@@ -26,7 +26,7 @@ export const getContents = async (
 
   const response: AxiosResponse<any> = await axios.get(target);
 
-  return [...response.data.data.pageDto.content];
+  return [...response.data.data.content];
 };
 
 /**
