@@ -95,7 +95,7 @@ $ yarn install
 <br />
 
 ## API Reference
-[http://3.34.93.16:8080/swagger-ui.html](Link to API Reference)
+[Link to API Reference](http://3.34.93.16:8080/swagger-ui.html)
 <br />
 
 ## License
