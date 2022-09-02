@@ -1,6 +1,9 @@
 <img src="./public/icons/favicon.ico" alt="Logo of the project" align="right">
 
-# Linklip-Client &middot;
+# Linklip-Client 
+> 어떻게 하면 다양한 형태의 순간적인 정보를 간편하게 저장하고 체계적으로 관리할 수 있을까? <br>
+> 여러분들의 효율적인 정보 관리를 위한 최고의 수단, 링클립입니다.
+
 
 ## Quick Start
 ### Prerequisites
@@ -12,7 +15,7 @@
 
 or
 
-- Clone the repository
+- Clone the **repository**
 ```bash
 $ git clone https://github.com/SoftwareMaestro-LinkLip/LinkLip-Client.git
 ```
@@ -70,10 +73,14 @@ $ yarn install
     │   └── manifest.json
     │
     ├── src/                # project root
-    │   ├── css/            # css/scss styles
+    │   ├── assets/         
+    │   │   ├── css/        # css/scss styles
+    │   │   └── images/     # images, icons, etc.
+    │   │
     │   ├── hooks/          # custom hooks
-    │   ├── images/         # images, icons, etc.
     │   ├── pages/          # application views
+    │   ├── partials/       # components
+    │   ├── stores/         # atoms, selectors for Recoil
     │   ├── typings/        # types for typescript
     │   ├── utils/          # utilities
     │   ├── ...
@@ -88,7 +95,7 @@ $ yarn install
 <br />
 
 ## API Reference
-
+[http://3.34.93.16:8080/swagger-ui.html](Link to API Reference)
 <br />
 
 ## License
