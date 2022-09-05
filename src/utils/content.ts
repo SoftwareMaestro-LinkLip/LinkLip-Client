@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { ILinkContent, IEditContentInfo } from '../typings/types';
+import { ILinkContent, IEditContentInfo } from '../typings/content';
 import { parse } from './link';
 
 /**
@@ -18,7 +18,7 @@ export const getContents = async (
 ): Promise<any> => {
   const target = `${
     import.meta.env.VITE_API_SERVER
-  }/content/v1/link?page=${pageIdx}&size=${contentsSize}${
+  }/content/v1/?page=${pageIdx}&size=${contentsSize}${
     !!term ? `&term=${term}` : ''
   }${!!categoryId ? `&categoryId=${categoryId}` : ''}`;
 
@@ -26,7 +26,7 @@ export const getContents = async (
 
   const response: AxiosResponse<any> = await axios.get(target);
 
-  return [...response.data.data.pageDto.content];
+  return [...response.data.data.content];
 };
 
 /**
@@ -48,7 +48,7 @@ export const addLinkContent = async (content: ILinkContent): Promise<any> => {
 };
 
 /**
- * 컨텐츠의 내용 수정 함수
+ * 링크 컨텐츠의 내용 수정 함수
  * @param {number} contentId
  * @param {IEditContentInfo} body
  * @returns {Promise<any>}
@@ -70,9 +70,14 @@ export const editLinkContent = async (
   return response.data;
 };
 
-export const deleteLinkContent = async (contentId: number): Promise<any> => {
+/**
+ * 컨텐츠 삭제 함수
+ * @param {number} contentId
+ * @returns {Promise<any>}
+ */
+export const deleteContent = async (contentId: number): Promise<any> => {
   const response = await axios.delete(
-    `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
+    `${import.meta.env.VITE_API_SERVER}/content/v1/${contentId}`,
     {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },

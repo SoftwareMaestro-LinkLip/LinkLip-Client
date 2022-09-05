@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { ICategory } from '../typings/types';
+import { ICategory } from '../typings/content';
 
 /**
  * 사용자 카테고리 불러오기 함수

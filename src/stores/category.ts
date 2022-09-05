@@ -1,5 +1,5 @@
 import { atom, selector, RecoilState } from 'recoil';
-import { ICategory } from '../typings/types';
+import { ICategory } from '../typings/content';
 
 export const editCategoryIdState = atom({
   key: 'editCategoryIdState',

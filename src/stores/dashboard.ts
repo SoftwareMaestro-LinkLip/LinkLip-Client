@@ -1,5 +1,5 @@
 import { atom, RecoilState } from 'recoil';
-import { ILinkContent } from '../typings/types';
+import { ILinkContent } from '../typings/content';
 
 export const termState = atom({
   key: 'termAtom',
@@ -40,7 +40,8 @@ export const openedContentState: RecoilState<ILinkContent> = atom<ILinkContent>(
       linkImg: '',
       title: '',
       text: '',
-      categoryId: null,
+      category: null,
+      type: 'note',
     },
   },
 );

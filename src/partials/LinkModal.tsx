@@ -12,7 +12,7 @@ import { userCategoriesState, categoriesState } from '../stores/category';
 import { contentsState } from '../stores/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { editLinkContent } from '../utils/content';
-import { IEditContentInfo } from '../typings/types';
+import { IEditContentInfo } from '../typings/content';
 import useInput from '../hooks/useInput';
 
 const Modal = () => {
@@ -54,9 +54,13 @@ const Modal = () => {
     };
 
     editLinkContent(openedContent.id, body).then((res) => {
-      setContents([
-        ...contents.filter((item) => item.categoryId !== curCategoryId),
-      ]);
+      if (!!curCategoryId) {
+        setContents([
+          ...contents.filter(
+            (item: any) => !item.category || item.category.id != curCategoryId,
+          ),
+        ]);
+      }
       setModalOpen(false);
     });
   }, [curCategoryId, selectedCategoryId, title, setModalOpen]);
@@ -107,8 +111,14 @@ const Modal = () => {
               onChange={onChangeSelectedCategoryId}
               className="inline bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 w-32 max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option defaultValue={openedContent.categoryId!}>
-                {openedContent.categoryId ? openedContent.categoryId : '없음'}
+              <option
+                defaultValue={
+                  openedContent.category && openedContent.category.id
+                    ? openedContent.category.id
+                    : 0
+                }
+              >
+                {openedContent.category ? openedContent.category.name : '없음'}
               </option>
               ;<option value={0}>선택안함</option>
               {userCategories.map((item) => {
