@@ -4,8 +4,10 @@ import Header from '../partials/Header';
 import { ILinkContent, INoteContent, IContents } from '../typings/content';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
-import LinkCard from '../partials/LinkCard';
-import Modal from '../partials/LinkModal';
+import LinkCard from '../partials/cards/LinkCard';
+import NoteCard from '../partials/cards/NoteCard';
+import LinkModal from '../partials/modals/LinkModal';
+import NoteModal from '../partials/modals/NoteModal';
 import { getContents } from '../utils/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { contentsState } from '../stores/content';
@@ -15,6 +17,7 @@ import {
   contentsSizeState,
   pageIdxState,
   modalOpenState,
+  openedContentState,
 } from '../stores/dashboard';
 
 const Dashboard = () => {
@@ -25,6 +28,7 @@ const Dashboard = () => {
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
   const modalOpen = useRecoilValue(modalOpenState);
+  const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
 
   useEffect(() => {
     // change page title tag
@@ -37,10 +41,10 @@ const Dashboard = () => {
     const cardHeight = 208; // 기본 컨텐츠 카드 높이
     let cnt = (Math.floor(scrollHeight?.clientHeight! / cardHeight) + 1) * 4;
 
-    if (cnt > 12) {
+    if (cnt > 24) {
       setContentsSize(cnt);
     } else {
-      cnt = 12;
+      cnt = 24;
     }
     getContents(cnt, curCategoryId, term).then((res) => {
       setContents([...res]);
@@ -86,13 +90,21 @@ const Dashboard = () => {
         <Header />
         {/* TextArea */}
         <Notebox />
-        {modalOpen && <Modal />}
+        {/* Modal */}
+        {modalOpen &&
+          {
+            link: <LinkModal content={openedContent} />,
+            note: <NoteModal content={openedContent} />,
+          }[openedContent.type]}
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
           <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full ">
             {contents.map(
               (item, idx) =>
-                ({ link: <LinkCard key={idx} content={item} /> }[item.type]),
+                ({
+                  link: <LinkCard key={idx} content={item} />,
+                  note: <NoteCard key={idx} content={item} />,
+                }[item.type]),
             )}
           </div>
         </main>

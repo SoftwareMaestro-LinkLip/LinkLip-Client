@@ -1,5 +1,5 @@
 import { atom, RecoilState } from 'recoil';
-import { ILinkContent } from '../typings/content';
+import { ILinkContent, INoteContent } from '../typings/content';
 
 export const termState = atom({
   key: 'termAtom',
@@ -31,8 +31,8 @@ export const modalOpenState = atom({
   default: false,
 });
 
-export const openedContentState: RecoilState<ILinkContent> = atom<ILinkContent>(
-  {
+export const openedContentState: RecoilState<ILinkContent | INoteContent> =
+  atom<ILinkContent | INoteContent>({
     key: 'openedContentState',
     default: {
       id: 0,
@@ -43,5 +43,4 @@ export const openedContentState: RecoilState<ILinkContent> = atom<ILinkContent>(
       category: null,
       type: 'note',
     },
-  },
-);
+  });

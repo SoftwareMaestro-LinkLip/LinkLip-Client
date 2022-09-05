@@ -8,7 +8,7 @@ import React, {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { isURL, parse } from '../utils/link';
-import { getContents, addLinkContent } from '../utils/content';
+import { getContents, addLinkContent, addNoteContent } from '../utils/content';
 import { useResetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 import {
   termState,
@@ -23,14 +23,16 @@ import { ILinkContent } from '../typings/content';
 
 const Notebox = () => {
   const ref = useRef<HTMLTextAreaElement>(null);
-  const [note, onChangeNote, setNote] = useInput('');
+  const [text, onChangeText, setText] = useInput('');
   const resetTerm = useResetRecoilState(termState);
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const contentsSize = useRecoilValue(contentsSizeState);
   const resetPageIdx = useResetRecoilState(pageIdxState);
   const [contents, setContents] = useRecoilState(contentsState);
   const categories = useRecoilValue(categoriesState);
-  const [selected, setSelected] = useState<number | null>(curCategoryId);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    curCategoryId,
+  );
 
   useEffect(() => {
     if (ref === null || ref.current === null) {
@@ -41,7 +43,7 @@ const Notebox = () => {
   }, []);
 
   useEffect(() => {
-    setSelected(curCategoryId);
+    setSelectedCategoryId(curCategoryId);
   }, [curCategoryId]);
 
   const handleResizeHeight = useCallback(() => {
@@ -56,38 +58,49 @@ const Notebox = () => {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      if (isURL(note)) {
-        const loadingContent = {
-          category: { id: null, name: null },
-          id: 0,
-          url: note,
-          linkImg: '',
-          title: '',
-          text: '',
-          categoryId: 0,
-          type: 'link',
-        };
-        setNote('');
-        setContents([loadingContent, ...contents]);
-
-        parse(note).then((body) => {
+      if (isURL(text)) {
+        parse(text).then((body) => {
           body.categoryId = curCategoryId;
           console.log('body', body);
           addLinkContent(body).then(() => {
             resetPageIdx();
             resetTerm();
-            getContents(contentsSize, selected).then((res) => {
+            getContents(contentsSize, selectedCategoryId).then((res) => {
               setContents([...res]);
             });
-
-            if (ref !== null) {
-              ref.current!.style.height = '42px';
-            }
+          });
+        });
+      } else {
+        const body = {
+          text,
+          categoryId: selectedCategoryId,
+        };
+        addNoteContent(body).then(() => {
+          resetPageIdx();
+          resetTerm();
+          getContents(contentsSize, selectedCategoryId).then((res) => {
+            setContents([...res]);
           });
         });
       }
+
+      setText('');
+      const loadingContent = {
+        category: { id: null, name: null },
+        id: 0,
+        url: text,
+        linkImg: '',
+        title: '',
+        text: '',
+        categoryId: 0,
+        type: 'link',
+      };
+      setContents([loadingContent, ...contents]);
+      if (ref !== null) {
+        ref.current!.style.height = '42px';
+      }
     },
-    [note, setNote],
+    [text, setText],
   );
 
   const onKeyDown = useCallback(
@@ -104,9 +117,9 @@ const Notebox = () => {
 
   const onSelectCategoryHandler = useCallback(
     (e: any) => {
-      setSelected(e.target.value != 0 ? e.target.value : null);
+      setSelectedCategoryId(e.target.value != 0 ? e.target.value : null);
     },
-    [categories, setSelected, selected],
+    [categories, setSelectedCategoryId, selectedCategoryId],
   );
 
   return (
@@ -118,10 +131,10 @@ const Notebox = () => {
         <div className="w-full rounded border-solid border-2 border-slate-200">
           <form onSubmit={onSubmitHandler} className="w-full bg-white">
             <textarea
-              onChange={onChangeNote}
+              onChange={onChangeText}
               onKeyPress={onKeyDown}
               placeholder="Input URL"
-              value={note}
+              value={text}
               rows={1}
               ref={ref}
               onInput={handleResizeHeight}
@@ -144,14 +157,15 @@ const Notebox = () => {
                 </svg>
               </button>
               {/* category select */}
-              {note && (
+              {text && (
                 <div className="flex overflow-scroll text-center scrollbar-hide">
                   {categories.map((item) => {
                     return (
                       <button
                         className={`whitespace-nowrap align-baseline rounded-xl m-1 py-0.25 px-2 
                         ${
-                          (!item.id && !selected) || item.id == selected
+                          (!item.id && !selectedCategoryId) ||
+                          item.id == selectedCategoryId
                             ? 'bg-slate-500 text-white'
                             : 'border-slate-500 text-slate-500 border-2'
                         }

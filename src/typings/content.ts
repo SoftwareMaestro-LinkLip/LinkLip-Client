@@ -21,7 +21,12 @@ export interface INoteContent {
   type: string;
 }
 
-export interface IEditContentInfo {
+export interface IEditLinkContent {
   categoryId: number | null;
   title: string;
+}
+
+export interface IEditNoteContent {
+  categoryId: number | null;
+  text: string;
 }

@@ -1,11 +1,14 @@
 import React, { useRef, useState, Dispatch, useCallback } from 'react';
-import useOnClickOutside from '../hooks/useOnClickOutside';
-import useKeyPressESC from '../hooks/useKeyPressESC';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
+import useKeyPressESC from '../../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { useSetRecoilState, useRecoilState } from 'recoil';
-import { editCategoryIdState, userCategoriesState } from '../stores/category';
-import { deleteCategory } from '../utils/category';
+import {
+  editCategoryIdState,
+  userCategoriesState,
+} from '../../stores/category';
+import { deleteCategory } from '../../utils/category';
 
 interface IProps {
   categoryId: number | null;
