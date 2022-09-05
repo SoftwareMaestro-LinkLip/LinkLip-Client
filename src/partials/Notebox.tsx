@@ -19,7 +19,7 @@ import {
 import { contentsState } from '../stores/content';
 import { categoriesState } from '../stores/category';
 import useInput from '../hooks/useInput';
-import { ILinkContent } from '../typings/types';
+import { ILinkContent } from '../typings/content';
 
 const Notebox = () => {
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -65,6 +65,7 @@ const Notebox = () => {
           title: '',
           text: '',
           categoryId: 0,
+          type: 'link',
         };
         setNote('');
         setContents([loadingContent, ...contents]);

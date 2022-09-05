@@ -5,7 +5,7 @@ import useInput from '../hooks/useInput';
 import { getCategories, editCategory } from '../utils/category';
 import { useSetRecoilState, useResetRecoilState } from 'recoil';
 import { categoriesState, editCategoryIdState } from '../stores/category';
-import { ICategory } from '../typings/types';
+import { ICategory } from '../typings/content';
 
 interface IProps {
   categoryInfo: ICategory;

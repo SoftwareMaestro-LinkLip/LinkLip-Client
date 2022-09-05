@@ -1,7 +1,7 @@
 import { atom, RecoilState } from 'recoil';
-import { ILinkContent } from '../typings/types';
+import { ILinkContent, INoteContent, IContents } from '../typings/content';
 
-export const contentsState: RecoilState<ILinkContent[]> = atom<ILinkContent[]>({
+export const contentsState: RecoilState<IContents> = atom<IContents>({
   key: 'contentsState',
   default: [],
 });

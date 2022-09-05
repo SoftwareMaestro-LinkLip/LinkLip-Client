@@ -3,11 +3,11 @@ import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { ILinkContent } from '../typings/types';
+import { ILinkContent } from '../typings/content';
 import { modalOpenState, openedContentState } from '../stores/dashboard';
 import { contentsState } from '../stores/content';
 import { useRecoilState } from 'recoil';
-import { deleteLinkContent } from '../utils/content';
+import { deleteContent } from '../utils/content';
 
 interface IProps {
   content: ILinkContent;
@@ -45,7 +45,7 @@ const CardOptionButton = (props: IProps) => {
 
   const onDeleteHandler = useCallback(() => {
     setDropdownOpen(false);
-    deleteLinkContent(props.content.id).then(() => {
+    deleteContent(props.content.id).then(() => {
       setContents([...contents.filter((item) => item.id !== props.content.id)]);
     });
   }, [setDropdownOpen]);

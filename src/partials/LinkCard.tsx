@@ -1,12 +1,12 @@
 import React, { CSSProperties } from 'react';
-import { ILinkContent } from '../typings/types';
+import { ILinkContent, IContents } from '../typings/content';
 import logo from '../assets/images/logo.png';
 import { getShortURL } from '../utils/link';
 import CardOptionButton from './CardOptionButton';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 interface IProps {
-  content: ILinkContent;
+  content: any;
 }
 
 const LinkCard = (props: IProps) => {
