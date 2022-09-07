@@ -1,5 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
-import { ILinkContent, IEditContentInfo } from '../typings/content';
+import {
+  ILinkContent,
+  INoteContent,
+  IEditLinkContent,
+} from '../typings/content';
 import { parse } from './link';
 
 /**
@@ -31,10 +35,16 @@ export const getContents = async (
 
 /**
  * 링크 컨텐츠 저장 함수
- * @param {ILinkContent} content
+ * @param {{url: string, linkImg: string, title: string, text: string, categoryId: number}} content
  * @returns {Promise<any>}
  */
-export const addLinkContent = async (content: ILinkContent): Promise<any> => {
+export const addLinkContent = async (content: {
+  url: string;
+  linkImg: string;
+  title: string;
+  text: string;
+  categoryId: number;
+}): Promise<any> => {
   const response = await axios.post(
     `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
     content,
@@ -55,12 +65,33 @@ export const addLinkContent = async (content: ILinkContent): Promise<any> => {
  */
 export const editLinkContent = async (
   contentId: number,
-  body: IEditContentInfo,
+  body: IEditLinkContent,
 ): Promise<any> => {
   console.log('body', body);
   const response = await axios.patch(
     `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
     body,
+    {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+
+  return response.data;
+};
+
+/**
+ * 노트 컨텐츠 저장 함수
+ * @param {{text: string, categoryId: number}} content
+ * @returns {Promise<any>}
+ */
+export const addNoteContent = async (content: {
+  text: string;
+  categoryId: number | null;
+}): Promise<any> => {
+  const response = await axios.post(
+    `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
+    content,
     {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },

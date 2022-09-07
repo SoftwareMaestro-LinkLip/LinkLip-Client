@@ -1,16 +1,16 @@
 import React, { useRef, useState, useCallback } from 'react';
-import useOnClickOutside from '../hooks/useOnClickOutside';
-import useKeyPressESC from '../hooks/useKeyPressESC';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
+import useKeyPressESC from '../../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { ILinkContent } from '../typings/content';
-import { modalOpenState, openedContentState } from '../stores/dashboard';
-import { contentsState } from '../stores/content';
+import { ILinkContent, INoteContent } from '../../typings/content';
+import { modalOpenState, openedContentState } from '../../stores/dashboard';
+import { contentsState } from '../../stores/content';
 import { useRecoilState } from 'recoil';
-import { deleteContent } from '../utils/content';
+import { deleteContent } from '../../utils/content';
 
 interface IProps {
-  content: ILinkContent;
+  content: ILinkContent | INoteContent;
 }
 
 const CardOptionButton = (props: IProps) => {
@@ -41,7 +41,7 @@ const CardOptionButton = (props: IProps) => {
     setOpenedContent(props.content);
     setDropdownOpen(false);
     setModalOpen(true);
-  }, [dropdownOpen, setDropdownOpen, setOpenedContent]);
+  }, [dropdownOpen, setDropdownOpen, setOpenedContent, setModalOpen]);
 
   const onDeleteHandler = useCallback(() => {
     setDropdownOpen(false);
@@ -54,7 +54,7 @@ const CardOptionButton = (props: IProps) => {
     <div className="relative">
       <button
         onClick={onDropHandler}
-        className="absolute bg-slate-400 opacity-60 hover:bg-slate-600 hover:opacity-80 w-9 h-7 rounded-lg m-2 right-0"
+        className="absolute bg-slate-200 opacity-60 hover:bg-white hover:opacity-80 w-9 h-7 rounded-lg m-2 right-0"
         aria-label="옵션 더보기 버튼"
       >
         <FontAwesomeIcon icon={faEllipsis} aria-hidden="true" />

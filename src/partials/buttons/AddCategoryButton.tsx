@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import useOnClickOutside from '../hooks/useOnClickOutside';
-import useKeyPressESC from '../hooks/useKeyPressESC';
-import useInput from '../hooks/useInput';
-import { addCategory, getCategories } from '../utils/category';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
+import useKeyPressESC from '../../hooks/useKeyPressESC';
+import useInput from '../../hooks/useInput';
+import { addCategory, getCategories } from '../../utils/category';
 import { useRecoilState } from 'recoil';
-import { categoriesState } from '../stores/category';
+import { categoriesState } from '../../stores/category';
 
 const AddCategoryButton = () => {
   const ref = useRef(null);

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
-import AddCategoryButton from './AddCategoryButton';
-import CategoryOptionButton from './CategoryOptionButton';
+import AddCategoryButton from './buttons/AddCategoryButton';
+import CategoryOptionButton from './buttons/CategoryOptionButton';
 import EditCategoryInput from './EditCategoryInput';
 import { useRecoilState } from 'recoil';
 import { categoriesState } from '../stores/category';
