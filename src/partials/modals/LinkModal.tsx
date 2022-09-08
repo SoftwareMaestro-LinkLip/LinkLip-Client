@@ -3,15 +3,15 @@ import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKeyPressESC from '../../hooks/useKeyPressESC';
 import {
   modalOpenState,
-  openedContentState,
-  termState,
   curCategoryIdState,
   contentsSizeState,
+  pageIdxState,
+  termState,
 } from '../../stores/dashboard';
-import { userCategoriesState, categoriesState } from '../../stores/category';
+import { userCategoriesState } from '../../stores/category';
 import { contentsState } from '../../stores/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { editLinkContent } from '../../utils/content';
+import { editLinkContent, getContents } from '../../utils/content';
 import { IEditLinkContent } from '../../typings/content';
 import useInput from '../../hooks/useInput';
 
@@ -28,6 +28,9 @@ const Modal = (props: IProps) => {
   const [selectedCategoryId, onChangeSelectedCategoryId] = useInput(null);
   const [title, onChangeTitle] = useInput(props.content.title);
   const curCategoryId = useRecoilValue(curCategoryIdState);
+  const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
+  const [pageIdx, setPageIdx] = useRecoilState(pageIdxState);
+  const [term, setTerm] = useRecoilState(termState);
 
   useOnClickOutside(
     ref,
@@ -48,23 +51,20 @@ const Modal = (props: IProps) => {
     }
   }, []);
 
-  const editHandler = useCallback(() => {
+  const editHandler = () => {
+    setModalOpen(false);
+
     const body: IEditLinkContent = {
       categoryId: selectedCategoryId != 0 ? selectedCategoryId : null,
       title,
     };
 
-    editLinkContent(props.content.id, body).then((res) => {
-      if (!!curCategoryId) {
-        setContents([
-          ...contents.filter(
-            (item: any) => !item.category || item.category.id != curCategoryId,
-          ),
-        ]);
-      }
-      setModalOpen(false);
+    editLinkContent(props.content.id, body).then(() => {
+      getContents(contentsSize, curCategoryId, term, pageIdx).then((res) => {
+        setContents([...res]);
+      });
     });
-  }, [curCategoryId, selectedCategoryId, title, setModalOpen]);
+  };
 
   return (
     <div className="flex justify-center w-full">

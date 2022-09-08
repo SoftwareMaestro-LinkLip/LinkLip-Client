@@ -3,6 +3,7 @@ import {
   ILinkContent,
   INoteContent,
   IEditLinkContent,
+  IEditNoteContent,
 } from '../typings/content';
 import { parse } from './link';
 
@@ -67,7 +68,6 @@ export const editLinkContent = async (
   contentId: number,
   body: IEditLinkContent,
 ): Promise<any> => {
-  console.log('body', body);
   const response = await axios.patch(
     `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
     body,
@@ -98,6 +98,27 @@ export const addNoteContent = async (content: {
     },
   );
 
+  return response.data;
+};
+
+/**
+ * 노트 컨텐츠의 내용 수정 함수
+ * @param {number} contentId
+ * @param {IEditNoteContent} body
+ * @returns {Promise<any>}
+ */
+export const editNoteContent = async (
+  contentId: number,
+  body: IEditNoteContent,
+): Promise<any> => {
+  const response = await axios.patch(
+    `${import.meta.env.VITE_API_SERVER}/content/v1/note/${contentId}`,
+    body,
+    {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
   return response.data;
 };
 
