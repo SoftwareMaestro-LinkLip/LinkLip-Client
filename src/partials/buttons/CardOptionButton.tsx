@@ -37,18 +37,18 @@ const CardOptionButton = (props: IProps) => {
     setDropdownOpen(!dropdownOpen);
   }, [setDropdownOpen, dropdownOpen, setModalOpen]);
 
-  const onEditHandler = useCallback(() => {
+  const onEditHandler = () => {
     setOpenedContent(props.content);
     setDropdownOpen(false);
     setModalOpen(true);
-  }, [dropdownOpen, setDropdownOpen, setOpenedContent, setModalOpen]);
+  };
 
-  const onDeleteHandler = useCallback(() => {
+  const onDeleteHandler = () => {
     setDropdownOpen(false);
     deleteContent(props.content.id).then(() => {
       setContents([...contents.filter((item) => item.id !== props.content.id)]);
     });
-  }, [setDropdownOpen]);
+  };
 
   return (
     <div className="relative">
