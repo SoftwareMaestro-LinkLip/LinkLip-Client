@@ -12,10 +12,10 @@ const LinkCard = (props: IProps) => {
   const [modalOpen, setModalOpen] = useRecoilState(modalOpenState);
   const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
 
-  const onClickHandler = useCallback(() => {
+  const onClickHandler = () => {
     setOpenedContent(props.content);
     setModalOpen(true);
-  }, [setModalOpen, setOpenedContent]);
+  };
 
   return (
     <div className="flex overflow-hidden rounded-lg shadow-lg bg-white h-52 hover:-translate-y-1 hover:scale-110 hover:z-10 duration-300 relative">
