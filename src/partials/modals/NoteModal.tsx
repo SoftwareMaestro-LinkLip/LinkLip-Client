@@ -3,14 +3,15 @@ import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKeyPressESC from '../../hooks/useKeyPressESC';
 import {
   modalOpenState,
-  termState,
   curCategoryIdState,
   contentsSizeState,
+  pageIdxState,
+  termState,
 } from '../../stores/dashboard';
-import { userCategoriesState, categoriesState } from '../../stores/category';
+import { userCategoriesState } from '../../stores/category';
 import { contentsState } from '../../stores/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { editLinkContent } from '../../utils/content';
+import { editNoteContent, getContents } from '../../utils/content';
 import { IEditNoteContent } from '../../typings/content';
 import useInput from '../../hooks/useInput';
 
@@ -27,6 +28,9 @@ const Modal = (props: IProps) => {
   const [selectedCategoryId, onChangeSelectedCategoryId] = useInput(null);
   const [text, onChangeText] = useInput(props.content.text);
   const curCategoryId = useRecoilValue(curCategoryIdState);
+  const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
+  const [pageIdx, setPageIdx] = useRecoilState(pageIdxState);
+  const [term, setTerm] = useRecoilState(termState);
 
   useOnClickOutside(
     ref,
@@ -47,13 +51,20 @@ const Modal = (props: IProps) => {
     }
   }, []);
 
-  const editHandler = useCallback(() => {
+  const editHandler = () => {
+    setModalOpen(false);
+
     const body: IEditNoteContent = {
       categoryId: selectedCategoryId != 0 ? selectedCategoryId : null,
       text,
     };
-    setModalOpen(false);
-  }, [curCategoryId, selectedCategoryId, text, setModalOpen]);
+
+    editNoteContent(props.content.id, body).then(() => {
+      getContents(contentsSize, curCategoryId, term, pageIdx).then((res) => {
+        setContents([...res]);
+      });
+    });
+  };
 
   return (
     <div className="flex justify-center w-full">
