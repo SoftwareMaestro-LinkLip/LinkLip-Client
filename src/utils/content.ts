@@ -59,6 +59,23 @@ export const addLinkContent = async (content: {
 };
 
 /**
+ * 링크 컨텐츠 정보 불러오기 함수
+ * @param {number} contentId
+ * @returns {Promise<any>}
+ */
+export const getLinkContent = async (contentId: number): Promise<any> => {
+  const response = await axios.get(
+    `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
+    {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+
+  return response.data;
+};
+
+/**
  * 링크 컨텐츠의 내용 수정 함수
  * @param {number} contentId
  * @param {IEditContentInfo} body
@@ -92,6 +109,23 @@ export const addNoteContent = async (content: {
   const response = await axios.post(
     `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
     content,
+    {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+
+  return response.data;
+};
+
+/**
+ * 노트 컨텐츠 정보 불러오기 함수
+ * @param {number} contentId
+ * @returns {Promise<any>}
+ */
+export const getNoteContent = async (contentId: number): Promise<any> => {
+  const response = await axios.get(
+    `${import.meta.env.VITE_API_SERVER}/content/v1/note/${contentId}`,
     {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },
