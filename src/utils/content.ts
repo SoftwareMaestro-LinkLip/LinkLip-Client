@@ -16,7 +16,7 @@ import { parse } from './link';
  * @returns {Promise<any>}
  */
 export const getContents = async (
-  contentsSize: number = 12,
+  contentsSize: number = 24,
   categoryId: number | null = null,
   term: string = '',
   pageIdx: number = 0,
@@ -49,6 +49,23 @@ export const addLinkContent = async (content: {
   const response = await axios.post(
     `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
     content,
+    {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+
+  return response.data;
+};
+
+/**
+ * 링크 컨텐츠 정보 불러오기 함수
+ * @param {number} contentId
+ * @returns {Promise<any>}
+ */
+export const getLinkContent = async (contentId: number): Promise<any> => {
+  const response = await axios.get(
+    `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
     {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },
@@ -92,6 +109,23 @@ export const addNoteContent = async (content: {
   const response = await axios.post(
     `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
     content,
+    {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+
+  return response.data;
+};
+
+/**
+ * 노트 컨텐츠 정보 불러오기 함수
+ * @param {number} contentId
+ * @returns {Promise<any>}
+ */
+export const getNoteContent = async (contentId: number): Promise<any> => {
+  const response = await axios.get(
+    `${import.meta.env.VITE_API_SERVER}/content/v1/note/${contentId}`,
     {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },

@@ -115,18 +115,26 @@ const Modal = (props: IProps) => {
               >
                 <option
                   defaultValue={
-                    props.content.category && props.content.category.id
+                    props.content?.category && props.content.category.id
                       ? props.content.category.id
                       : 0
                   }
                 >
-                  {props.content.category
-                    ? props.content.category.name
+                  {props.content?.category
+                    ? userCategories.filter(
+                        (item) => props.content.category!.id === item.id,
+                      )[0].name
                     : '없음'}
                 </option>
-                ;<option value={0}>선택안함</option>
+                {!!props.content?.category && (
+                  <option value={0}>선택안함</option>
+                )}
                 {userCategories.map((item) => {
-                  if (item.id) {
+                  if (
+                    item.id &&
+                    (!props.content?.category ||
+                      props.content.category.id !== item.id)
+                  ) {
                     return (
                       <option value={item.id} key={item.id}>
                         {item.name}

@@ -11,8 +11,12 @@ import {
 import { userCategoriesState } from '../../stores/category';
 import { contentsState } from '../../stores/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { editLinkContent, getContents } from '../../utils/content';
-import { IEditLinkContent } from '../../typings/content';
+import {
+  editLinkContent,
+  getContents,
+  getLinkContent,
+} from '../../utils/content';
+import { IEditLinkContent, ILinkContent } from '../../typings/content';
 import useInput from '../../hooks/useInput';
 
 interface IProps {
@@ -25,12 +29,15 @@ const Modal = (props: IProps) => {
   const [userCategories, setUserCategories] =
     useRecoilState(userCategoriesState);
   const [contents, setContents] = useRecoilState(contentsState);
-  const [selectedCategoryId, onChangeSelectedCategoryId] = useInput(null);
+  const [selectedCategoryId, onChangeSelectedCategoryId] = useInput(
+    props.content.category.id,
+  );
   const [title, onChangeTitle] = useInput(props.content.title);
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
   const [pageIdx, setPageIdx] = useRecoilState(pageIdxState);
   const [term, setTerm] = useRecoilState(termState);
+  const [content, setContent] = useState<null | ILinkContent>(null);
 
   useOnClickOutside(
     ref,
@@ -45,6 +52,10 @@ const Modal = (props: IProps) => {
   });
 
   useEffect(() => {
+    getLinkContent(props.content.id).then((res) => {
+      setContent(res);
+    });
+
     const htmlLabel = document.querySelectorAll('label');
     if (!!htmlLabel) {
       htmlLabel[0].focus();
@@ -60,9 +71,14 @@ const Modal = (props: IProps) => {
     };
 
     editLinkContent(props.content.id, body).then(() => {
-      getContents(contentsSize, curCategoryId, term, pageIdx).then((res) => {
-        setContents([...res]);
-      });
+      console.log(contentsSize, curCategoryId, term, pageIdx);
+
+      getContents(contentsSize * (pageIdx + 1), curCategoryId, term, 0).then(
+        (res) => {
+          console.log('res', res);
+          setContents([...res]);
+        },
+      );
     });
   };
 
@@ -115,20 +131,23 @@ const Modal = (props: IProps) => {
               >
                 <option
                   defaultValue={
-                    props.content.category && props.content.category.id
-                      ? props.content.category.id
+                    content?.category && content.category.id
+                      ? content.category.id
                       : 0
                   }
                 >
-                  {props.content.category
-                    ? props.content.category.name
-                    : '없음'}
+                  {content?.category ? content.category.name : '없음'}
                 </option>
-                ;<option value={0}>선택안함</option>
+                {!!props.content?.category && (
+                  <option value={0}>선택안함</option>
+                )}
                 {userCategories.map((item) => {
-                  if (item.id) {
+                  if (
+                    !content?.category ||
+                    props.content.category.id != item.id
+                  ) {
                     return (
-                      <option value={item.id} key={item.id}>
+                      <option value={item.id!} key={item.id}>
                         {item.name}
                       </option>
                     );
