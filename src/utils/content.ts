@@ -16,7 +16,7 @@ import { parse } from './link';
  * @returns {Promise<any>}
  */
 export const getContents = async (
-  contentsSize: number = 12,
+  contentsSize: number = 24,
   categoryId: number | null = null,
   term: string = '',
   pageIdx: number = 0,
