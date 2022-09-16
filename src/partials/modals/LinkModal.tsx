@@ -56,11 +56,9 @@ const Modal = (props: IProps) => {
   useEffect(() => {
     getLinkContent(props.content.id).then((res) => {
       setContent(res);
-      if (content && content.category) {
-        setSelectedCategoryId(content.category.id!);
+      if (res && !!res.category) {
+        setSelectedCategoryId(res.category.id!);
       }
-      console.log('res', res);
-      console.log('content', content);
     });
 
     const htmlLabel = document.querySelectorAll('label');
@@ -78,11 +76,8 @@ const Modal = (props: IProps) => {
     };
 
     editLinkContent(props.content.id, body).then(() => {
-      console.log(contentsSize, curCategoryId, term, pageIdx);
-
       getContents(contentsSize * (pageIdx + 1), curCategoryId, term, 0).then(
         (res) => {
-          console.log('res', res);
           setContents([...res]);
         },
       );
@@ -136,9 +131,7 @@ const Modal = (props: IProps) => {
                 onChange={onChangeSelectedCategoryId}
                 className="inline bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 w-32 max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
               >
-                <option
-                  defaultValue={content?.category ? content.category.id! : 0}
-                >
+                <option defaultValue={selectedCategoryId}>
                   {content?.category ? content.category.name : '없음'}
                 </option>
                 {!!props.content?.category && (
