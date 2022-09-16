@@ -65,14 +65,14 @@ export const addLinkContent = async (content: {
  */
 export const getLinkContent = async (contentId: number): Promise<any> => {
   const response = await axios.get(
-    `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
+    `${import.meta.env.VITE_API_SERVER}/content/v1/${contentId}`,
     {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },
     },
   );
 
-  return response.data;
+  return response.data.data.content;
 };
 
 /**

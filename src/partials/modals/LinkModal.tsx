@@ -29,9 +29,11 @@ const Modal = (props: IProps) => {
   const [userCategories, setUserCategories] =
     useRecoilState(userCategoriesState);
   const [contents, setContents] = useRecoilState(contentsState);
-  const [selectedCategoryId, onChangeSelectedCategoryId] = useInput(
-    props.content.category.id,
-  );
+  const [
+    selectedCategoryId,
+    onChangeSelectedCategoryId,
+    setSelectedCategoryId,
+  ] = useInput(0);
   const [title, onChangeTitle] = useInput(props.content.title);
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
@@ -54,6 +56,11 @@ const Modal = (props: IProps) => {
   useEffect(() => {
     getLinkContent(props.content.id).then((res) => {
       setContent(res);
+      if (content && content.category) {
+        setSelectedCategoryId(content.category.id!);
+      }
+      console.log('res', res);
+      console.log('content', content);
     });
 
     const htmlLabel = document.querySelectorAll('label');
@@ -130,11 +137,7 @@ const Modal = (props: IProps) => {
                 className="inline bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 w-32 max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
               >
                 <option
-                  defaultValue={
-                    content?.category && content.category.id
-                      ? content.category.id
-                      : 0
-                  }
+                  defaultValue={content?.category ? content.category.id! : 0}
                 >
                   {content?.category ? content.category.name : '없음'}
                 </option>

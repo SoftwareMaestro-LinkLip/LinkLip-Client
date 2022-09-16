@@ -131,12 +131,11 @@ const Modal = (props: IProps) => {
                 )}
                 {userCategories.map((item) => {
                   if (
-                    item.id &&
-                    (!props.content?.category ||
-                      props.content.category.id !== item.id)
+                    !props.content?.category ||
+                    props.content.category.id != item.id
                   ) {
                     return (
-                      <option value={item.id} key={item.id}>
+                      <option value={item.id!} key={item.id}>
                         {item.name}
                       </option>
                     );
