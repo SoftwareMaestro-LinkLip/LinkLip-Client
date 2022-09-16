@@ -9,6 +9,8 @@ import {
   userCategoriesState,
 } from '../../stores/category';
 import { deleteCategory } from '../../utils/category';
+import { contentsState } from '../../stores/content';
+import { IContents } from '../../typings/content';
 
 interface IProps {
   categoryId: number | null;
@@ -20,6 +22,7 @@ const CategoryOptionButton = (props: IProps) => {
   const [editorOpen, setEditorOpen] = useState(false);
   const setEditCategoryId = useSetRecoilState(editCategoryIdState);
   const [categories, setCategories] = useRecoilState(userCategoriesState);
+  const [contents, setContents] = useRecoilState<IContents>(contentsState);
 
   useOnClickOutside(
     ref,
@@ -45,15 +48,21 @@ const CategoryOptionButton = (props: IProps) => {
   }, [dropdownOpen, editorOpen, setDropdownOpen, setEditorOpen]);
 
   const onDeleteHandler = useCallback(() => {
+    if (!!contents) {
+      alert('카테고리에 포함된 컨텐츠가 있어, 삭제를 할 수 없습니다.');
+      return;
+    }
     if (props.categoryId) {
       deleteCategory(props.categoryId).then((res) => {
-        setCategories([
-          ...categories.filter((item) => {
-            if (item.id && item.id !== props.categoryId) {
-              return item;
-            }
-          }),
-        ]);
+        if (res) {
+          setCategories([
+            ...categories.filter((item) => {
+              if (item.id && item.id !== props.categoryId) {
+                return item;
+              }
+            }),
+          ]);
+        }
       });
     }
   }, []);

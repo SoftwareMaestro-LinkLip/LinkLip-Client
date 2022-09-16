@@ -25,7 +25,11 @@ const Modal = (props: IProps) => {
   const [userCategories, setUserCategories] =
     useRecoilState(userCategoriesState);
   const [contents, setContents] = useRecoilState(contentsState);
-  const [selectedCategoryId, onChangeSelectedCategoryId] = useInput(null);
+  const [
+    selectedCategoryId,
+    onChangeSelectedCategoryId,
+    setSelectedCategoryId,
+  ] = useInput(0);
   const [text, onChangeText] = useInput(props.content.text);
   const curCategoryId = useRecoilValue(curCategoryIdState);
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
@@ -45,6 +49,10 @@ const Modal = (props: IProps) => {
   });
 
   useEffect(() => {
+    if (props.content.category && props.content.category.id) {
+      setSelectedCategoryId(props.content.category.id);
+    }
+
     const htmlTextarea = document.querySelectorAll('input');
     if (!!htmlTextarea) {
       htmlTextarea[0].focus();
