@@ -6,9 +6,15 @@ import axios, { AxiosResponse } from 'axios';
  * @returns {boolean}
  */
 export const isURL = (url: string): boolean => {
+  if (/[\s]/g.test(url)) {
+    return false;
+  }
   const regExp =
-    /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
-  return regExp.test(url);
+    /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/y;
+  if (regExp.test(url)) {
+    return true;
+  }
+  return false;
 };
 
 /**
