@@ -58,6 +58,10 @@ const Notebox = () => {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
+      if (!text.trim()) {
+        return;
+      }
+
       if (isURL(text)) {
         parse(text).then((body) => {
           body.categoryId = curCategoryId;
