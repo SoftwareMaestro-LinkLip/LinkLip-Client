@@ -45,11 +45,13 @@ export const getShortURL = (url: string): string => {
  * @returns {Promise<any>}
  */
 export const parse = async (url: string): Promise<any> => {
-  const response: AxiosResponse<any> = await axios.get(
+  const body = { url };
+  const response: AxiosResponse<any> = await axios.post(
     `${import.meta.env.VITE_API_PARSER}/link/v1?url=${getFullURL(url).replace(
       /^([^?#]*).*/,
       '$1',
     )}`,
+    body,
   );
 
   if (response.status >= 400) {
