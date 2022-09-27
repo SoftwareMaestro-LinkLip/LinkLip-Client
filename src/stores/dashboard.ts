@@ -2,7 +2,7 @@ import { atom, RecoilState } from 'recoil';
 import { ILinkContent, INoteContent } from '../typings/content';
 
 export const termState = atom({
-  key: 'termAtom',
+  key: 'termState',
   default: '',
 });
 
