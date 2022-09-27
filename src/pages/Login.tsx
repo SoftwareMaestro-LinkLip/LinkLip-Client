@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { loginSuccessState } from '../stores/user';
 
 const Login = () => {
   const { accessToken } = useParams();
-  const setLoginSuccess = useSetRecoilState(loginSuccessState);
+  const [loginSuccess, setLoginSuccess] = useRecoilState(loginSuccessState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const Login = () => {
       localStorage.setItem('accessToken', JSON.stringify(accessToken));
       setLoginSuccess(true);
     }
-    navigate(`/dashboard`);
+    // navigate(`/dashboard`);
   }, []);
 
   return <></>;
