@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { ICategory } from '../typings/content';
+import { authHeader } from './auth';
 
 /**
  * 사용자 카테고리 불러오기 함수
@@ -19,6 +20,9 @@ export const getCategories = async (
 
   const response: AxiosResponse<any> = await axios.get(
     `${import.meta.env.VITE_API_SERVER}/category/v1`,
+    {
+      headers: authHeader(),
+    },
   );
 
   if (!response.data.success) {

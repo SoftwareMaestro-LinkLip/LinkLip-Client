@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { jwtState } from '../stores/user';
+import { loginSuccessState } from '../stores/user';
 
 const Login = () => {
   const { jwt } = useParams();
-  const setJwt = useSetRecoilState(jwtState);
+  const setLoginSuccess = useSetRecoilState(loginSuccessState);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (jwt) {
-      setJwt(jwt);
+      localStorage.setItem('jwt', JSON.stringify(jwt));
+      setLoginSuccess(true);
     }
     navigate(`/dashboard`);
   }, []);

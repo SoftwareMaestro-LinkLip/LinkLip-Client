@@ -5,7 +5,7 @@ import {
   IEditLinkContent,
   IEditNoteContent,
 } from '../typings/content';
-import { parse } from './link';
+import { authHeader } from './auth';
 
 /**
  * 저장된 컨텐츠 불러오는 함수
@@ -29,7 +29,9 @@ export const getContents = async (
 
   console.log('url', target);
 
-  const response: AxiosResponse<any> = await axios.get(target);
+  const response: AxiosResponse<any> = await axios.get(target, {
+    headers: authHeader(),
+  });
 
   return [...response.data.data.content];
 };
