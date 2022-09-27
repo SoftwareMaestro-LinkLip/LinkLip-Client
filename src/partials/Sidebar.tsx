@@ -74,7 +74,7 @@ const Sidebar = () => {
           </h3>
           <AddCategoryButton />
         </div>
-        <ol>
+        <ul>
           {categories.map((item) => {
             return (
               <li
@@ -101,8 +101,7 @@ const Sidebar = () => {
               </li>
             );
           })}
-          ;
-        </ol>
+        </ul>
       </nav>
     </div>
   );
