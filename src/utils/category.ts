@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { ICategory } from '../typings/content';
-import { authHeader } from './auth';
+import { getAuthHeader } from './auth';
 
 /**
  * 사용자 카테고리 불러오기 함수
@@ -16,12 +16,13 @@ export const getCategories = async (
   categoryId: number = 0,
   contentsSize: number = 12,
 ): Promise<any> => {
-  const total: ICategory = { id: 0, name: '전체' };
+  const authHeader = getAuthHeader();
+  console.log('authHeader', authHeader);
 
   const response: AxiosResponse<any> = await axios.get(
     `${import.meta.env.VITE_API_SERVER}/category/v1`,
     {
-      headers: authHeader(),
+      headers: authHeader,
     },
   );
 
