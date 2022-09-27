@@ -1,11 +1,11 @@
 import axios, { AxiosRequestHeaders } from 'axios';
 
 export const getAuthHeader = (): AxiosRequestHeaders | undefined => {
-  const temp = localStorage.getItem('jwt');
+  const temp = localStorage.getItem('accessToken');
   if (temp) {
-    const jwt = JSON.parse(temp);
-    console.log('jwt', jwt);
-    return { Authorization: 'Bearer ' + jwt };
+    const accessToken = JSON.parse(temp);
+    console.log('accessToken', accessToken);
+    return { Authorization: `Bearer ${accessToken}` };
   } else {
     return undefined;
   }

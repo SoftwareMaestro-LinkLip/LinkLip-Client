@@ -4,13 +4,13 @@ import { useSetRecoilState } from 'recoil';
 import { loginSuccessState } from '../stores/user';
 
 const Login = () => {
-  const { jwt } = useParams();
+  const { accessToken } = useParams();
   const setLoginSuccess = useSetRecoilState(loginSuccessState);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (jwt) {
-      localStorage.setItem('jwt', JSON.stringify(jwt));
+    if (accessToken) {
+      localStorage.setItem('accessToken', JSON.stringify(accessToken));
       setLoginSuccess(true);
     }
     navigate(`/dashboard`);
