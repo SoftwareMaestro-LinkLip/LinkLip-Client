@@ -5,7 +5,7 @@ import {
   IEditLinkContent,
   IEditNoteContent,
 } from '../typings/content';
-import { getAuthHeader } from './auth';
+import { authHeader } from './auth';
 import apiServer from './api';
 
 /**
@@ -28,11 +28,8 @@ export const getContents = async (
     !!term ? `&term=${term}` : ''
   }${!!categoryId ? `&categoryId=${categoryId}` : ''}`;
 
-  const authHeader = getAuthHeader();
-  console.log('authHeader', authHeader);
-
   const response: AxiosResponse<any> = await axios.get(target, {
-    headers: authHeader,
+    headers: authHeader(),
   });
 
   return [...response.data.data.content];
@@ -54,8 +51,7 @@ export const addLinkContent = async (content: {
     `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
     content,
     {
-      withCredentials: true,
-      headers: getAuthHeader(),
+      headers: authHeader(),
     },
   );
 
