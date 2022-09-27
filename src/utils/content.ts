@@ -55,7 +55,7 @@ export const addLinkContent = async (content: {
     content,
     {
       withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeader(),
     },
   );
 
