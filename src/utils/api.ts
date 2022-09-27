@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const proxy = import.meta.env.DEV
+const proxy = import.meta.env
   ? {
       host: 'localhost',
       port: 8080,

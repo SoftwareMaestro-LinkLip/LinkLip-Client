@@ -5,7 +5,8 @@ import {
   IEditLinkContent,
   IEditNoteContent,
 } from '../typings/content';
-import { authHeader } from './auth';
+import { getAuthHeader } from './auth';
+import apiServer from './api';
 
 /**
  * 저장된 컨텐츠 불러오는 함수
@@ -27,10 +28,11 @@ export const getContents = async (
     !!term ? `&term=${term}` : ''
   }${!!categoryId ? `&categoryId=${categoryId}` : ''}`;
 
-  console.log('url', target);
+  const authHeader = getAuthHeader();
+  console.log('authHeader', authHeader);
 
   const response: AxiosResponse<any> = await axios.get(target, {
-    headers: authHeader(),
+    headers: authHeader,
   });
 
   return [...response.data.data.content];
