@@ -41,8 +41,7 @@ export const addCategory = async (name: string) => {
   };
   return await axios
     .post(`${import.meta.env.VITE_API_SERVER}/category/v1`, body, {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeader(),
     })
     .then((response) => {
       return response.data.success;
@@ -65,8 +64,7 @@ export const editCategory = async (id: number, name: string) => {
   };
   return await axios
     .patch(`${import.meta.env.VITE_API_SERVER}/category/v1/${id}`, body, {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeader(),
     })
     .then((response) => {
       if (response.data.success) {
@@ -87,8 +85,7 @@ export const editCategory = async (id: number, name: string) => {
 export const deleteCategory = async (categoryId: number) => {
   return await axios
     .delete(`${import.meta.env.VITE_API_SERVER}/category/v1/${categoryId}`, {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeader(),
     })
     .then((response) => {
       return response.data.success;
