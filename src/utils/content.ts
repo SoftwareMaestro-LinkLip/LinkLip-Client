@@ -67,8 +67,7 @@ export const getLinkContent = async (contentId: number): Promise<any> => {
   const response = await axios.get(
     `${import.meta.env.VITE_API_SERVER}/content/v1/${contentId}`,
     {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeader(),
     },
   );
 
@@ -89,8 +88,7 @@ export const editLinkContent = async (
     `${import.meta.env.VITE_API_SERVER}/content/v1/link/${contentId}`,
     body,
     {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeader(),
     },
   );
 
@@ -110,8 +108,7 @@ export const addNoteContent = async (content: {
     `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
     content,
     {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeader(),
     },
   );
 
@@ -127,8 +124,7 @@ export const getNoteContent = async (contentId: number): Promise<any> => {
   const response = await axios.get(
     `${import.meta.env.VITE_API_SERVER}/content/v1/note/${contentId}`,
     {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeader(),
     },
   );
 
@@ -149,8 +145,7 @@ export const editNoteContent = async (
     `${import.meta.env.VITE_API_SERVER}/content/v1/note/${contentId}`,
     body,
     {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeader(),
     },
   );
   return response.data;
@@ -165,8 +160,7 @@ export const deleteContent = async (contentId: number): Promise<any> => {
   const response = await axios.delete(
     `${import.meta.env.VITE_API_SERVER}/content/v1/${contentId}`,
     {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeader(),
     },
   );
 
