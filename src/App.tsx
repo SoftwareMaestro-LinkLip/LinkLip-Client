@@ -20,10 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route
-            path="/oauth2/redirect/:accessToken"
-            element={<Login />}
-          ></Route>
+          <Route path="/oauth2/redirect/" element={<Login />}></Route>
         </Routes>
       </RecoilRoot>
     </div>
