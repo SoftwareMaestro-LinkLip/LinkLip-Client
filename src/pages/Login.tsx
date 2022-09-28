@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { loginSuccessState } from '../stores/user';
 
 const Login = () => {
-  const [loginSuccess, setLoginSuccess] = useRecoilState(loginSuccessState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,7 +11,6 @@ const Login = () => {
 
     if (accessToken) {
       localStorage.setItem('accessToken', JSON.stringify(accessToken));
-      setLoginSuccess(true);
     }
 
     if (refreshToken) {
@@ -23,7 +19,7 @@ const Login = () => {
     navigate(`/dashboard`);
   }, []);
 
-  return <>Login</>;
+  return <div>Login</div>;
 };
 
 export default Login;
