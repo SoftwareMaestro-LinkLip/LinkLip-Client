@@ -3,8 +3,11 @@
 # Linklip-Client 
 
 <img src="https://user-images.githubusercontent.com/55964775/192938922-bf48a171-b361-42ae-bf31-4ae7877110ee.png" align="center" alt="Logo Meaning">
+
 > 어떻게 하면 다양한 형태의 순간적인 정보를 간편하게 저장하고 체계적으로 관리할 수 있을까? <br>
 > 여러분들의 효율적인 정보 관리를 위한 최고의 수단, 링클립입니다.
+
+<img src="https://user-images.githubusercontent.com/55964775/192941604-8f66257e-3a5f-4d84-9acd-31795820d7f8.png" align="center" alt="Dashboar">
 
 
 ## Quick Start
