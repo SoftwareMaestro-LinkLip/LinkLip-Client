@@ -1,39 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import google_logo from '../assets/images/google_logo.png';
 import { GoogleLogin } from 'react-google-login';
 import axios, { AxiosResponse } from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { requestAccessToken } from '../utils/auth';
 
 const LandingPage = () => {
-  const clientId = 'Your client ID';
+  const navigate = useNavigate();
 
-  async function onSuccess(res: any) {
-    const profile = res.getBasicProfile();
-    const userdata = {
-      email: profile.getEmail(),
-      image: profile.getImageUrl(),
-      name: profile.getName(),
-    };
-    // 로그인 성공 후 실행하기 원하는 코드 작성.
-  }
-
-  const onFailure = (res: any) => {
-    alert('구글 로그인에 실패하였습니다');
-    console.log('err', res);
-  };
-
-  const getToken = async (e: any) => {
-    console.log(import.meta.env.VITE_API_AUTH);
-
-    const response: AxiosResponse<any> = await axios.get(
-      `${import.meta.env.VITE_API_AUTH}`,
-    );
-
-    console.log(response);
-
-    // if (!response.data.success) {
-    //   alert('카테고리를 불러오지 못했습니다');
-    // }
-  };
+  useEffect(() => {
+    requestAccessToken().then((res) => {
+      if (res) {
+        navigate(`/dashboard`);
+      }
+    });
+  }, []);
 
   return (
     <div>
