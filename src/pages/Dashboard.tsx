@@ -11,6 +11,8 @@ import NoteModal from '../partials/modals/NoteModal';
 import { getContents } from '../utils/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { contentsState } from '../stores/content';
+import { requestAccessToken } from '../utils/auth';
+import { useNavigate } from 'react-router-dom';
 import {
   termState,
   curCategoryIdState,
@@ -29,8 +31,15 @@ const Dashboard = () => {
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
   const modalOpen = useRecoilValue(modalOpenState);
   const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    requestAccessToken().then((res) => {
+      if (!res) {
+        navigate(`/`);
+      }
+    });
+
     // change page title tag
     const htmlTitle = document.querySelector('title');
     htmlTitle!.innerHTML = 'Linklip Dashboard';

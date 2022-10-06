@@ -12,3 +12,37 @@ export const authHeader = (): AxiosRequestHeaders => {
     return { 'Content-Type': 'application/json' };
   }
 };
+
+export const requestAccessToken = async () => {
+  const rawAccessToken = localStorage.getItem('accessToken');
+  const rawRefreshToken = localStorage.getItem('refreshToken');
+  if (rawAccessToken && rawRefreshToken) {
+    const accessToken = JSON.parse(rawAccessToken);
+    const refreshToken = JSON.parse(rawRefreshToken);
+
+    await axios
+      .post(`${import.meta.env.VITE_API_SERVER}/token/v1/refresh-token`, {
+        accessToken,
+        refreshToken,
+      })
+      .then((response) => {
+        if (!response.data.data.success) {
+          const accessToken = response.data.data.accessToken;
+          const refreshToken = response.data.data.refreshToken;
+
+          if (accessToken) {
+            localStorage.setItem('accessToken', JSON.stringify(accessToken));
+          }
+
+          if (refreshToken) {
+            localStorage.setItem('refreshToken', JSON.stringify(refreshToken));
+          }
+          return true;
+        }
+
+        return response.data.data.success;
+      });
+  } else {
+    return false;
+  }
+};
