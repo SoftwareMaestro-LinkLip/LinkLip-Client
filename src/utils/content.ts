@@ -7,8 +7,6 @@ import {
 } from '../typings/content';
 import { authHeader } from './auth';
 import apiServer from './api';
-import { useRecoilState } from 'recoil';
-import { serverAPIState } from '../stores/api';
 
 /**
  * 저장된 컨텐츠 불러오는 함수
@@ -24,8 +22,6 @@ export const getContents = async (
   term: string = '',
   pageIdx: number = 0,
 ): Promise<any> => {
-  const [serverAPI, setServerAPI] = useRecoilState(serverAPIState);
-
   const target = `${
     import.meta.env.VITE_API_SERVER
   }/content/v1/?page=${pageIdx}&size=${contentsSize}${
