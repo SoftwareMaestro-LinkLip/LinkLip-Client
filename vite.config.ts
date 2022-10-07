@@ -14,6 +14,7 @@ export default defineConfig({
       '/content': 'http://localhost:8080',
       '/category': 'http://localhost:8080',
       '/link': 'http://localhost:5050',
+      '/token': 'http://localhost:8080',
     },
   },
   plugins: [react(), pluginRewriteAll()],

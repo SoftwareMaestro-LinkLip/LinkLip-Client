@@ -20,12 +20,15 @@ export const requestAccessToken = async () => {
     const accessToken = JSON.parse(rawAccessToken);
     const refreshToken = JSON.parse(rawRefreshToken);
 
+    const body = {
+      accessToken,
+      refreshToken,
+    };
+
     await axios
-      .post(`${import.meta.env.VITE_API_SERVER}/token/v1/refresh-token`, {
-        accessToken,
-        refreshToken,
-      })
+      .post(`${import.meta.env.VITE_API_SERVER}/token/v1/refresh-token`, body)
       .then((response) => {
+        console.log('response', response);
         if (!response.data.data.success) {
           const accessToken = response.data.data.accessToken;
           const refreshToken = response.data.data.refreshToken;
