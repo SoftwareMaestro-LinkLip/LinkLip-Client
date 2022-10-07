@@ -32,8 +32,8 @@ export const requestAccessToken = async () => {
         console.log('response.data.success', response.data.success);
 
         if (!response.data.success) {
-          const accessToken = response.data.data.accessToken;
-          const refreshToken = response.data.data.refreshToken;
+          const accessToken = response.data.accessToken;
+          const refreshToken = response.data.refreshToken;
 
           if (accessToken) {
             localStorage.setItem('accessToken', JSON.stringify(accessToken));
