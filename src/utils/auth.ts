@@ -16,6 +16,7 @@ export const authHeader = (): AxiosRequestHeaders => {
 export const requestAccessToken = async () => {
   const rawAccessToken = localStorage.getItem('accessToken');
   const rawRefreshToken = localStorage.getItem('refreshToken');
+
   if (rawAccessToken && rawRefreshToken) {
     const accessToken = JSON.parse(rawAccessToken);
     const refreshToken = JSON.parse(rawRefreshToken);
@@ -43,7 +44,7 @@ export const requestAccessToken = async () => {
           return true;
         }
 
-        return response.data.data.success;
+        return response.data.success;
       });
   } else {
     return false;
