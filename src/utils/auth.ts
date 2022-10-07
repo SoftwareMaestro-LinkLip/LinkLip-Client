@@ -26,27 +26,24 @@ export const requestAccessToken = async () => {
       refreshToken,
     };
 
-    await axios
-      .post(`${import.meta.env.VITE_API_SERVER}/token/v1/refresh-token`, body)
-      .then((response) => {
-        console.log('response.data.success', response.data.success);
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_SERVER}/token/v1/refresh-token`,
+      body,
+    );
 
-        if (!response.data.success) {
-          const accessToken = response.data.accessToken;
-          const refreshToken = response.data.refreshToken;
+    if (response && response.data && response.data.success) {
+      const accessToken = response.data.accessToken;
+      const refreshToken = response.data.refreshToken;
 
-          if (accessToken) {
-            localStorage.setItem('accessToken', JSON.stringify(accessToken));
-          }
+      if (accessToken) {
+        localStorage.setItem('accessToken', JSON.stringify(accessToken));
+      }
 
-          if (refreshToken) {
-            localStorage.setItem('refreshToken', JSON.stringify(refreshToken));
-          }
-          return response.data.success;
-        }
-
-        return response.data.success;
-      });
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', JSON.stringify(refreshToken));
+      }
+    }
+    return response.data.success;
   } else {
     return false;
   }
