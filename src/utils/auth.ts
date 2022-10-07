@@ -29,8 +29,9 @@ export const requestAccessToken = async () => {
     await axios
       .post(`${import.meta.env.VITE_API_SERVER}/token/v1/refresh-token`, body)
       .then((response) => {
-        console.log('response', response);
-        if (!response.data.data.success) {
+        console.log('response.data.success', response.data.success);
+
+        if (!response.data.success) {
           const accessToken = response.data.data.accessToken;
           const refreshToken = response.data.data.refreshToken;
 
@@ -41,7 +42,7 @@ export const requestAccessToken = async () => {
           if (refreshToken) {
             localStorage.setItem('refreshToken', JSON.stringify(refreshToken));
           }
-          return true;
+          return response.data.success;
         }
 
         return response.data.success;
