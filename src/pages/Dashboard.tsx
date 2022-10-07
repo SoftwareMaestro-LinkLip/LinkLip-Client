@@ -35,6 +35,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     requestAccessToken().then((res) => {
+      console.log('res', res);
       if (!res) {
         navigate(`/`);
       }
