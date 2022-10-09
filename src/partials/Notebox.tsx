@@ -130,7 +130,7 @@ const Notebox = () => {
     <div className="flex justify-center z-30 ">
       <div
         className={`fixed bottom-0 w-11/12 
-       lg:w-9/12 m-4 z-30`}
+       lg:w-9/12 z-30`}
       >
         <div className="w-full rounded border-solid border-2 border-slate-200">
           <form onSubmit={onSubmitHandler} className="w-full bg-white">
