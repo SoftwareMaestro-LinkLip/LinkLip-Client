@@ -90,7 +90,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen " id="pageContainer">
+    <div className="flex h-screen bg-bg_gray" id="pageContainer">
       {/* Side Bar */}
       <Sidebar />
       {/* Content area */}
@@ -108,7 +108,7 @@ const Dashboard = () => {
           }[openedContent.type]}
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
-          <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full ">
+          <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-8 lg:px-10 py-8 w-full ">
             {contents.map(
               (item, idx) =>
                 ({

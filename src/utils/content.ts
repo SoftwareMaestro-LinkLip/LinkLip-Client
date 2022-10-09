@@ -5,8 +5,7 @@ import {
   IEditLinkContent,
   IEditNoteContent,
 } from '../typings/content';
-import { authHeader } from './auth';
-import apiServer from './api';
+import { authHeader, requestAccessToken } from './auth';
 
 /**
  * 저장된 컨텐츠 불러오는 함수
@@ -104,15 +103,25 @@ export const addNoteContent = async (content: {
   text: string;
   categoryId: number | null;
 }): Promise<any> => {
-  const response = await axios.post(
-    `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
-    content,
-    {
-      headers: authHeader(),
-    },
-  );
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
+      content,
+      {
+        headers: authHeader(),
+      },
+    );
+  } catch {
+    const temp = await requestAccessToken();
 
-  return response.data;
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
+      content,
+      {
+        headers: authHeader(),
+      },
+    );
+  }
 };
 
 /**

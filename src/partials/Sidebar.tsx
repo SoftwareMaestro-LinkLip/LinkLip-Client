@@ -40,7 +40,7 @@ const Sidebar = () => {
     <div
       ref={ref}
       id="sidebar"
-      className={`flex flex-col absolute z-50 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll scrollbar-hide lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
+      className={`flex flex-col absolute z-50 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll scrollbar-hide lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-white p-4 transition-all duration-200 ease-in-out ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-64'
       }`}
     >
@@ -64,12 +64,9 @@ const Sidebar = () => {
         </button>
       </div>
       {/* 카테고리 목록 */}
-      <nav className="space-y-8">
-        <div className="flex justify-between">
-          <h3
-            className="text-lg text-slate-400 font-semibold pl-3"
-            tabIndex={3}
-          >
+      <nav className="space-y-4">
+        <div className="flex justify-between rounded-md outline outline-1 outline-slate-200 bg-bg_gray py-2">
+          <h3 className="text-md text-black font-semibold pl-3 " tabIndex={3}>
             카테고리
           </h3>
           <AddCategoryButton />
@@ -78,8 +75,8 @@ const Sidebar = () => {
           {categories.map((item) => {
             return (
               <li
-                className={`flex py-2 rounded-sm mb-0.5 last:mb-0 text-slate-200 text-xl ${
-                  curCategoryId === item.id && 'bg-slate-900'
+                className={`flex py-0.5 last:mb-0 text-slate-400 text-lg ${
+                  curCategoryId === item.id && 'text-black'
                 }`}
                 key={item.id ? item.id : 0}
               >

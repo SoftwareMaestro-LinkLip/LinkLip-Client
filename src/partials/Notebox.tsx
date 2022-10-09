@@ -5,8 +5,6 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { isURL, parse } from '../utils/link';
 import { getContents, addLinkContent, addNoteContent } from '../utils/content';
 import { useResetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
@@ -19,7 +17,8 @@ import {
 import { contentsState } from '../stores/content';
 import { categoriesState } from '../stores/category';
 import useInput from '../hooks/useInput';
-import { ILinkContent } from '../typings/content';
+import image_icon from '../assets/images/image_icon4.png';
+import { useNavigate } from 'react-router-dom';
 
 const Notebox = () => {
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -33,6 +32,7 @@ const Notebox = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     curCategoryId,
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (ref === null || ref.current === null) {
@@ -79,7 +79,7 @@ const Notebox = () => {
           text,
           categoryId: selectedCategoryId,
         };
-        addNoteContent(body).then(() => {
+        addNoteContent(body).then((data) => {
           resetPageIdx();
           resetTerm();
           getContents(contentsSize, selectedCategoryId).then((res) => {
@@ -129,36 +129,31 @@ const Notebox = () => {
   return (
     <div className="flex justify-center z-30 ">
       <div
-        className={`fixed bottom-0 w-11/12 
-       lg:w-9/12 z-30`}
+        className={`fixed mx-4 bottom-0 w-11/12 
+       lg:w-9/12 sm:m-4 z-30`}
       >
-        <div className="w-full rounded border-solid border-2 border-slate-200">
+        <div className="w-full rounded-xl outline outline-1 outline-slate-200">
           <form onSubmit={onSubmitHandler} className="w-full bg-white">
             <textarea
               onChange={onChangeText}
               onKeyPress={onKeyDown}
-              placeholder="Input URL"
+              placeholder="URL 또는 메모 입력"
               value={text}
               rows={1}
               ref={ref}
               onInput={handleResizeHeight}
-              className="w-full border-slate-300 border-0 focus:border-slate-300 focus:border-b-0 rounded-t resize-none outline-0 shadow-none overflow-hidden ring-0 focus:ring-0"
+              className="w-full border-slate-300 border-0 focus:border-slate-300 focus:border-b-0 resize-none outline-0 shadow-none overflow-hidden ring-0 focus:ring-0"
             ></textarea>
             {/* tool area */}
-            <div className="flex items-center relative bg-slate-200 h-10 border-0 ">
+            <div className="flex items-center relative bg-white h-10 border-0 sm:rounded-b-xl">
               {/* image button */}
               <button
-                className="justify-center w-6 h-6 m-2 rounded-lg  border-slate-200 text-slate-500"
+                type="button"
+                className="justify-center w-6 h-6 m-2"
                 aria-haspopup="true"
                 aria-label="이미지 추가"
               >
-                <svg
-                  className="w-4 h-4 fill-current"
-                  viewBox="0 0 16 16"
-                  aria-hidden="true"
-                >
-                  <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                </svg>
+                <img src={image_icon} alt="이미지 추가" />
               </button>
               {/* category select */}
               {text && (
@@ -166,6 +161,7 @@ const Notebox = () => {
                   {categories.map((item) => {
                     return (
                       <button
+                        type="button"
                         className={`whitespace-nowrap align-baseline rounded-xl m-1 py-0.25 px-2 
                         ${
                           (!item.id && !selectedCategoryId) ||
@@ -188,9 +184,15 @@ const Notebox = () => {
               {/* submit button */}
               <button
                 type="submit"
-                className="absolute right-1  p-2 text-slate-500"
+                className="absolute right-2  p-1.5  text-slate-500 rounded-full bg-signiture"
               >
-                <FontAwesomeIcon icon={faPaperPlane} />
+                <svg
+                  className="w-4 h-4 fill-current"
+                  viewBox="0 0 16 16"
+                  aria-hidden="true"
+                >
+                  <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                </svg>
               </button>
             </div>
           </form>

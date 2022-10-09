@@ -58,7 +58,7 @@ const AddCategoryButton = () => {
     <div>
       {dropdownOpen ? (
         <button
-          className="flex justify-center items-center w-6 h-6 mr-2 rounded-lg bg-white border-slate-200 text-slate-400"
+          className="flex justify-center items-center w-6 h-6 mr-2 text-slate-400"
           aria-haspopup="true"
           onClick={onDropHandler}
           aria-expanded={dropdownOpen}
@@ -67,7 +67,7 @@ const AddCategoryButton = () => {
         </button>
       ) : (
         <button
-          className="flex justify-center items-center w-6 h-6 mr-2 rounded-lg  border-slate-200 text-slate-400"
+          className="flex justify-center items-center w-6 h-6 mr-2 text-slate-400"
           aria-haspopup="true"
           onClick={onDropHandler}
           aria-expanded={dropdownOpen}
