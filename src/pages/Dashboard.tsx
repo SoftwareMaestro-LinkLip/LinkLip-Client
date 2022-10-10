@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../partials/Header';
-import { ILinkContent, INoteContent, IContents } from '../typings/content';
+import {
+  ILinkContent,
+  INoteContent,
+  IImageContent,
+  IContents,
+} from '../typings/content';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
 import LinkCard from '../partials/cards/LinkCard';
@@ -57,7 +62,7 @@ const Dashboard = () => {
       cnt = 24;
     }
     getContents(cnt, curCategoryId, term).then((res) => {
-      setContents([...res]);
+      setContents([...contents, ...res]);
     });
   }, []);
 
@@ -65,7 +70,7 @@ const Dashboard = () => {
     setPageIdx(0);
     setTerm('');
     getContents(contentsSize, curCategoryId, term).then((res) => {
-      setContents([...res]);
+      setContents([...contents, ...res]);
     });
   }, [curCategoryId]);
 

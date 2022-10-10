@@ -1,4 +1,5 @@
 import React, { CSSProperties } from 'react';
+import logo from '../../assets/images/logo.png';
 import { getShortURL } from '../../utils/link';
 import CardOptionButton from '../buttons/CardOptionButton';
 import ClipLoader from 'react-spinners/ClipLoader';

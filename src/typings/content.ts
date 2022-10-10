@@ -3,7 +3,8 @@ export interface ICategory {
   name: string | null;
 }
 
-export interface IContents extends Array<ILinkContent | INoteContent> {}
+export interface IContents
+  extends Array<ILinkContent | INoteContent | IImageContent> {}
 
 export interface ILinkContent {
   category: ICategory | null;
