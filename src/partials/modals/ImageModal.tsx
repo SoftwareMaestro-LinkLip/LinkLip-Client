@@ -11,15 +11,15 @@ import {
 import { userCategoriesState } from '../../stores/category';
 import { contentsState } from '../../stores/content';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { editNoteContent, getContents } from '../../utils/content';
-import { IEditNoteContent } from '../../typings/content';
+import { editImageContent, getContents } from '../../utils/content';
+import { IEditImageContent } from '../../typings/content';
 import useInput from '../../hooks/useInput';
 
 interface IProps {
   content: any;
 }
 
-const Modal = (props: IProps) => {
+const ImageModal = (props: IProps) => {
   const ref = useRef(null);
   const [modalOpen, setModalOpen] = useRecoilState(modalOpenState);
   const [userCategories, setUserCategories] =
@@ -62,12 +62,11 @@ const Modal = (props: IProps) => {
   const editHandler = () => {
     setModalOpen(false);
 
-    const body: IEditNoteContent = {
+    const body: IEditImageContent = {
       categoryId: selectedCategoryId != 0 ? selectedCategoryId : null,
-      text,
     };
 
-    editNoteContent(props.content.id, body).then(() => {
+    editImageContent(props.content.id, body).then(() => {
       getContents(contentsSize, curCategoryId, term, pageIdx).then((res) => {
         setContents([...res]);
       });
@@ -78,7 +77,7 @@ const Modal = (props: IProps) => {
     <div className="flex justify-center w-full">
       <div
         ref={ref}
-        className="flex flex-col justify-between z-50 w-full h-full sm:max-w-2xl sm:h-2/3 bg-bg_gray sm:rounded-lg shadow fixed top-1/2 transform -translate-y-1/2 lg:translate-x-4"
+        className="flex flex-col justify-between z-50 w-full h-full  bg-bg_gray sm:rounded-lg shadow fixed top-1/2 transform -translate-y-1/2 lg:translate-x-4"
       >
         {/* modal header */}
         <div className="flex justify-between items-start pt-4 px-4 rounded-t border-b ">
@@ -151,11 +150,10 @@ const Modal = (props: IProps) => {
                 })}
               </select>
             </div>
-            <textarea
-              id="text"
-              onChange={onChangeText}
-              value={text}
-              className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500  h-full w-full p-2.5  resize-none"
+
+            <div
+              style={{ backgroundImage: `url(${props.content.linkImg})` }}
+              className="h-full bg-contain bg-no-repeat bg-center "
             />
           </form>
         </div>
@@ -185,4 +183,4 @@ const Modal = (props: IProps) => {
   );
 };
 
-export default Modal;
+export default ImageModal;

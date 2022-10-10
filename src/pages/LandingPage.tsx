@@ -10,8 +10,6 @@ const LandingPage = () => {
 
   useEffect(() => {
     requestAccessToken().then((res) => {
-      console.log('res', res);
-
       if (res) {
         navigate(`/dashboard`);
       }

@@ -4,9 +4,9 @@ import {
   INoteContent,
   IEditLinkContent,
   IEditNoteContent,
+  IEditImageContent,
 } from '../typings/content';
-import { authHeader } from './auth';
-import apiServer from './api';
+import { authHeader, requestAccessToken } from './auth';
 
 /**
  * 저장된 컨텐츠 불러오는 함수
@@ -104,15 +104,31 @@ export const addNoteContent = async (content: {
   text: string;
   categoryId: number | null;
 }): Promise<any> => {
-  const response = await axios.post(
-    `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
-    content,
-    {
-      headers: authHeader(),
-    },
-  );
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
+      content,
+      {
+        headers: authHeader(),
+      },
+    );
+  } catch {
+    const temp = await requestAccessToken();
 
-  return response.data;
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
+        content,
+        {
+          headers: authHeader(),
+        },
+      );
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
 };
 
 /**
@@ -149,6 +165,69 @@ export const editNoteContent = async (
     },
   );
   return response.data;
+};
+
+/**
+ * 이미지 컨텐츠 저장 함수
+ * @param {{text: string, categoryId: number}} content
+ * @returns {Promise<any>}
+ */
+export const addImageContent = async (content: {
+  imageFile: FormData;
+  categoryId: number | null;
+}): Promise<any> => {
+  const header = authHeader();
+  header['Content-Type'] = 'multipart/form-data';
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_SERVER}/content/v1/image`,
+      content,
+      {
+        headers: header,
+      },
+    );
+    return true;
+  } catch {
+    const temp = await requestAccessToken();
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_SERVER}/content/v1/image`,
+        content,
+        {
+          headers: header,
+        },
+      );
+      return true;
+    } catch {
+      return false;
+    }
+  }
+};
+
+/**
+ * 이미지 컨텐츠의 내용 수정 함수
+ * @param {number} contentId
+ * @param {IEditImageContent} body
+ * @returns {Promise<any>}
+ */
+export const editImageContent = async (
+  contentId: number,
+  body: IEditImageContent,
+): Promise<any> => {
+  try {
+    const response = await axios.patch(
+      `${import.meta.env.VITE_API_SERVER}/content/v1/image/${contentId}`,
+      body,
+      {
+        headers: authHeader(),
+      },
+    );
+
+    return response.data;
+  } catch {
+    alert('해당 기능이 아직 구현되지 않았습니다.');
+  }
 };
 
 /**

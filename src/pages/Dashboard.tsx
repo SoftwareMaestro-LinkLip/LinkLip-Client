@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../partials/Header';
-import { ILinkContent, INoteContent, IContents } from '../typings/content';
+import {
+  ILinkContent,
+  INoteContent,
+  IImageContent,
+  IContents,
+} from '../typings/content';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
 import LinkCard from '../partials/cards/LinkCard';
@@ -21,6 +26,8 @@ import {
   modalOpenState,
   openedContentState,
 } from '../stores/dashboard';
+import ImageCard from '../partials/cards/ImageCard';
+import ImageModal from '../partials/modals/ImageModal';
 
 const Dashboard = () => {
   const [bottom, setBottom] = useState(false);
@@ -35,7 +42,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     requestAccessToken().then((res) => {
-      console.log('res', res);
       if (!res) {
         navigate(`/`);
       }
@@ -57,14 +63,6 @@ const Dashboard = () => {
       cnt = 24;
     }
     getContents(cnt, curCategoryId, term).then((res) => {
-      setContents([...res]);
-    });
-  }, []);
-
-  useEffect(() => {
-    setPageIdx(0);
-    setTerm('');
-    getContents(contentsSize, curCategoryId, term).then((res) => {
       setContents([...res]);
     });
   }, [curCategoryId]);
@@ -90,7 +88,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen " id="pageContainer">
+    <div className="flex h-screen bg-bg_gray" id="pageContainer">
       {/* Side Bar */}
       <Sidebar />
       {/* Content area */}
@@ -105,15 +103,17 @@ const Dashboard = () => {
           {
             link: <LinkModal content={openedContent} />,
             note: <NoteModal content={openedContent} />,
+            image: <ImageModal content={openedContent} />,
           }[openedContent.type]}
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
-          <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-6 lg:px-8 py-8 w-full ">
+          <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-3 px-4 sm:px-8 lg:px-10 py-8 w-full ">
             {contents.map(
               (item, idx) =>
                 ({
                   link: <LinkCard key={idx} content={item} />,
                   note: <NoteCard key={idx} content={item} />,
+                  image: <ImageCard key={idx} content={item} />,
                 }[item.type]),
             )}
           </div>
