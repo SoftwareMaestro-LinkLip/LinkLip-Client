@@ -21,6 +21,7 @@ import {
   modalOpenState,
   openedContentState,
 } from '../stores/dashboard';
+import ImageCard from '../partials/cards/ImageCard';
 
 const Dashboard = () => {
   const [bottom, setBottom] = useState(false);
@@ -35,7 +36,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     requestAccessToken().then((res) => {
-      console.log('res', res);
       if (!res) {
         navigate(`/`);
       }
@@ -114,6 +114,7 @@ const Dashboard = () => {
                 ({
                   link: <LinkCard key={idx} content={item} />,
                   note: <NoteCard key={idx} content={item} />,
+                  image: <ImageCard key={idx} content={item} />,
                 }[item.type]),
             )}
           </div>

@@ -16,8 +16,16 @@ export interface ILinkContent {
 }
 
 export interface INoteContent {
+  category: ICategory | null;
   text: string;
   id: number;
+  type: string;
+}
+
+export interface IImageContent {
+  category: ICategory | null;
+  id: number;
+  linkImg: string;
   type: string;
 }
 

@@ -1,5 +1,4 @@
 import React, { CSSProperties } from 'react';
-import logo from '../../assets/images/logo.png';
 import { getShortURL } from '../../utils/link';
 import CardOptionButton from '../buttons/CardOptionButton';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -15,12 +14,16 @@ const LinkCard = (props: IProps) => {
         <a
           href={props.content.url}
           target="_blank"
-          className=" flex justify-center w-full h-2/3 overflow-hidden "
+          className={
+            props.content.id == 0 || props.content.linkImg
+              ? `flex justify-center items-center w-full h-2/3 overflow-hidden`
+              : `hidden`
+          }
         >
-          {props.content.id > 0 ? (
+          {props.content.linkImg ? (
             <img
               className=" block my-0 mx-auto w-full object-cover transition  duration-300"
-              src={props.content.linkImg ? props.content.linkImg : logo}
+              src={props.content.linkImg}
               alt="props.content.title"
             />
           ) : (
@@ -29,21 +32,21 @@ const LinkCard = (props: IProps) => {
             </div>
           )}
         </a>
-        <p className="text-start text-xs text-gray-500 ml-2 mt-1">
+        <p className="text-start text-xs text-gray-500 m-2">
           {props.content.category ? props.content.category.name : '전체'}
         </p>
 
         <a
           href={props.content.url}
           target="_blank"
-          className="text-sm mx-2 mt-1 mb-4 break-all leading-5 h-10 overflow-hidden"
+          className="text-sm mx-2 mb-10 pb-2 break-all leading-5 h-10 overflow-hidden"
         >
           {props.content.title}
         </a>
         <a
           href={props.content.url}
           target="_blank"
-          className="text-sm text-slate-400 mx-2 break-all h-6 mb-1 overflow-hidden"
+          className="absolute bottom-1 text-sm text-slate-400 mx-2 break-all h-6 mb-1 overflow-hidden"
         >
           {getShortURL(props.content.url)}
         </a>

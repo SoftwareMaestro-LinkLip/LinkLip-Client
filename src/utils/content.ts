@@ -179,7 +179,7 @@ export const addImageContent = async (content: {
   header['Content-Type'] = 'multipart/form-data';
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
+      `${import.meta.env.VITE_API_SERVER}/content/v1/image`,
       content,
       {
         headers: header,

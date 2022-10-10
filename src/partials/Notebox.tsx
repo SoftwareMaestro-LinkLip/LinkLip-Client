@@ -84,7 +84,6 @@ const Notebox = () => {
 
         parse(text).then((body) => {
           body.categoryId = curCategoryId;
-          console.log('body', body);
           addLinkContent(body).then(() => {
             resetPageIdx();
             resetTerm();
@@ -191,11 +190,18 @@ const Notebox = () => {
             {/* tool area */}
             <div className="flex items-center relative bg-white h-10 border-0 sm:rounded-b-xl">
               {/* image button */}
+              <input
+                type="file"
+                accept="image/*"
+                ref={inputRef}
+                onChange={onUploadImage}
+                className="hidden"
+              />
               <button
                 type="button"
+                onClick={onUploadImageButtonClick}
                 className="justify-center w-6 h-6 m-2"
-                aria-haspopup="true"
-                aria-label="이미지 추가"
+                aria-label="이미지 업로드"
               >
                 <img src={image_icon} alt="이미지 추가" />
               </button>

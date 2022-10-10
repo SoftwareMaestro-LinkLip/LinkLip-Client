@@ -26,8 +26,6 @@ export const requestAccessToken = async () => {
       refreshToken,
     };
 
-    console.log('body', body);
-
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_SERVER}/token/v1/refresh-token`,
