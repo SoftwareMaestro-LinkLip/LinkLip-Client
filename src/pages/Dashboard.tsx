@@ -27,6 +27,7 @@ import {
   openedContentState,
 } from '../stores/dashboard';
 import ImageCard from '../partials/cards/ImageCard';
+import ImageModal from '../partials/modals/ImageModal';
 
 const Dashboard = () => {
   const [bottom, setBottom] = useState(false);
@@ -62,15 +63,7 @@ const Dashboard = () => {
       cnt = 24;
     }
     getContents(cnt, curCategoryId, term).then((res) => {
-      setContents([...contents, ...res]);
-    });
-  }, []);
-
-  useEffect(() => {
-    setPageIdx(0);
-    setTerm('');
-    getContents(contentsSize, curCategoryId, term).then((res) => {
-      setContents([...contents, ...res]);
+      setContents([...res]);
     });
   }, [curCategoryId]);
 
@@ -110,6 +103,7 @@ const Dashboard = () => {
           {
             link: <LinkModal content={openedContent} />,
             note: <NoteModal content={openedContent} />,
+            image: <ImageModal content={openedContent} />,
           }[openedContent.type]}
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">

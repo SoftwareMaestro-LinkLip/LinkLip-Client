@@ -39,3 +39,7 @@ export interface IEditNoteContent {
   categoryId: number | null;
   text: string;
 }
+
+export interface IEditImageContent {
+  categoryId: number | null;
+}

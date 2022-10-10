@@ -79,14 +79,14 @@ const Sidebar = () => {
             return (
               <li
                 className={`flex py-0.5 last:mb-0 text-lg ${
-                  curCategoryId === item.id ? 'text-black' : 'text-gray-500'
+                  curCategoryId === item.id ? 'text-black' : 'text-gray-400'
                 }`}
                 key={item.id ? item.id : 0}
               >
                 {!editCategoryId || editCategoryId !== item.id ? (
                   <>
                     <button
-                      className="w-full px-3 text-left overflow-hidden"
+                      className="w-full px-3 text-left overflow-hidden whitespace-nowrap"
                       onClick={() => {
                         setCurCategoryId(item.id);
                       }}

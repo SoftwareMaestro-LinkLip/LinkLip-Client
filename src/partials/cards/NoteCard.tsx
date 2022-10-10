@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import CardOptionButton from '../buttons/CardOptionButton';
-import ClipLoader from 'react-spinners/ClipLoader';
 import { modalOpenState, openedContentState } from '../../stores/dashboard';
 import { useRecoilState } from 'recoil';
 
@@ -23,7 +22,7 @@ const LinkCard = (props: IProps) => {
         className="h-full m-2 w-full overflow-hidden"
         onClick={onClickHandler}
       >
-        <p className="text-start text-xs text-gray-500 m-2">
+        <p className="text-start text-xs text-gray-500 m-2 whitespace-nowrap">
           {props.content.category ? props.content.category.name : '전체'}
         </p>
         <p className="text-start h-full mx-2">{props.content.text}</p>

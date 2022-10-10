@@ -33,7 +33,7 @@ const LinkCard = (props: IProps) => {
             </div>
           )}
         </a>
-        <p className="text-start text-xs text-gray-500 m-2">
+        <p className="text-start text-xs text-gray-500 m-2 whitespace-nowrap">
           {props.content.category ? props.content.category.name : '전체'}
         </p>
 

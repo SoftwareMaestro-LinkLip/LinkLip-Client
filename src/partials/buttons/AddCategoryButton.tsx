@@ -115,7 +115,7 @@ const AddCategoryButton = () => {
             />
             <button
               type="submit"
-              className="inline-block px-6 py-2.5 bg-transparent text-signiutre font-medium text-xs leading-tight focus:outline-none focus:ring-0 transition text-signiture"
+              className="inline-block px-6 py-2.5 bg-transparent text-signiutre font-medium text-xs leading-tight focus:outline-none focus:ring-0 transition text-green-400"
             >
               추가
             </button>

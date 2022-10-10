@@ -3,7 +3,11 @@ import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKeyPressESC from '../../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { ILinkContent, INoteContent } from '../../typings/content';
+import {
+  IImageContent,
+  ILinkContent,
+  INoteContent,
+} from '../../typings/content';
 import { modalOpenState, openedContentState } from '../../stores/dashboard';
 import { contentsState } from '../../stores/content';
 import { useRecoilState } from 'recoil';
@@ -11,7 +15,7 @@ import { deleteContent } from '../../utils/content';
 import '../../assets/css/dashboard.scss';
 
 interface IProps {
-  content: ILinkContent | INoteContent;
+  content: any;
 }
 
 const CardOptionButton = (props: IProps) => {
@@ -56,7 +60,7 @@ const CardOptionButton = (props: IProps) => {
       <button
         onClick={onDropHandler}
         className={
-          props.content.type === 'note'
+          !props.content.linkImg
             ? `btn-on-blank opacity-60 hover:opacity-80 w-6 h-5 rounded-md `
             : `btn-on-image  opacity-60 hover:bg-gray-500  hover:opacity-80 w-6 h-5 rounded-md `
         }
@@ -78,7 +82,7 @@ const CardOptionButton = (props: IProps) => {
           <li className="list-none">
             <ol>
               <button
-                className="inline-block px-4 py-2 text-signiture font-medium text-sm rounded leading-tight hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out"
+                className="inline-block px-4 py-2 text-green-400 font-medium text-sm rounded leading-tight hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out"
                 onClick={onEditHandler}
               >
                 수정

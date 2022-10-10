@@ -1,5 +1,7 @@
 import React, { CSSProperties } from 'react';
 import CardOptionButton from '../buttons/CardOptionButton';
+import { modalOpenState, openedContentState } from '../../stores/dashboard';
+import { useRecoilState } from 'recoil';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 interface IProps {
@@ -7,9 +9,17 @@ interface IProps {
 }
 
 const ImageCard = (props: IProps) => {
+  const [modalOpen, setModalOpen] = useRecoilState(modalOpenState);
+  const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
+
+  const onClickHandler = () => {
+    setOpenedContent(props.content);
+    setModalOpen(true);
+  };
+
   return (
     <div className="flex overflow-hidden rounded-lg shadow-lg bg-white hover:-translate-y-1 hover:scale-110 hover:z-10 duration-300 relative h-64">
-      <div className="flex flex-col w-full h-full">
+      <button onClick={onClickHandler} className="flex flex-col w-full h-full">
         {props.content.id > 0 ? (
           <div className="flex w-full h-full overflow-hidden">
             {props.content.linkImg && (
@@ -25,7 +35,7 @@ const ImageCard = (props: IProps) => {
             <ClipLoader color={'rgb(0 255 127)'} loading={true} size={80} />
           </div>
         )}
-      </div>
+      </button>
 
       <div className="absolute flex left-0 mt-2 ml-2">
         <div

@@ -4,6 +4,7 @@ import {
   INoteContent,
   IEditLinkContent,
   IEditNoteContent,
+  IEditImageContent,
 } from '../typings/content';
 import { authHeader, requestAccessToken } from './auth';
 
@@ -201,6 +202,31 @@ export const addImageContent = async (content: {
     } catch {
       return false;
     }
+  }
+};
+
+/**
+ * 이미지 컨텐츠의 내용 수정 함수
+ * @param {number} contentId
+ * @param {IEditImageContent} body
+ * @returns {Promise<any>}
+ */
+export const editImageContent = async (
+  contentId: number,
+  body: IEditImageContent,
+): Promise<any> => {
+  try {
+    const response = await axios.patch(
+      `${import.meta.env.VITE_API_SERVER}/content/v1/image/${contentId}`,
+      body,
+      {
+        headers: authHeader(),
+      },
+    );
+
+    return response.data;
+  } catch {
+    alert('해당 기능이 아직 구현되지 않았습니다.');
   }
 };
 
