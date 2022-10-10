@@ -39,6 +39,7 @@ const Notebox = () => {
   );
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     if (ref === null || ref.current === null) {
@@ -87,7 +88,7 @@ const Notebox = () => {
           addLinkContent(body).then(() => {
             resetPageIdx();
             resetTerm();
-            getContents(contentsSize, selectedCategoryId).then((res) => {
+            getContents(contentsSize, curCategoryId).then((res) => {
               setContents([...res]);
             });
           });
@@ -136,7 +137,11 @@ const Notebox = () => {
   );
 
   const onSelectCategoryHandler = (e: any) => {
-    setSelectedCategoryId(e.target.value != 0 ? e.target.value : null);
+    const temp = e.target.value != 0 ? e.target.value : null;
+    setSelectedCategoryId(temp);
+    if (buttonRef !== null) {
+      buttonRef.current!.focus();
+    }
   };
 
   const onUploadImage = useCallback(
@@ -175,8 +180,11 @@ const Notebox = () => {
         className={`fixed mx-4 bottom-0 w-11/12 
        lg:w-9/12 sm:m-4 z-30`}
       >
-        <div className="w-full rounded-xl outline outline-1 outline-slate-200">
-          <form onSubmit={onSubmitHandler} className="w-full bg-white">
+        <div className="w-full rounded-xl outline outline-2 outline-gray-300 ">
+          <form
+            onSubmit={onSubmitHandler}
+            className="w-full rounded-xl bg-white"
+          >
             <textarea
               onChange={onChangeText}
               onKeyPress={onKeyDown}
@@ -188,7 +196,7 @@ const Notebox = () => {
               className="w-full border-slate-300 border-0 focus:border-slate-300 focus:border-b-0 resize-none outline-0 shadow-none overflow-hidden ring-0 focus:ring-0"
             ></textarea>
             {/* tool area */}
-            <div className="flex items-center relative bg-white h-10 border-0 sm:rounded-b-xl">
+            <div className="flex items-center justify-between relative bg-white h-10 border-0 sm:rounded-b-xl">
               {/* image button */}
               <input
                 type="file"
@@ -200,44 +208,50 @@ const Notebox = () => {
               <button
                 type="button"
                 onClick={onUploadImageButtonClick}
-                className="justify-center w-6 h-6 m-2"
+                className="justify-center w-6 h-6 m-2 shrink-0"
                 aria-label="이미지 업로드"
               >
                 <img src={image_icon} alt="이미지 추가" />
               </button>
               {/* category select */}
-              {text && (
-                <div className="flex overflow-scroll text-center scrollbar-hide">
-                  {categories.map((item) => {
-                    return (
-                      <button
-                        type="button"
-                        className={`whitespace-nowrap align-baseline rounded-xl m-1 py-0.25 px-2 
+
+              <div
+                className={
+                  text
+                    ? `grow flex overflow-scroll text-center scrollbar-hide transition-all duration-200  translate-x-0`
+                    : `grow flex overflow-scroll text-center scrollbar-hide transition-all duration-300  translate-x-1000`
+                }
+              >
+                {categories.map((item) => {
+                  return (
+                    <button
+                      type="button"
+                      className={`whitespace-nowrap align-baseline rounded-xl m-1 py-0.25 px-2 
                         ${
                           (!item.id && !selectedCategoryId) ||
                           item.id == selectedCategoryId
-                            ? 'bg-gray-400 text-white'
+                            ? 'bg-gray-400 text-white animate-pulse'
                             : 'border-gray-400 text-gray-400 border-2'
                         }
                       `}
-                        key={item.id ? item.id : 0}
-                        onClick={onSelectCategoryHandler}
-                        value={item.id ? item.id : 0}
-                      >
-                        {item.name}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+                      key={item.id ? item.id : 0}
+                      onClick={onSelectCategoryHandler}
+                      value={item.id ? item.id : 0}
+                    >
+                      {item.name}
+                    </button>
+                  );
+                })}
+              </div>
 
               {/* submit button */}
               <button
                 type="submit"
+                ref={buttonRef}
                 className={
                   text
-                    ? `absolute right-2  p-1.5  text-white rounded-full bg-signiture`
-                    : `absolute right-2  p-1.5  text-white rounded-full bg-gray-400`
+                    ? `mx-2 p-1.5 mr-2  text-white rounded-full bg-signiture focus:border-none`
+                    : ` p-1.5 mr-2 text-white rounded-full bg-gray-400 focus:border-none`
                 }
               >
                 <svg

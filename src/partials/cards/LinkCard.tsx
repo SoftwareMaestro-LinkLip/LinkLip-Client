@@ -33,7 +33,11 @@ const LinkCard = (props: IProps) => {
             </div>
           )}
         </a>
-        <p className="text-start text-xs text-gray-500 m-2 whitespace-nowrap">
+        {/* 카테고리 */}
+        <p
+          className="text-start text-xs text-gray-500 m-2 overflow-hidden text-ellipsis whitespace-nowrap"
+          style={{ maxWidth: '6rem' }}
+        >
           {props.content.category ? props.content.category.name : '전체'}
         </p>
 
@@ -44,10 +48,12 @@ const LinkCard = (props: IProps) => {
         >
           {props.content.title}
         </a>
+        {/* URL 주소 */}
         <a
           href={props.content.url}
           target="_blank"
-          className="absolute bottom-1 text-sm text-slate-400 mx-2 break-all h-6 mb-1 overflow-hidden"
+          className="absolute bottom-1 text-sm text-slate-400 mx-2 break-all h-6 mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
+          style={{ maxWidth: '50%' }}
         >
           {getShortURL(props.content.url)}
         </a>

@@ -3,11 +3,6 @@ import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKeyPressESC from '../../hooks/useKeyPressESC';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import {
-  IImageContent,
-  ILinkContent,
-  INoteContent,
-} from '../../typings/content';
 import { modalOpenState, openedContentState } from '../../stores/dashboard';
 import { contentsState } from '../../stores/content';
 import { useRecoilState } from 'recoil';
@@ -57,11 +52,12 @@ const CardOptionButton = (props: IProps) => {
 
   return (
     <div className="relative">
+      {/* ... 버튼 */}
       <button
         onClick={onDropHandler}
         className={
           !props.content.linkImg
-            ? `btn-on-blank opacity-60 hover:opacity-80 w-6 h-5 rounded-md `
+            ? `btn-on-blank opacity-60 hover:opacity-80 hover:bg-gray-200 w-6 h-5 rounded-md `
             : `btn-on-image  opacity-60 hover:bg-gray-500  hover:opacity-80 w-6 h-5 rounded-md `
         }
         aria-label="옵션 더보기 버튼"
@@ -74,10 +70,11 @@ const CardOptionButton = (props: IProps) => {
         />
       </button>
 
+      {/* 드롭다운 */}
       {dropdownOpen && (
         <div
           ref={ref}
-          className="z-50 absolute right-2 w-20 bg-white border border-slate-200 p-2 rounded shadow-lg mt-2 flex flex-col items-center"
+          className="z-50 absolute right-0 w-20 bg-white border border-slate-200 rounded shadow-lg flex flex-col items-center"
         >
           <li className="list-none">
             <ol>

@@ -19,13 +19,20 @@ const LinkCard = (props: IProps) => {
   return (
     <div className="flex overflow-hidden rounded-lg shadow-lg bg-white h-64 hover:-translate-y-1 hover:scale-110 hover:z-10 duration-300 relative">
       <button
-        className="h-full m-2 w-full overflow-hidden"
+        className="flex flex-col h-full m-2 w-full overflow-hidden"
         onClick={onClickHandler}
       >
-        <p className="text-start text-xs text-gray-500 m-2 whitespace-nowrap">
+        {/* 카테고리 */}
+        <p
+          className="text-start text-xs text-gray-500 m-2 overflow-hidden text-ellipsis whitespace-nowrap"
+          style={{ maxWidth: '6rem' }}
+        >
           {props.content.category ? props.content.category.name : '전체'}
         </p>
-        <p className="text-start h-full mx-2">{props.content.text}</p>
+        {/* 노트 내용 */}
+        <p className="text-start h-48 mx-2 overflow-hidden text-ellipsis ">
+          {props.content.text}
+        </p>
       </button>
       <div className="absolute flex right-0 mt-2 mr-2">
         <CardOptionButton content={props.content} />

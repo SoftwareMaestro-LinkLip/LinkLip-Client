@@ -36,7 +36,7 @@ const ImageCard = (props: IProps) => {
           </div>
         )}
       </button>
-
+      {/* 카테고리 */}
       <div className="absolute flex left-0 mt-2 ml-2">
         <div
           className="text-start text-white bg-gray-500 opacity-60 h-5 rounded-md flex items-center px-1 overflow-hidden whitespace-nowrap"
