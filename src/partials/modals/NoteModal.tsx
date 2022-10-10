@@ -78,13 +78,13 @@ const Modal = (props: IProps) => {
     <div className="flex justify-center w-full">
       <div
         ref={ref}
-        className="flex flex-col justify-between z-50 w-full h-full sm:max-w-2xl sm:h-2/3 bg-white sm:rounded-lg shadow dark:bg-gray-700 fixed top-1/2 transform -translate-y-1/2 lg:translate-x-4"
+        className="flex flex-col justify-between z-50 w-full h-full sm:max-w-2xl sm:h-2/3 bg-bg_gray sm:rounded-lg shadow fixed top-1/2 transform -translate-y-1/2 lg:translate-x-4"
       >
         {/* modal header */}
-        <div className="flex justify-between items-start pt-4 px-4 rounded-t border-b dark:border-gray-600">
+        <div className="flex justify-between items-start pt-4 px-4 rounded-t border-b ">
           <button
             type="button"
-            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            className="text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center "
             data-modal-toggle="defaultModal"
             onClick={() => {
               setModalOpen(false);
@@ -107,19 +107,19 @@ const Modal = (props: IProps) => {
           </button>
         </div>
         {/* <!-- Modal body --> */}
-        <div className="my-3 mx-6 space-y-3 h-full">
+        <div className="my-3 mx-6 space-y-3 h-full ">
           <form className="h-full flex flex-col">
             <div className="flex min-w-1/2 items-center f-">
               <label
                 htmlFor="category"
-                className="inline shrink-0 text-md font-medium text-gray-900 dark:text-gray-400 mr-2"
+                className="inline shrink-0 text-md font-medium text-gray-900  mr-2"
               >
                 카테고리
               </label>
               <select
                 id="category"
                 onChange={onChangeSelectedCategoryId}
-                className="inline bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 w-32 max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
+                className="inline bg-white border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-0 focus:border-gray-200 w-32 max-w-lg p-2.5 mb-2"
               >
                 <option
                   defaultValue={
@@ -155,17 +155,17 @@ const Modal = (props: IProps) => {
               id="text"
               onChange={onChangeText}
               value={text}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500  h-full w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white resize-none"
+              className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:border-gray-400 focus:ring-0 h-full w-full p-2.5  resize-none"
             />
           </form>
         </div>
         {/* 버튼 */}
-        <div className="flex items-center px-6 pb-4 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+        <div className="flex items-center px-6 pb-4 space-x-2 rounded-b border-t border-gray-200 ">
           <button
             onClick={editHandler}
             data-modal-toggle="defaultModal"
             type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white bg-signiture hover:bg-green-400 focus:outline-none focus:ring-0 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
           >
             수정
           </button>
@@ -175,7 +175,7 @@ const Modal = (props: IProps) => {
             }}
             data-modal-toggle="defaultModal"
             type="button"
-            className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-green-400 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 "
           >
             취소
           </button>

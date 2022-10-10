@@ -5,10 +5,13 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { isURL, parse } from '../utils/link';
-import { getContents, addLinkContent, addNoteContent } from '../utils/content';
+import {
+  getContents,
+  addLinkContent,
+  addNoteContent,
+  addImageContent,
+} from '../utils/content';
 import { useResetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 import {
   termState,
@@ -19,7 +22,8 @@ import {
 import { contentsState } from '../stores/content';
 import { categoriesState } from '../stores/category';
 import useInput from '../hooks/useInput';
-import { ILinkContent } from '../typings/content';
+import image_icon from '../assets/images/image_icon4.png';
+import { useNavigate } from 'react-router-dom';
 
 const Notebox = () => {
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -33,6 +37,9 @@ const Notebox = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     curCategoryId,
   );
+  const navigate = useNavigate();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     if (ref === null || ref.current === null) {
@@ -62,49 +69,59 @@ const Notebox = () => {
         return;
       }
 
+      setText('');
+
       if (isURL(text)) {
+        const loadingContent = {
+          category: { id: null, name: null },
+          id: 0,
+          url: text,
+          linkImg: '',
+          title: '',
+          text: '',
+          type: 'link',
+        };
+        setContents([loadingContent, ...contents]);
+
         parse(text).then((body) => {
           body.categoryId = curCategoryId;
-          console.log('body', body);
           addLinkContent(body).then(() => {
             resetPageIdx();
             resetTerm();
-            getContents(contentsSize, selectedCategoryId).then((res) => {
+            getContents(contentsSize, curCategoryId).then((res) => {
               setContents([...res]);
             });
           });
         });
       } else {
+        const loadingContent = {
+          category: { id: null, name: null },
+          id: 0,
+          text,
+          type: 'note',
+        };
+        setContents([loadingContent, ...contents]);
+
         const body = {
           text,
           categoryId: selectedCategoryId,
         };
-        addNoteContent(body).then(() => {
+        addNoteContent(body).then((status) => {
+          if (!status) {
+            navigate('/');
+          }
           resetPageIdx();
           resetTerm();
-          getContents(contentsSize, selectedCategoryId).then((res) => {
+          getContents(contentsSize, curCategoryId).then((res) => {
             setContents([...res]);
           });
         });
       }
-
-      setText('');
-      const loadingContent = {
-        category: { id: null, name: null },
-        id: 0,
-        url: text,
-        linkImg: '',
-        title: '',
-        text: '',
-        categoryId: 0,
-        type: 'link',
-      };
-      setContents([loadingContent, ...contents]);
       if (ref !== null) {
         ref.current!.style.height = '42px';
       }
     },
-    [text, setText],
+    [text, setText, selectedCategoryId, curCategoryId],
   );
 
   const onKeyDown = useCallback(
@@ -119,38 +136,123 @@ const Notebox = () => {
     [onSubmitHandler],
   );
 
-  const onSelectCategoryHandler = useCallback(
-    (e: any) => {
-      setSelectedCategoryId(e.target.value != 0 ? e.target.value : null);
+  const onSelectCategoryHandler = (e: any) => {
+    const temp = e.target.value != 0 ? e.target.value : null;
+    setSelectedCategoryId(temp);
+    if (buttonRef !== null) {
+      buttonRef.current!.focus();
+    }
+  };
+
+  const onUploadImage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', e.target.files[0]);
+
+      const body = {
+        imageFile: formData,
+        categoryId: selectedCategoryId,
+      };
+
+      addImageContent(body).then((res) => {
+        if (!res) {
+          navigate('/');
+        }
+      });
     },
-    [categories, setSelectedCategoryId, selectedCategoryId],
+    [selectedCategoryId],
   );
+
+  const onUploadImageButtonClick = useCallback(() => {
+    if (!inputRef.current) {
+      return;
+    }
+    inputRef.current.click();
+  }, []);
 
   return (
     <div className="flex justify-center z-30 ">
       <div
-        className={`fixed bottom-0 w-11/12 
-       lg:w-9/12 m-4 z-30`}
+        className={`fixed mx-4 bottom-0 w-11/12 
+       lg:w-9/12 sm:m-4 z-30`}
       >
-        <div className="w-full rounded border-solid border-2 border-slate-200">
-          <form onSubmit={onSubmitHandler} className="w-full bg-white">
+        <div className="w-full rounded-xl outline outline-2 outline-gray-300 ">
+          <form
+            onSubmit={onSubmitHandler}
+            className="w-full rounded-xl bg-white"
+          >
             <textarea
               onChange={onChangeText}
               onKeyPress={onKeyDown}
-              placeholder="Input URL"
+              placeholder="URL 또는 메모 입력"
               value={text}
               rows={1}
               ref={ref}
               onInput={handleResizeHeight}
-              className="w-full border-slate-300 border-0 focus:border-slate-300 focus:border-b-0 rounded-t resize-none outline-0 shadow-none overflow-hidden ring-0 focus:ring-0"
+              className="w-full border-slate-300 border-0 focus:border-slate-300 focus:border-b-0 resize-none outline-0 shadow-none overflow-hidden ring-0 focus:ring-0"
             ></textarea>
             {/* tool area */}
-            <div className="flex items-center relative bg-slate-200 h-10 border-0 ">
+            <div className="flex items-center justify-between relative bg-white h-10 border-0 sm:rounded-b-xl">
               {/* image button */}
+              <input
+                type="file"
+                accept="image/*"
+                ref={inputRef}
+                onChange={onUploadImage}
+                className="hidden"
+              />
               <button
-                className="justify-center w-6 h-6 m-2 rounded-lg  border-slate-200 text-slate-500"
-                aria-haspopup="true"
-                aria-label="이미지 추가"
+                type="button"
+                onClick={onUploadImageButtonClick}
+                className="justify-center w-6 h-6 m-2 shrink-0"
+                aria-label="이미지 업로드"
+              >
+                <img src={image_icon} alt="이미지 추가" />
+              </button>
+              {/* category select */}
+
+              <div
+                className={
+                  text
+                    ? `grow flex overflow-scroll text-center scrollbar-hide transition-all duration-200  translate-x-0`
+                    : `grow flex overflow-scroll text-center scrollbar-hide transition-all duration-300  translate-x-1000`
+                }
+              >
+                {categories.map((item) => {
+                  return (
+                    <button
+                      type="button"
+                      className={`whitespace-nowrap align-baseline rounded-xl m-1 py-0.25 px-2 
+                        ${
+                          (!item.id && !selectedCategoryId) ||
+                          item.id == selectedCategoryId
+                            ? 'bg-gray-400 text-white animate-pulse'
+                            : 'border-gray-400 text-gray-400 border-2'
+                        }
+                      `}
+                      key={item.id ? item.id : 0}
+                      onClick={onSelectCategoryHandler}
+                      value={item.id ? item.id : 0}
+                    >
+                      {item.name}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* submit button */}
+              <button
+                type="submit"
+                ref={buttonRef}
+                className={
+                  text
+                    ? `mx-2 p-1.5 mr-2  text-white rounded-full bg-signiture focus:border-none`
+                    : ` p-1.5 mr-2 text-white rounded-full bg-gray-400 focus:border-none`
+                }
               >
                 <svg
                   className="w-4 h-4 fill-current"
@@ -159,38 +261,6 @@ const Notebox = () => {
                 >
                   <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                 </svg>
-              </button>
-              {/* category select */}
-              {text && (
-                <div className="flex overflow-scroll text-center scrollbar-hide">
-                  {categories.map((item) => {
-                    return (
-                      <button
-                        className={`whitespace-nowrap align-baseline rounded-xl m-1 py-0.25 px-2 
-                        ${
-                          (!item.id && !selectedCategoryId) ||
-                          item.id == selectedCategoryId
-                            ? 'bg-slate-500 text-white'
-                            : 'border-slate-500 text-slate-500 border-2'
-                        }
-                      `}
-                        key={item.id ? item.id : 0}
-                        onClick={onSelectCategoryHandler}
-                        value={item.id ? item.id : 0}
-                      >
-                        {item.name}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* submit button */}
-              <button
-                type="submit"
-                className="absolute right-1  p-2 text-slate-500"
-              >
-                <FontAwesomeIcon icon={faPaperPlane} />
               </button>
             </div>
           </form>

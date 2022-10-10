@@ -58,7 +58,7 @@ const AddCategoryButton = () => {
     <div>
       {dropdownOpen ? (
         <button
-          className="flex justify-center items-center w-6 h-6 mr-2 rounded-lg bg-white border-slate-200 text-slate-400"
+          className="flex justify-center items-center w-6 h-6 mr-2 text-slate-400"
           aria-haspopup="true"
           onClick={onDropHandler}
           aria-expanded={dropdownOpen}
@@ -67,7 +67,7 @@ const AddCategoryButton = () => {
         </button>
       ) : (
         <button
-          className="flex justify-center items-center w-6 h-6 mr-2 rounded-lg  border-slate-200 text-slate-400"
+          className="flex justify-center items-center w-6 h-6 mr-2 text-slate-400"
           aria-haspopup="true"
           onClick={onDropHandler}
           aria-expanded={dropdownOpen}
@@ -91,12 +91,12 @@ const AddCategoryButton = () => {
           <form onSubmit={onSubmitHandler}>
             <label
               htmlFor="newCategory"
-              className="my-2 text-xs font-semibold text-slate-400 px-4"
+              className="my-2 text-xs font-semibold text-gray-400 px-4"
             >
               카테고리 추가
             </label>
             <input
-              type="search"
+              type="text"
               className="
         block
         w-full
@@ -107,7 +107,7 @@ const AddCategoryButton = () => {
         border border-solid border-gray-300
         rounded
         my-2
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+        focus:text-gray-700 focus:bg-white focus:border-signiture focus:outline-none focus:ring-0
       "
               id="newCategory"
               placeholder="카테고리 입력"
@@ -115,7 +115,7 @@ const AddCategoryButton = () => {
             />
             <button
               type="submit"
-              className="inline-block px-6 py-2.5 bg-transparent text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:text-blue-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out"
+              className="inline-block px-6 py-2.5 bg-transparent text-signiutre font-medium text-xs leading-tight focus:outline-none focus:ring-0 transition text-green-400"
             >
               추가
             </button>

@@ -7,6 +7,10 @@ module.exports = {
     extend: {
       colors: {
         signiture: '#00FF7F',
+        bg_gray: '#F9FAFA',
+      },
+      spacing: {
+        1000: '78rem',
       },
     },
   },

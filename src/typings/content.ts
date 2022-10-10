@@ -3,7 +3,8 @@ export interface ICategory {
   name: string | null;
 }
 
-export interface IContents extends Array<ILinkContent | INoteContent> {}
+export interface IContents
+  extends Array<ILinkContent | INoteContent | IImageContent> {}
 
 export interface ILinkContent {
   category: ICategory | null;
@@ -16,8 +17,16 @@ export interface ILinkContent {
 }
 
 export interface INoteContent {
+  category: ICategory | null;
   text: string;
   id: number;
+  type: string;
+}
+
+export interface IImageContent {
+  category: ICategory | null;
+  id: number;
+  linkImg: string;
   type: string;
 }
 
@@ -29,4 +38,8 @@ export interface IEditLinkContent {
 export interface IEditNoteContent {
   categoryId: number | null;
   text: string;
+}
+
+export interface IEditImageContent {
+  categoryId: number | null;
 }
