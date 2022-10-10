@@ -29,7 +29,7 @@ const LinkCard = (props: IProps) => {
             />
           ) : (
             <div className="mt-10">
-              <ClipLoader color={'rgb(96 165 250)'} loading={true} size={80} />
+              <ClipLoader color={'rgb(0 255 127)'} loading={true} size={80} />
             </div>
           )}
         </a>
