@@ -10,7 +10,7 @@ interface IProps {
 
 const LinkCard = (props: IProps) => {
   return (
-    <div className="flex overflow-hidden rounded-lg shadow-lg bg-white hover:-translate-y-1 hover:scale-110 hover:z-10 duration-300 relative h-52">
+    <div className="flex overflow-hidden rounded-lg shadow-lg bg-white hover:-translate-y-1 hover:scale-110 hover:z-10 duration-300 relative h-64">
       <div className="flex flex-col w-full">
         <a
           href={props.content.url}
@@ -29,23 +29,34 @@ const LinkCard = (props: IProps) => {
             </div>
           )}
         </a>
+        <p className="text-start text-xs text-gray-500 ml-2 mt-1">
+          {props.content.category ? props.content.category.name : '전체'}
+        </p>
 
         <a
           href={props.content.url}
           target="_blank"
-          className=" mx-2 mt-2 break-all leading-5 h-10 overflow-hidden"
+          className="text-sm mx-2 mt-1 mb-4 break-all leading-5 h-10 overflow-hidden"
         >
           {props.content.title}
         </a>
         <a
           href={props.content.url}
           target="_blank"
-          className="text-slate-400 mx-2 break-all h-8 overflow-hidden"
+          className="text-sm text-slate-400 mx-2 break-all h-6 mb-1 overflow-hidden"
         >
           {getShortURL(props.content.url)}
         </a>
       </div>
-      <CardOptionButton content={props.content} />
+      <div className="absolute flex right-0 mt-2 mr-2">
+        <CardOptionButton content={props.content} />
+        <div
+          className=" text-white bg-gray-500 opacity-60 w-6 h-5 rounded-md flex items-center ml-1"
+          style={{ fontSize: '0.25rem' }}
+        >
+          <p className="pl-1.5">url</p>
+        </div>
+      </div>
     </div>
   );
 };

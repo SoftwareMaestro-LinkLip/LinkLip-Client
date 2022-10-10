@@ -108,7 +108,7 @@ const Dashboard = () => {
           }[openedContent.type]}
         {/* Cards */}
         <main className="mt-10 h-auto pb-32">
-          <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-2 px-4 sm:px-8 lg:px-10 py-8 w-full ">
+          <div className="grid sm:grid-cols-3 md:grid-cols-4 gap-3 px-4 sm:px-8 lg:px-10 py-8 w-full ">
             {contents.map(
               (item, idx) =>
                 ({

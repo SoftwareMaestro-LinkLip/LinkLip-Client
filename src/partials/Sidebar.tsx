@@ -9,6 +9,7 @@ import { categoriesState } from '../stores/category';
 import { getCategories } from '../utils/category';
 import { editCategoryIdState } from '../stores/category';
 import { curCategoryIdState, sidebarOpenState } from '../stores/dashboard';
+import logo from '../assets/images/linklip_logo.png';
 
 const Sidebar = () => {
   const ref = useRef(null);
@@ -46,6 +47,8 @@ const Sidebar = () => {
     >
       {/* Sidebar header */}
       <div className="flex justify-between mb-10 pr-3 sm:px-2 z-50">
+        {/* Linklip Logo */}
+        <img src={logo} className="max-h-6 mt-2" />
         {/* Close button */}
         <button
           className="lg:hidden text-slate-500 hover:text-slate-400"
@@ -75,8 +78,8 @@ const Sidebar = () => {
           {categories.map((item) => {
             return (
               <li
-                className={`flex py-0.5 last:mb-0 text-slate-400 text-lg ${
-                  curCategoryId === item.id && 'text-black'
+                className={`flex py-0.5 last:mb-0 text-lg ${
+                  curCategoryId === item.id ? 'text-black' : 'text-gray-500'
                 }`}
                 key={item.id ? item.id : 0}
               >

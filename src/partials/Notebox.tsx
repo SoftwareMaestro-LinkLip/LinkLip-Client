@@ -6,7 +6,12 @@ import React, {
   useState,
 } from 'react';
 import { isURL, parse } from '../utils/link';
-import { getContents, addLinkContent, addNoteContent } from '../utils/content';
+import {
+  getContents,
+  addLinkContent,
+  addNoteContent,
+  addImageContent,
+} from '../utils/content';
 import { useResetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 import {
   termState,
@@ -33,6 +38,7 @@ const Notebox = () => {
     curCategoryId,
   );
   const navigate = useNavigate();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (ref === null || ref.current === null) {
@@ -62,7 +68,20 @@ const Notebox = () => {
         return;
       }
 
+      setText('');
+
       if (isURL(text)) {
+        const loadingContent = {
+          category: { id: null, name: null },
+          id: 0,
+          url: text,
+          linkImg: '',
+          title: '',
+          text: '',
+          type: 'link',
+        };
+        setContents([loadingContent, ...contents]);
+
         parse(text).then((body) => {
           body.categoryId = curCategoryId;
           console.log('body', body);
@@ -75,36 +94,34 @@ const Notebox = () => {
           });
         });
       } else {
+        const loadingContent = {
+          category: { id: null, name: null },
+          id: 0,
+          text,
+          type: 'note',
+        };
+        setContents([loadingContent, ...contents]);
+
         const body = {
           text,
           categoryId: selectedCategoryId,
         };
-        addNoteContent(body).then((data) => {
+        addNoteContent(body).then((status) => {
+          if (!status) {
+            navigate('/');
+          }
           resetPageIdx();
           resetTerm();
-          getContents(contentsSize, selectedCategoryId).then((res) => {
+          getContents(contentsSize, curCategoryId).then((res) => {
             setContents([...res]);
           });
         });
       }
-
-      setText('');
-      const loadingContent = {
-        category: { id: null, name: null },
-        id: 0,
-        url: text,
-        linkImg: '',
-        title: '',
-        text: '',
-        categoryId: 0,
-        type: 'link',
-      };
-      setContents([loadingContent, ...contents]);
       if (ref !== null) {
         ref.current!.style.height = '42px';
       }
     },
-    [text, setText],
+    [text, setText, selectedCategoryId, curCategoryId],
   );
 
   const onKeyDown = useCallback(
@@ -119,12 +136,39 @@ const Notebox = () => {
     [onSubmitHandler],
   );
 
-  const onSelectCategoryHandler = useCallback(
-    (e: any) => {
-      setSelectedCategoryId(e.target.value != 0 ? e.target.value : null);
+  const onSelectCategoryHandler = (e: any) => {
+    setSelectedCategoryId(e.target.value != 0 ? e.target.value : null);
+  };
+
+  const onUploadImage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', e.target.files[0]);
+
+      const body = {
+        imageFile: formData,
+        categoryId: selectedCategoryId,
+      };
+
+      addImageContent(body).then((res) => {
+        if (!res) {
+          navigate('/');
+        }
+      });
     },
-    [categories, setSelectedCategoryId, selectedCategoryId],
+    [selectedCategoryId],
   );
+
+  const onUploadImageButtonClick = useCallback(() => {
+    if (!inputRef.current) {
+      return;
+    }
+    inputRef.current.click();
+  }, []);
 
   return (
     <div className="flex justify-center z-30 ">
@@ -166,8 +210,8 @@ const Notebox = () => {
                         ${
                           (!item.id && !selectedCategoryId) ||
                           item.id == selectedCategoryId
-                            ? 'bg-slate-500 text-white'
-                            : 'border-slate-500 text-slate-500 border-2'
+                            ? 'bg-gray-400 text-white'
+                            : 'border-gray-400 text-gray-400 border-2'
                         }
                       `}
                         key={item.id ? item.id : 0}
@@ -184,7 +228,11 @@ const Notebox = () => {
               {/* submit button */}
               <button
                 type="submit"
-                className="absolute right-2  p-1.5  text-slate-500 rounded-full bg-signiture"
+                className={
+                  text
+                    ? `absolute right-2  p-1.5  text-white rounded-full bg-signiture`
+                    : `absolute right-2  p-1.5  text-white rounded-full bg-gray-400`
+                }
               >
                 <svg
                   className="w-4 h-4 fill-current"
