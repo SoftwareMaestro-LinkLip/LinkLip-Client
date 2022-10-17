@@ -151,14 +151,21 @@ const Notebox = () => {
       }
 
       const formData = new FormData();
-      formData.append('image', e.target.files[0]);
+      formData.append('imageFile', e.target.files[0]);
 
-      const body = {
-        imageFile: formData,
-        categoryId: selectedCategoryId,
-      };
+      if (selectedCategoryId) {
+        const request = {
+          categoryId: selectedCategoryId,
+        };
+        formData.append(
+          'request',
+          new Blob([JSON.stringify(request)], {
+            type: 'application/json',
+          }),
+        );
+      }
 
-      addImageContent(body).then((res) => {
+      addImageContent(formData).then((res) => {
         if (!res) {
           navigate('/');
         }

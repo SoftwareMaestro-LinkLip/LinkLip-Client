@@ -56,5 +56,22 @@ export const parse = async (url: string): Promise<any> => {
     throw response;
   }
 
-  return response.data.data;
+  const res = response.data.data;
+
+  if (!res.title) {
+    res.title = getDomainName(url);
+  }
+
+  return res;
+};
+
+/**
+ *
+ * @param {string} url
+ * @returns {string}
+ */
+export const getDomainName = (url: string): string => {
+  const domain = new URL(url).hostname.replace(/(https?:\/\/)?(www\.)?/y, '');
+
+  return domain;
 };

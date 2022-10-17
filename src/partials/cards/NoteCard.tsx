@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useEffect } from 'react';
 import CardOptionButton from '../buttons/CardOptionButton';
 import { modalOpenState, openedContentState } from '../../stores/dashboard';
 import { useRecoilState } from 'recoil';
