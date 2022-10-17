@@ -112,22 +112,10 @@ export const addNoteContent = async (content: {
         headers: authHeader(),
       },
     );
+
+    return true;
   } catch {
-    const temp = await requestAccessToken();
-
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
-        content,
-        {
-          headers: authHeader(),
-        },
-      );
-
-      return true;
-    } catch {
-      return false;
-    }
+    return false;
   }
 };
 
@@ -169,39 +157,23 @@ export const editNoteContent = async (
 
 /**
  * 이미지 컨텐츠 저장 함수
- * @param {{text: string, categoryId: number}} content
+ * @param {FormData} content
  * @returns {Promise<any>}
  */
-export const addImageContent = async (content: {
-  imageFile: FormData;
-  categoryId: number | null;
-}): Promise<any> => {
+export const addImageContent = async (request: FormData): Promise<any> => {
   const header = authHeader();
   header['Content-Type'] = 'multipart/form-data';
   try {
     const response = await axios.post(
       `${import.meta.env.VITE_API_SERVER}/content/v1/image`,
-      content,
+      request,
       {
         headers: header,
       },
     );
     return true;
   } catch {
-    const temp = await requestAccessToken();
-
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_SERVER}/content/v1/image`,
-        content,
-        {
-          headers: header,
-        },
-      );
-      return true;
-    } catch {
-      return false;
-    }
+    return false;
   }
 };
 

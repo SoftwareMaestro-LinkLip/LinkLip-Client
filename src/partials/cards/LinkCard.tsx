@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react';
 import logo from '../../assets/images/logo.png';
-import { getShortURL } from '../../utils/link';
+import { getShortURL, getDomainName } from '../../utils/link';
 import CardOptionButton from '../buttons/CardOptionButton';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -11,10 +11,13 @@ interface IProps {
 const LinkCard = (props: IProps) => {
   return (
     <div className="flex overflow-hidden rounded-lg shadow-lg bg-white hover:-translate-y-1 hover:scale-110 hover:z-10 duration-300 relative h-64">
-      <div className="flex flex-col w-full">
-        <a
-          href={props.content.url}
-          target="_blank"
+      <a
+        href={props.content.url}
+        target="_blank"
+        className="flex flex-col w-full"
+      >
+        {/* 썸네일 */}
+        <div
           className={
             props.content.id == 0 || props.content.linkImg
               ? `flex justify-center items-center w-full h-2/3 overflow-hidden`
@@ -23,7 +26,7 @@ const LinkCard = (props: IProps) => {
         >
           {props.content.linkImg ? (
             <img
-              className=" block my-0 mx-auto w-full object-cover transition  duration-300"
+              className=" block my-0 mx-auto w-full h-full object-cover transition  duration-300"
               src={props.content.linkImg}
               alt="props.content.title"
             />
@@ -32,7 +35,7 @@ const LinkCard = (props: IProps) => {
               <ClipLoader color={'rgb(0 255 127)'} loading={true} size={80} />
             </div>
           )}
-        </a>
+        </div>
         {/* 카테고리 */}
         <p
           className="text-start text-xs text-gray-500 m-2 overflow-hidden text-ellipsis whitespace-nowrap"
@@ -40,14 +43,10 @@ const LinkCard = (props: IProps) => {
         >
           {props.content.category ? props.content.category.name : '전체'}
         </p>
-
-        <a
-          href={props.content.url}
-          target="_blank"
-          className="text-sm mx-2 mb-10 pb-2 break-all leading-5 h-10 overflow-hidden"
-        >
+        {/* 제목 */}
+        <div className="text-sm mx-2 mb-10 pb-2 break-all leading-5 h-10 overflow-hidden">
           {props.content.title}
-        </a>
+        </div>
         {/* URL 주소 */}
         <a
           href={props.content.url}
@@ -57,7 +56,7 @@ const LinkCard = (props: IProps) => {
         >
           {getShortURL(props.content.url)}
         </a>
-      </div>
+      </a>
       <div className="absolute flex right-0 mt-2 mr-2">
         <CardOptionButton content={props.content} />
         <div

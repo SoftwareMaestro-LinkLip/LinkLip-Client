@@ -103,7 +103,7 @@ const Header = () => {
                 </button>
                 <input
                   type="text"
-                  className="form-control border-none focus:ring-0"
+                  className="form-control border-none focus:ring-0 w-full"
                   placeholder="저장한 내용 바로 찾기"
                   aria-label="검색"
                   onChange={onChangeHandler}
