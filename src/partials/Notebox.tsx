@@ -222,13 +222,7 @@ const Notebox = () => {
               </button>
               {/* category select */}
 
-              <div
-                className={
-                  text
-                    ? `grow flex overflow-scroll text-center scrollbar-hide transition-all duration-200  translate-x-0`
-                    : `grow flex overflow-scroll text-center scrollbar-hide transition-all duration-300  translate-x-1000`
-                }
-              >
+              <div className="grow flex overflow-scroll text-center scrollbar-hide">
                 {categories.map((item) => {
                   return (
                     <button
@@ -237,7 +231,7 @@ const Notebox = () => {
                         ${
                           (!item.id && !selectedCategoryId) ||
                           item.id == selectedCategoryId
-                            ? 'bg-gray-400 text-white animate-pulse'
+                            ? 'bg-gray-400 text-white'
                             : 'border-gray-400 text-gray-400 border-2'
                         }
                       `}
