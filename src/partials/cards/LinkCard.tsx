@@ -48,14 +48,12 @@ const LinkCard = (props: IProps) => {
           {props.content.title}
         </div>
         {/* URL 주소 */}
-        <a
-          href={props.content.url}
-          target="_blank"
+        <div
           className="absolute bottom-1 text-sm text-slate-400 mx-2 break-all h-6 mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
           style={{ maxWidth: '50%' }}
         >
           {getShortURL(props.content.url)}
-        </a>
+        </div>
       </a>
       <div className="absolute flex right-0 mt-2 mr-2">
         <CardOptionButton content={props.content} />
@@ -63,7 +61,7 @@ const LinkCard = (props: IProps) => {
           className=" text-white bg-gray-500 opacity-60 w-6 h-5 rounded-md flex items-center ml-1"
           style={{ fontSize: '0.75rem' }}
         >
-          <p className="pl-1.5">url</p>
+          <p className="pl-1">url</p>
         </div>
       </div>
     </div>

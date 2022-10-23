@@ -70,7 +70,7 @@ const Sidebar = () => {
         </button>
       </div>
       {/* 카테고리 목록 */}
-      <nav className="space-y-4">
+      <nav className="space-y-4 grow">
         <div className="flex justify-between rounded-md outline outline-1 outline-slate-200 bg-bg_gray py-2">
           <h3 className="text-md text-black font-semibold pl-3 " tabIndex={3}>
             카테고리
@@ -106,6 +106,20 @@ const Sidebar = () => {
           })}
         </ul>
       </nav>
+      {/* 추가 설정 */}
+      <div className="bottom-0 space-y-3 mb-3">
+        <hr className="my-4 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+        <Link to="/logout" className="text-gray-400 block px-3">
+          로그아웃
+        </Link>
+        <a
+          target="_blank"
+          href="https://forms.gle/ZopyuPueViXbp5gT7"
+          className="text-gray-400 block px-3"
+        >
+          건의하기
+        </a>
+      </div>
     </div>
   );
 };
