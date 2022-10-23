@@ -25,6 +25,7 @@ import {
   pageIdxState,
   modalOpenState,
   openedContentState,
+  sidebarOpenState,
 } from '../stores/dashboard';
 import ImageCard from '../partials/cards/ImageCard';
 import ImageModal from '../partials/modals/ImageModal';
@@ -38,6 +39,7 @@ const Dashboard = () => {
   const [contentsSize, setContentsSize] = useRecoilState(contentsSizeState);
   const modalOpen = useRecoilValue(modalOpenState);
   const [openedContent, setOpenedContent] = useRecoilState(openedContentState);
+  const [sidebarOpen, setSidebarOpen] = useRecoilState(sidebarOpenState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -89,6 +91,14 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen bg-bg_gray" id="pageContainer">
+      {/* Dark effect on modal opened */}
+      {modalOpen && (
+        <div className="absolute h-screen w-screen bg-black opacity-50 z-50"></div>
+      )}
+      {/* Dark effect on sidebar opened */}
+      {sidebarOpen && (
+        <div className="absolute h-screen w-screen bg-black opacity-50 z-40"></div>
+      )}
       {/* Side Bar */}
       <Sidebar />
       {/* Content area */}
