@@ -42,7 +42,7 @@ const Sidebar = () => {
     <div
       ref={ref}
       id="sidebar"
-      className={`flex flex-col absolute z-50 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll scrollbar-hide lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-white p-4 transition-all duration-200 ease-in-out ${
+      className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll scrollbar-hide lg:overflow-y-auto no-scrollbar w-52 lg:w-52 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-white p-4 transition-all duration-200 ease-in-out ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-64'
       }`}
     >
@@ -109,7 +109,7 @@ const Sidebar = () => {
       {/* 추가 설정 */}
       <div className="bottom-0 space-y-3 mb-3">
         <hr className="my-4 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-        <Link to="/logout" className="text-gray-400 block px-3">
+        <Link to="/logout" className="text-gray-700 block px-3">
           로그아웃
         </Link>
         <a

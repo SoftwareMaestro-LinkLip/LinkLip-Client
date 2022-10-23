@@ -107,7 +107,7 @@ const Modal = (props: IProps) => {
           </button>
         </div>
         {/* <!-- Modal body --> */}
-        <div className="my-3 mx-6 space-y-3 h-full ">
+        <div className="my-3 mx-6 space-y-3 grow">
           <form className="h-full flex flex-col">
             <div className="flex min-w-1/2 items-center f-">
               <label
@@ -155,7 +155,7 @@ const Modal = (props: IProps) => {
               id="text"
               onChange={onChangeText}
               value={text}
-              className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:border-gray-400 focus:ring-0 h-full w-full p-2.5  resize-none"
+              className="grow bg-white border border-gray-300 text-gray-900 rounded-lg focus:border-gray-400 focus:ring-0 w-full p-2.5 resize-none"
             />
           </form>
         </div>
