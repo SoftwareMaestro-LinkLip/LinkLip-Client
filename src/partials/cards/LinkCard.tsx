@@ -61,7 +61,7 @@ const LinkCard = (props: IProps) => {
         <CardOptionButton content={props.content} />
         <div
           className=" text-white bg-gray-500 opacity-60 w-6 h-5 rounded-md flex items-center ml-1"
-          style={{ fontSize: '0.25rem' }}
+          style={{ fontSize: '0.75rem' }}
         >
           <p className="pl-1.5">url</p>
         </div>
