@@ -85,7 +85,7 @@ const Modal = (props: IProps) => {
   };
 
   return (
-    <div className="flex  w-full">
+    <div className="flex justify-center w-full">
       <div
         ref={ref}
         className="flex flex-col z-50 w-full h-full sm:max-w-2xl sm:h-2/3 bg-bg_gray sm:rounded-lg shadow fixed top-1/2 transform -translate-y-1/2 lg:translate-x-4"

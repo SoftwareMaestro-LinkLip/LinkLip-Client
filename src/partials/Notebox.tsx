@@ -221,13 +221,13 @@ const Notebox = () => {
                 <img src={image_icon} alt="이미지 추가" />
               </button>
               {/* category select */}
-
               <div className="grow flex overflow-scroll text-center scrollbar-hide">
-                {categories.map((item) => {
-                  return (
-                    <button
-                      type="button"
-                      className={`whitespace-nowrap align-baseline rounded-xl m-1 py-0.25 px-2 
+                {text &&
+                  categories.map((item) => {
+                    return (
+                      <button
+                        type="button"
+                        className={`whitespace-nowrap align-baseline rounded-xl m-1 py-0.25 px-2 
                         ${
                           (!item.id && !selectedCategoryId) ||
                           item.id == selectedCategoryId
@@ -235,14 +235,14 @@ const Notebox = () => {
                             : 'border-gray-400 text-gray-400 border-2'
                         }
                       `}
-                      key={item.id ? item.id : 0}
-                      onClick={onSelectCategoryHandler}
-                      value={item.id ? item.id : 0}
-                    >
-                      {item.name}
-                    </button>
-                  );
-                })}
+                        key={item.id ? item.id : 0}
+                        onClick={onSelectCategoryHandler}
+                        value={item.id ? item.id : 0}
+                      >
+                        {item.name}
+                      </button>
+                    );
+                  })}
               </div>
 
               {/* submit button */}
