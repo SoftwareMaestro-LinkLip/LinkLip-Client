@@ -16,7 +16,13 @@ const Login = () => {
     if (refreshToken) {
       localStorage.setItem('refreshToken', JSON.stringify(refreshToken));
     }
-    // navigate(`/dashboard`);
+
+    // 개발 환경 이동을 위한 로그 출력
+    console.log(
+      `http://localhost:3000/oauth2/redirect/?accessToken=${accessToken}&refreshToken=${refreshToken}`,
+    );
+
+    navigate(`/dashboard`);
   }, []);
 
   return <div>Login</div>;
