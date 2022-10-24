@@ -30,7 +30,7 @@ const LandingPage = () => {
             src={logoPoint}
             className="absolute bottom-1 w-4/5"
             data-aos="slide-right"
-            data-aos-delay="100"
+            data-aos-delay="500"
           ></img>
         </div>
         <div className="bg-white grow"></div>
@@ -39,13 +39,11 @@ const LandingPage = () => {
       <div className="text-center">
         {detailOpen && (
           <div className="max-w-3xl mx-auto" data-aos="flip-down">
-            <p className="text-xl text-gray-600">
-              어떻게 하면 다양한 형태의 순간적인 정보를
+            <p className="text-lg text-gray-600">
+              어떻게 하면 다양한 형태의 순간적인 정보를 간편하게 저장하고
+              체계적으로 관리할 수 있을까?
             </p>
-            <p className="text-xl text-gray-600 mb-2">
-              간편하게 저장하고 체계적으로 관리할 수 있을까?
-            </p>
-            <p className="text-xl text-gray-600  mb-4">
+            <p className="text-lg text-gray-600  mb-4">
               효율적인 정보 관리를 위한 최고의 수단, {` `}
               <span className="text-xl bg-clip-text text-transparent bg-gradient-to-r from-signiture to-teal-400">
                 링클립
