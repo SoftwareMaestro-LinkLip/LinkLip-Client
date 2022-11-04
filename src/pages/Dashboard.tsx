@@ -48,7 +48,9 @@ const Dashboard = () => {
         navigate(`/`);
       }
     });
+  }, []);
 
+  useEffect(() => {
     // change page title tag
     const htmlTitle = document.querySelector('title');
     htmlTitle!.innerHTML = 'Linklip Dashboard';
