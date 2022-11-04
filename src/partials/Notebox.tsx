@@ -150,33 +150,22 @@ const Notebox = () => {
         return;
       }
 
-      // const access = localStorage.getItem('accessToken');
-      // const refresh = localStorage.getItem('refreshToken');
-
-      // console.log('accessToken: ' + access);
-      // console.log('refreshToken: ' + refresh);
-
-      console.log('e.target.files', e.target.files);
-
       const formData = new FormData();
       formData.append('imageFile', e.target.files[0]);
 
-      const request = selectedCategoryId
-        ? {
-            categoryId: selectedCategoryId,
-          }
-        : {};
+      if (selectedCategoryId) {
+        const request = {
+          categoryId: selectedCategoryId,
+        };
+        formData.append(
+          'request',
+          new Blob([JSON.stringify(request)], {
+            type: 'application/json',
+          }),
+        );
+      }
 
-      formData.append(
-        'request',
-        new Blob([JSON.stringify(request)], {
-          type: 'application/json',
-        }),
-      );
-
-      // addImageContent(formData).then((res) => {
-      const temp = new FormData();
-      addImageContent(temp).then((res) => {
+      addImageContent(formData).then((res) => {
         if (!res) {
           navigate('/');
         }
