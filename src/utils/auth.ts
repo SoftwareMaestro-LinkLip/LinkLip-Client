@@ -1,6 +1,12 @@
 import axios, { AxiosRequestHeaders } from 'axios';
 
 export const authHeader = (): AxiosRequestHeaders => {
+  // const access = localStorage.getItem('accessToken');
+  // const refresh = localStorage.getItem('refreshToken');
+
+  // console.log('accessToken: ' + access);
+  // console.log('refreshToken: ' + refresh);
+
   const temp = localStorage.getItem('accessToken');
   if (temp) {
     const accessToken = JSON.parse(temp);

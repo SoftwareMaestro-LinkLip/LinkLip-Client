@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
 import {
   ILinkContent,
   INoteContent,
@@ -6,7 +6,7 @@ import {
   IEditNoteContent,
   IEditImageContent,
 } from '../typings/content';
-import { authHeader, requestAccessToken } from './auth';
+import { authHeader } from './auth';
 
 /**
  * 저장된 컨텐츠 불러오는 함수
@@ -47,6 +47,12 @@ export const addLinkContent = async (content: {
   text: string;
   categoryId: number;
 }): Promise<any> => {
+  const access = localStorage.getItem('accessToken');
+  const refresh = localStorage.getItem('refreshToken');
+
+  console.log('link accessToken: ' + access);
+  console.log('link refreshToken: ' + refresh);
+
   const response = await axios.post(
     `${import.meta.env.VITE_API_SERVER}/content/v1/link`,
     content,
@@ -105,6 +111,12 @@ export const addNoteContent = async (content: {
   categoryId: number | null;
 }): Promise<any> => {
   try {
+    const access = localStorage.getItem('accessToken');
+    const refresh = localStorage.getItem('refreshToken');
+
+    console.log('note accessToken: ' + access);
+    console.log('note refreshToken: ' + refresh);
+
     const response = await axios.post(
       `${import.meta.env.VITE_API_SERVER}/content/v1/note`,
       content,
@@ -161,18 +173,33 @@ export const editNoteContent = async (
  * @returns {Promise<any>}
  */
 export const addImageContent = async (request: FormData): Promise<any> => {
-  const header = authHeader();
+  const access = localStorage.getItem('accessToken');
+  const refresh = localStorage.getItem('refreshToken');
+
+  console.log('img accessToken: ' + access);
+  console.log('img refreshToken: ' + refresh);
+
+  const header: AxiosRequestHeaders = authHeader();
   header['Content-Type'] = 'multipart/form-data';
+
+  // console.log('header', header);
   try {
     const response = await axios.post(
       `${import.meta.env.VITE_API_SERVER}/content/v1/image`,
       request,
       {
-        headers: header,
+        headers: authHeader(),
       },
     );
+
     return true;
   } catch {
+    const temp = authHeader();
+    const access = localStorage.getItem('accessToken');
+    const refresh = localStorage.getItem('refreshToken');
+
+    console.log('img accessToken: ' + access);
+    console.log('img refreshToken: ' + refresh);
     return false;
   }
 };
