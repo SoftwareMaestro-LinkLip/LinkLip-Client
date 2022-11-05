@@ -29,7 +29,7 @@ const Notebox = () => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [text, onChangeText, setText] = useInput('');
   const resetTerm = useResetRecoilState(termState);
-  const curCategoryId = useRecoilValue(curCategoryIdState);
+  const [curCategoryId, setCurCategoryId] = useRecoilState(curCategoryIdState);
   const contentsSize = useRecoilValue(contentsSizeState);
   const resetPageIdx = useResetRecoilState(pageIdxState);
   const [contents, setContents] = useRecoilState(contentsState);
@@ -53,6 +53,7 @@ const Notebox = () => {
     setSelectedCategoryId(curCategoryId);
   }, [curCategoryId]);
 
+  // 입력창 높이 조절 함수
   const handleResizeHeight = useCallback(() => {
     if (ref === null || ref.current === null) {
       return;
@@ -61,17 +62,21 @@ const Notebox = () => {
     ref.current.style.height = ref.current.scrollHeight + 'px';
   }, []);
 
+  // submit hadler 함수
   const onSubmitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
+      // 아무것도 입력되지 않은 경우 체크
       if (!text.trim()) {
         return;
       }
 
       setText('');
+      setCurCategoryId(selectedCategoryId);
 
       if (isURL(text)) {
+        // 링크 입력인 경우
         const loadingContent = {
           category: { id: null, name: null },
           id: 0,
@@ -94,6 +99,7 @@ const Notebox = () => {
           });
         });
       } else {
+        // 텍스트 입력인 경우
         const loadingContent = {
           category: { id: null, name: null },
           id: 0,
@@ -144,46 +150,40 @@ const Notebox = () => {
     }
   };
 
-  const onUploadImage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) {
-        return;
+  // 이미지 저장 handler
+  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('imageFile', e.target.files[0]);
+
+    const request = selectedCategoryId
+      ? {
+          categoryId: selectedCategoryId,
+        }
+      : {};
+
+    formData.append(
+      'request',
+      new Blob([JSON.stringify(request)], {
+        type: 'application/json',
+      }),
+    );
+
+    addImageContent(formData).then((status) => {
+      if (!status) {
+        navigate('/');
       }
 
-      // const access = localStorage.getItem('accessToken');
-      // const refresh = localStorage.getItem('refreshToken');
-
-      // console.log('accessToken: ' + access);
-      // console.log('refreshToken: ' + refresh);
-
-      console.log('e.target.files', e.target.files);
-
-      const formData = new FormData();
-      formData.append('imageFile', e.target.files[0]);
-
-      const request = selectedCategoryId
-        ? {
-            categoryId: selectedCategoryId,
-          }
-        : {};
-
-      formData.append(
-        'request',
-        new Blob([JSON.stringify(request)], {
-          type: 'application/json',
-        }),
-      );
-
-      // addImageContent(formData).then((res) => {
-      const temp = new FormData();
-      addImageContent(temp).then((res) => {
-        if (!res) {
-          navigate('/');
-        }
+      resetPageIdx();
+      resetTerm();
+      getContents(contentsSize, curCategoryId).then((res) => {
+        setContents([...res]);
       });
-    },
-    [selectedCategoryId],
-  );
+    });
+  };
 
   const onUploadImageButtonClick = useCallback(() => {
     if (!inputRef.current) {
