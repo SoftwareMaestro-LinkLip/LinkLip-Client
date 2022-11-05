@@ -1,7 +1,5 @@
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
 import {
-  ILinkContent,
-  INoteContent,
   IEditLinkContent,
   IEditNoteContent,
   IEditImageContent,
