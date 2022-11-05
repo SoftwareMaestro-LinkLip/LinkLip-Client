@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../partials/Header';
-import {
-  ILinkContent,
-  INoteContent,
-  IImageContent,
-  IContents,
-} from '../typings/content';
+import { IContents } from '../typings/content';
 import Notebox from '../partials/Notebox';
 import Sidebar from '../partials/Sidebar';
 import LinkCard from '../partials/cards/LinkCard';

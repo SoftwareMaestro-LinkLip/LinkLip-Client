@@ -1,12 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
 import {
-  ILinkContent,
-  INoteContent,
   IEditLinkContent,
   IEditNoteContent,
   IEditImageContent,
 } from '../typings/content';
-import { authHeader, requestAccessToken } from './auth';
+import { authHeader } from './auth';
 
 /**
  * 저장된 컨텐츠 불러오는 함수
@@ -161,16 +159,18 @@ export const editNoteContent = async (
  * @returns {Promise<any>}
  */
 export const addImageContent = async (request: FormData): Promise<any> => {
-  const header = authHeader();
+  const header: AxiosRequestHeaders = authHeader();
   header['Content-Type'] = 'multipart/form-data';
+
   try {
     const response = await axios.post(
       `${import.meta.env.VITE_API_SERVER}/content/v1/image`,
       request,
       {
-        headers: header,
+        headers: authHeader(),
       },
     );
+
     return true;
   } catch {
     return false;
