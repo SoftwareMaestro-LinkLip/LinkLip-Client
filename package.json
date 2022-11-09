@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint --fix src"
   },
   "dependencies": {
     "@emotion/react": "^11.9.3",
