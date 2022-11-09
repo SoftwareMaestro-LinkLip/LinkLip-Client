@@ -56,7 +56,7 @@ const CardOptionButton = (props: IProps) => {
       <button
         onClick={onDropHandler}
         className={
-          !props.content.linkImg
+          !props.content.linkImg || props.content.imageUrl
             ? `btn-on-blank opacity-60 hover:opacity-80 hover:bg-gray-200 w-6 h-5 rounded-md `
             : `btn-on-image  opacity-60 hover:bg-gray-500  hover:opacity-80 w-6 h-5 rounded-md `
         }
