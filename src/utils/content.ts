@@ -30,6 +30,8 @@ export const getContents = async (
     headers: authHeader(),
   });
 
+  console.log('res.data', response.data);
+
   return [...response.data.data.content];
 };
 

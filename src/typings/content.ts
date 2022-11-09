@@ -26,7 +26,7 @@ export interface INoteContent {
 export interface IImageContent {
   category: ICategory | null;
   id: number;
-  linkImg: string;
+  imageUrl: string;
   type: string;
 }
 
