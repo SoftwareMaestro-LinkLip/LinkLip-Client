@@ -77,7 +77,7 @@ const ImageModal = (props: IProps) => {
     <div className="flex justify-center w-full">
       <div
         ref={ref}
-        className="flex flex-col justify-between z-50 w-full h-full  bg-bg_gray sm:rounded-lg shadow fixed top-1/2 transform -translate-y-1/2 lg:translate-x-4"
+        className="flex flex-col justify-between z-50 w-full h-full  bg-bg_gray sm:rounded-lg shadow fixed top-1/2 transform -translate-y-1/2 lg:-translate-x-24"
       >
         {/* modal header */}
         <div className="flex justify-between items-start pt-4 px-4 rounded-t border-b ">
@@ -150,9 +150,9 @@ const ImageModal = (props: IProps) => {
                 })}
               </select>
             </div>
-
+            {/* 이미지 */}
             <div
-              style={{ backgroundImage: `url(${props.content.linkImg})` }}
+              style={{ backgroundImage: `url(${props.content.imageUrl})` }}
               className="h-full bg-contain bg-no-repeat bg-center "
             />
           </form>

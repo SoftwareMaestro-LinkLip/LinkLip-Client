@@ -22,10 +22,10 @@ const ImageCard = (props: IProps) => {
       <button onClick={onClickHandler} className="flex flex-col w-full h-full">
         {props.content.id > 0 ? (
           <div className="flex w-full h-full overflow-hidden">
-            {props.content.linkImg && (
+            {props.content.imageUrl && (
               <img
                 className=" block my-0 mx-auto w-full object-cover transition  duration-300"
-                src={props.content.linkImg}
+                src={props.content.imageUrl}
                 alt="Image"
               />
             )}
