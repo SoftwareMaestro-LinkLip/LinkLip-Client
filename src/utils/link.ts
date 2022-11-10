@@ -45,7 +45,10 @@ export const getShortURL = (url: string): string => {
  * @returns {Promise<any>}
  */
 export const parse = async (url: string): Promise<any> => {
-  const body = { url };
+  // let temp = encodeURIComponent(url);
+  // console.log('encodeURI(url)', temp);
+  console.log('decodeURI(url)', decodeURIComponent(url));
+  const body = { url: decodeURIComponent(url) };
   const response: AxiosResponse<any> = await axios.post(
     `${import.meta.env.VITE_API_PARSER}/link/v1`,
     body,
