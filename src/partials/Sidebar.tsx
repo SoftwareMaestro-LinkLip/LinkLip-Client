@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import useKeyPressESC from '../hooks/useKeyPressESC';
 import AddCategoryButton from './buttons/AddCategoryButton';
@@ -9,6 +9,7 @@ import { categoriesState } from '../stores/category';
 import { getCategories } from '../utils/category';
 import { editCategoryIdState } from '../stores/category';
 import { curCategoryIdState, sidebarOpenState } from '../stores/dashboard';
+import { userNameState } from '../stores/user';
 import logo from '../assets/images/linklip_logo.png';
 import { Link } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ const Sidebar = () => {
   const [categories, setCategories] = useRecoilState(categoriesState);
   const [editCategoryId, setEditCategoryId] =
     useRecoilState(editCategoryIdState);
+  const [userName, setUserName] = useRecoilState(userNameState);
 
   useOnClickOutside(
     ref,
@@ -33,9 +35,25 @@ const Sidebar = () => {
   });
 
   useEffect(() => {
-    getCategories().then((res) => {
-      setCategories([...res]);
-    });
+    if (!userName.length) {
+      getCategories(true).then((res) => {
+        const filtered = new Array();
+        res.forEach((item: any) => {
+          console.log('item.name', item.name);
+          if (item.name.startsWith('__linklip:')) {
+            setUserName(item.name.split(':')[1]);
+          } else {
+            filtered.push(item);
+          }
+        });
+
+        setCategories([...filtered]);
+      });
+    } else {
+      getCategories().then((res) => {
+        setCategories([...res]);
+      });
+    }
   }, []);
 
   return (
@@ -49,7 +67,7 @@ const Sidebar = () => {
       {/* Sidebar header */}
       <div className="flex justify-between mb-10 pr-3 sm:px-2 z-50">
         {/* Linklip Logo */}
-        <Link to="/">
+        <Link to="/dashboard">
           <img src={logo} className="max-h-6 mt-2" />
         </Link>
         {/* Close button */}
@@ -73,7 +91,7 @@ const Sidebar = () => {
       <nav className="space-y-4 grow">
         <div className="flex justify-between rounded-md outline outline-1 outline-slate-200 bg-bg_gray py-2">
           <h3 className="text-md text-black font-semibold pl-3 " tabIndex={3}>
-            카테고리
+            {userName} <span className="text-sm text-gray-600">님</span>
           </h3>
           <AddCategoryButton />
         </div>
