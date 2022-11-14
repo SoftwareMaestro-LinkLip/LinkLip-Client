@@ -24,10 +24,12 @@ const LinkCard = (props: IProps) => {
       >
         {/* 카테고리 */}
         <p
-          className="text-start text-xs text-gray-500 m-2 overflow-hidden text-ellipsis whitespace-nowrap"
+          className="text-start text-xs text-gray-500 m-2 overflow-hidden text-ellipsis whitespace-nowrap h-4"
           style={{ maxWidth: '6rem' }}
         >
-          {props.content.category ? props.content.category.name : '전체'}
+          {props.content && props.content.category
+            ? props.content.category.name
+            : '전체'}
         </p>
         {/* 노트 내용 */}
         <p className="text-start h-48 mx-2 overflow-hidden text-ellipsis ">
