@@ -10,12 +10,7 @@ import { authHeader } from './auth';
  * @param {number} contentsSize
  * @returns {Promise<any>}
  */
-export const getCategories = async (
-  term: string = '',
-  page: number = 0,
-  categoryId: number = 0,
-  contentsSize: number = 12,
-): Promise<any> => {
+export const getCategories = async (all: boolean = false): Promise<any> => {
   const response: AxiosResponse<any> = await axios.get(
     `${import.meta.env.VITE_API_SERVER}/category/v1`,
     {
@@ -24,10 +19,14 @@ export const getCategories = async (
   );
 
   if (!response.data.success) {
-    alert('카테고리를 불러오지 못했습니다');
+    alert('불러오지 못했습니다');
   }
 
-  return [...response.data.data.category];
+  let res = response.data.data.category;
+  if (!all) {
+    res = res.filter((item: any) => !item.name.startsWith('__linklip:'));
+  }
+  return [...res];
 };
 
 /**

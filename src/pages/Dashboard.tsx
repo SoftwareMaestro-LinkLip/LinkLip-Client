@@ -24,6 +24,7 @@ import {
 } from '../stores/dashboard';
 import ImageCard from '../partials/cards/ImageCard';
 import ImageModal from '../partials/modals/ImageModal';
+import { getCategories } from '../utils/category';
 
 const Dashboard = () => {
   const [bottom, setBottom] = useState(false);
@@ -42,6 +43,12 @@ const Dashboard = () => {
       if (!res) {
         navigate(`/`);
       }
+
+      getCategories(true).then((res) => {
+        if (!res.length) {
+          navigate(`/join`);
+        }
+      });
     });
 
     // change page title tag
