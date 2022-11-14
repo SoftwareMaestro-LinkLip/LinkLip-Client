@@ -198,10 +198,10 @@ const Notebox = () => {
         className={`fixed mx-4 bottom-0 w-11/12 
        lg:w-9/12 sm:m-4 z-30`}
       >
-        <div className="w-full rounded-xl outline outline-2 outline-gray-300 ">
+        <div className="w-full rounded-md outline outline-2 outline-gray-300 ">
           <form
             onSubmit={onSubmitHandler}
-            className="w-full rounded-xl bg-white"
+            className="w-full rounded-md bg-white"
           >
             <textarea
               onChange={onChangeText}

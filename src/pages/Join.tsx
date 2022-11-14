@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { requestAccessToken } from '../utils/auth';
 import { getCategories, addCategory } from '../utils/category';
-import TermsOfPolicy from '../partials/TermsOfPolicies';
+import termsOfService from '../partials/termsOfService';
 import useInput from '../hooks/useInput';
+import Markdown from 'markdown-to-jsx';
 
 function SignUp() {
   const navigate = useNavigate();
   const [name, onChangeName] = useInput('');
+  const [checked, setChecked] = useState(false);
+  const [joinable, setJoinable] = useState(false);
 
   useEffect(() => {
     requestAccessToken().then((res) => {
@@ -23,8 +26,24 @@ function SignUp() {
     });
   }, []);
 
+  useEffect(() => {
+    if (checked && name.trim().length) {
+      setJoinable(true);
+    } else {
+      setJoinable(false);
+    }
+  }, [checked, name]);
+
+  const checkedHandler = (e: any) => {
+    if (checked) {
+      setChecked(false);
+    } else {
+      setChecked(true);
+    }
+  };
+
   const joinHandler = (e: any) => {
-    if (name.trim().length) {
+    if (name.trim().length && checked) {
       addCategory(`__linklip:${name}`).then(() => {
         navigate(`/dashboard`);
       });
@@ -45,11 +64,17 @@ function SignUp() {
 
               {/* 이용 약관 */}
               <div className="max-w-2xl mx-auto mb-8">
-                <h2 className="text-2xl text-center font-bold">이용약관</h2>
-                <TermsOfPolicy />
+                <h2 className="text-gray-800 text-center text-xl font-medium mb-2">
+                  이용약관
+                </h2>
+                <div className="h-60 overflow-y-scroll text-left mb-4 border-solid border-gray-200 border-2 rounded-lg p-2">
+                  <Markdown options={{ wrapper: 'article' }}>
+                    {termsOfService}
+                  </Markdown>
+                </div>
                 <input
-                  id="default-checkbox"
                   type="checkbox"
+                  onChange={checkedHandler}
                   className="w-4 h-4 text-signiture bg-gray-100 rounded border-gray-300 focus:ring-signiture"
                 />
                 <label
@@ -85,12 +110,18 @@ function SignUp() {
 
                   <div className="flex flex-wrap -mx-3 mt-6">
                     <div className="w-full px-3">
-                      <button
-                        onClick={joinHandler}
-                        className="btn text-white bg-green-400 hover:bg-signiture w-full mb-5"
-                      >
-                        링클립 시작하기
-                      </button>
+                      {joinable ? (
+                        <button
+                          onClick={joinHandler}
+                          className="btn text-white bg-green-400 hover:bg-signiture w-full mb-5"
+                        >
+                          링클립 시작하기
+                        </button>
+                      ) : (
+                        <button className="btn text-white bg-gray-300 w-full mb-5">
+                          링클립 시작하기
+                        </button>
+                      )}
                     </div>
                   </div>
                 </form>
