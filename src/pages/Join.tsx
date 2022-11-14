@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { requestAccessToken } from '../utils/auth';
 import { getCategories, addCategory } from '../utils/category';
+import TermsOfPolicy from '../partials/TermsOfPolicies';
 import useInput from '../hooks/useInput';
 
 function SignUp() {
@@ -42,6 +43,24 @@ function SignUp() {
                 <h1 className="h1">환영합니다!</h1>
               </div>
 
+              {/* 이용 약관 */}
+              <div className="max-w-2xl mx-auto mb-8">
+                <h2 className="text-2xl text-center font-bold">이용약관</h2>
+                <TermsOfPolicy />
+                <input
+                  id="default-checkbox"
+                  type="checkbox"
+                  className="w-4 h-4 text-signiture bg-gray-100 rounded border-gray-300 focus:ring-signiture"
+                />
+                <label
+                  htmlFor="default-checkbox"
+                  className="ml-2 text-gray-800 text-sm"
+                >
+                  본 서비스의 이용약관에 동의합니다{' '}
+                  <span className="text-red-600">*</span>
+                </label>
+              </div>
+
               {/* Form */}
               <div className="max-w-sm mx-auto">
                 <form>
@@ -68,24 +87,16 @@ function SignUp() {
                     <div className="w-full px-3">
                       <button
                         onClick={joinHandler}
-                        className="btn text-white bg-green-400 hover:bg-signiture w-full"
+                        className="btn text-white bg-green-400 hover:bg-signiture w-full mb-5"
                       >
                         링클립 시작하기
                       </button>
                     </div>
                   </div>
-                  <div className="text-sm text-gray-500 text-center mt-3">
-                    By creating an account, you agree to the{' '}
-                    <a className="underline" href="#0">
-                      terms & conditions
-                    </a>
-                    , and our{' '}
-                    <a className="underline" href="#0">
-                      privacy policy
-                    </a>
-                    .
-                  </div>
                 </form>
+                <Link to="/logout" className="text-sm text-gray-500">
+                  다음에 가입할래요.
+                </Link>
               </div>
             </div>
           </div>
