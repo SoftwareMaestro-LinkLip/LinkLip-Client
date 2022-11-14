@@ -190,7 +190,7 @@ const Modal = (props: IProps) => {
               type="text"
               id="url"
               onChange={onChangeTitle}
-              value={props.content.url}
+              value={decodeURIComponent(props.content.url)}
               className="bg-bg_gray border border-gray-300 focus:ring-0 focus:border-gray-200 text-gray-900 text-sm rounded-lg block w-full p-2.5 "
             />
           </form>

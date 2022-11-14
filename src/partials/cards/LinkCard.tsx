@@ -52,7 +52,7 @@ const LinkCard = (props: IProps) => {
           className="absolute bottom-1 text-sm text-slate-400 mx-2 break-all h-6 mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
           style={{ maxWidth: '50%' }}
         >
-          {getShortURL(props.content.url)}
+          {decodeURIComponent(getShortURL(props.content.url))}
         </div>
       </a>
       <div className="absolute flex right-0 mt-2 mr-2">
