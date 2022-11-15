@@ -77,10 +77,10 @@ const ImageModal = (props: IProps) => {
     <div className="flex justify-center w-full">
       <div
         ref={ref}
-        className="flex flex-col justify-between z-50 w-full h-full  bg-bg_gray sm:rounded-lg shadow fixed top-1/2 transform -translate-y-1/2 lg:-translate-x-24"
+        className="flex flex-col justify-between z-50 w-full h-full sm:max-w-2xl sm:h-2/3 bg-bg_gray sm:rounded-lg shadow fixed top-1/2 transform -translate-y-1/2 lg:translate-x-4"
       >
         {/* modal header */}
-        <div className="flex justify-between items-start pt-4 px-4 rounded-t border-b ">
+        <div className="flex justify-between items-start pt-4 px-4 rounded-t ">
           <button
             type="button"
             className="text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center "
@@ -108,7 +108,8 @@ const ImageModal = (props: IProps) => {
         {/* <!-- Modal body --> */}
         <div className="my-3 mx-6 space-y-3 h-full ">
           <form className="h-full flex flex-col">
-            <div className="flex min-w-1/2 items-center f-">
+            {/* 백엔드 이미지 컨텐츠 수정 기능 구현할 때까지 주석 처리 */}
+            {/* <div className="flex min-w-1/2 items-center f-">
               <label
                 htmlFor="category"
                 className="inline shrink-0 text-md font-medium text-gray-900  mr-2"
@@ -149,7 +150,7 @@ const ImageModal = (props: IProps) => {
                   }
                 })}
               </select>
-            </div>
+            </div> */}
             {/* 이미지 */}
             <div
               style={{ backgroundImage: `url(${props.content.imageUrl})` }}
@@ -158,7 +159,7 @@ const ImageModal = (props: IProps) => {
           </form>
         </div>
         {/* 버튼 */}
-        <div className="flex items-center px-6 pb-4 space-x-2 rounded-b border-t border-gray-200 ">
+        {/* <div className="flex items-center px-6 pb-4 space-x-2 rounded-b border-t border-gray-200 ">
           <button
             onClick={editHandler}
             data-modal-toggle="defaultModal"
@@ -177,7 +178,7 @@ const ImageModal = (props: IProps) => {
           >
             취소
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
