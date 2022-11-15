@@ -50,7 +50,7 @@ const LinkCard = (props: IProps) => {
         {/* URL 주소 */}
         <div
           className="absolute bottom-1 text-sm text-slate-400 mx-2 break-all h-6 mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
-          style={{ maxWidth: '50%' }}
+          style={{ maxWidth: '80%' }}
         >
           {decodeURIComponent(getShortURL(props.content.url))}
         </div>

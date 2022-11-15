@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import CardOptionButton from '../buttons/CardOptionButton';
 import { modalOpenState, openedContentState } from '../../stores/dashboard';
 import { useRecoilState } from 'recoil';
+import Markdown from 'markdown-to-jsx';
 
 interface IProps {
   content: any;
@@ -33,7 +34,10 @@ const LinkCard = (props: IProps) => {
         </p>
         {/* 노트 내용 */}
         <p className="text-start h-48 mx-2 overflow-hidden text-ellipsis ">
-          {props.content.text}
+          <Markdown options={{ forceBlock: true }}>
+            {props.content.text}
+          </Markdown>
+          {/* {props.content.text} */}
         </p>
       </button>
       <div className="absolute flex right-0 mt-2 mr-2">
