@@ -39,7 +39,6 @@ const Sidebar = () => {
       getCategories(true).then((res) => {
         const filtered = new Array();
         res.forEach((item: any) => {
-          console.log('item.name', item.name);
           if (item.name.startsWith('__linklip:')) {
             setUserName(item.name.split(':')[1]);
           } else {
