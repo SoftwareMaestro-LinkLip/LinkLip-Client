@@ -65,6 +65,8 @@ export const parse = async (url: string): Promise<any> => {
     res.title = getDomainName(url);
   }
 
+  console.log('res', res);
+
   return res;
 };
 

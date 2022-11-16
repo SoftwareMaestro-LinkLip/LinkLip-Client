@@ -63,72 +63,69 @@ const Notebox = () => {
   }, []);
 
   // submit hadler 함수
-  const onSubmitHandler = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-      // 아무것도 입력되지 않은 경우 체크
-      if (!text.trim()) {
-        return;
-      }
+    // 아무것도 입력되지 않은 경우 체크
+    if (!text.trim()) {
+      return;
+    }
 
-      setText('');
-      setCurCategoryId(selectedCategoryId);
+    setText('');
+    setCurCategoryId(selectedCategoryId);
 
-      if (isURL(text)) {
-        // 링크 입력인 경우
-        const loadingContent = {
-          category: { id: null, name: null },
-          id: 0,
-          url: text,
-          linkImg: '',
-          title: '',
-          text: '',
-          type: 'link',
-        };
-        setContents([loadingContent, ...contents]);
+    if (isURL(text)) {
+      // 링크 입력인 경우
+      const loadingContent = {
+        category: { id: null, name: null },
+        id: 0,
+        url: text,
+        linkImg: '',
+        title: '',
+        text: '',
+        type: 'link',
+      };
+      setContents([loadingContent, ...contents]);
 
-        parse(text).then((body) => {
-          body.categoryId = curCategoryId;
-          addLinkContent(body).then(() => {
-            resetPageIdx();
-            resetTerm();
-            getContents(contentsSize, curCategoryId).then((res) => {
-              setContents([...res]);
-            });
-          });
-        });
-      } else {
-        // 텍스트 입력인 경우
-        const loadingContent = {
-          category: { id: null, name: null },
-          id: 0,
-          text,
-          type: 'note',
-        };
-        setContents([loadingContent, ...contents]);
-
-        const body = {
-          text,
-          categoryId: selectedCategoryId,
-        };
-        addNoteContent(body).then((status) => {
-          if (!status) {
-            navigate('/');
-          }
+      parse(text).then((body) => {
+        body.categoryId = selectedCategoryId;
+        addLinkContent(body).then(() => {
           resetPageIdx();
           resetTerm();
-          getContents(contentsSize, curCategoryId).then((res) => {
+          getContents(contentsSize, selectedCategoryId).then((res) => {
             setContents([...res]);
           });
         });
-      }
-      if (ref !== null) {
-        ref.current!.style.height = '42px';
-      }
-    },
-    [text, setText, selectedCategoryId, curCategoryId],
-  );
+      });
+    } else {
+      // 텍스트 입력인 경우
+      const loadingContent = {
+        category: { id: null, name: null },
+        id: 0,
+        text,
+        type: 'note',
+      };
+      setContents([loadingContent, ...contents]);
+
+      const body = {
+        text,
+        categoryId: selectedCategoryId,
+      };
+      addNoteContent(body).then((status) => {
+        if (!status) {
+          navigate('/');
+        }
+        resetPageIdx();
+        resetTerm();
+        getContents(contentsSize, selectedCategoryId).then((res) => {
+          setContents([...res]);
+        });
+      });
+    }
+    if (ref !== null) {
+      ref.current!.style.height = '42px';
+    }
+  };
 
   const onKeyDown = useCallback(
     (e: any) => {
