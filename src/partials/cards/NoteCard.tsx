@@ -33,12 +33,12 @@ const LinkCard = (props: IProps) => {
             : '전체'}
         </p>
         {/* 노트 내용 */}
-        <p className="text-start h-48 mx-2 overflow-hidden text-ellipsis ">
+        <div className="text-start h-48 mx-2 overflow-hidden text-ellipsis ">
           <Markdown options={{ forceBlock: true }}>
             {props.content.text}
           </Markdown>
           {/* {props.content.text} */}
-        </p>
+        </div>
       </button>
       <div className="absolute flex right-0 mt-2 mr-2">
         <CardOptionButton content={props.content} />
