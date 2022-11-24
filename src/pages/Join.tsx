@@ -27,7 +27,7 @@ function SignUp() {
   }, []);
 
   useEffect(() => {
-    if (checked && name.trim().length) {
+    if (checked && name && name.trim().length) {
       setJoinable(true);
     } else {
       setJoinable(false);
@@ -43,7 +43,7 @@ function SignUp() {
   };
 
   const joinHandler = (e: any) => {
-    if (name.trim().length && checked) {
+    if (name && name.trim().length && checked) {
       addCategory(`__linklip:${name}`).then(() => {
         navigate(`/dashboard`);
       });

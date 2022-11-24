@@ -35,7 +35,7 @@ const EditCategoryInput = (props: IProps) => {
   const onSubmitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      if (!!name?.trim()) {
+      if (!!name && !!name?.trim()) {
         editCategory(props.categoryInfo.id!, name).then(() => {
           getCategories().then((res) => {
             setCategories([...res]);
