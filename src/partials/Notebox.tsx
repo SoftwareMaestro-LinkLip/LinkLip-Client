@@ -67,7 +67,7 @@ const Notebox = () => {
     event.preventDefault();
 
     // 아무것도 입력되지 않은 경우 체크
-    if (!text.trim()) {
+    if (!text || !text.trim()) {
       return;
     }
 
