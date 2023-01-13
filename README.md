@@ -2,6 +2,8 @@
 
 # Linklip-Client 
 
+## Overview
+<br>
 <img src="https://user-images.githubusercontent.com/55964775/192938922-bf48a171-b361-42ae-bf31-4ae7877110ee.png" align="center" alt="Logo Meaning">
 
 <br>
@@ -20,6 +22,39 @@
 ![Frame 96](https://user-images.githubusercontent.com/55964775/212302946-b356e6b5-30ae-4a00-98b3-676037c1dd8a.png)
 ![Frame 98](https://user-images.githubusercontent.com/55964775/212302954-f120eeb6-d316-4c52-b7a5-218bfa3ecff1.png)
 ![Frame 97](https://user-images.githubusercontent.com/55964775/212302951-d4fda146-9ae2-4711-bb1f-4ad670a80027.png)
+
+
+## Developing
+### Built With
+![skills](https://user-images.githubusercontent.com/55964775/212307993-e048d12f-1ffd-4369-ac2d-7449a7652f2b.png)
+- React
+- React Router
+- Vite
+- Tailwind CSS
+- AWS Amplify
+- PWA
+- TypeScript
+
+### Prerequisites
+- Install editor `Visual Studio Code` or `WebStorm`
+- Install `ESLint`, `Prettier` extensions(plugins) in the editor.
+  - `ESLint`: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+  - `Prettier`: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
+- Turn the `formatOnSave` option on.
+- Make sure your `NodeJS` and `yarn` versions are up to date
+
+### Setting up Dev
+```bash
+$ git clone https://github.com/SoftwareMaestro-LinkLip/LinkLip-Client.git
+$ cd LinkLip-Client
+$ yarn install
+```
+
+### Deploying / Publishing
+- Make pull request to main branch and merge it.
+- Check building success in AWS Amplify.
+
+<br />
 
 ## Quick Start
 ### Prerequisites
@@ -49,36 +84,6 @@ $ yarn dev
 ```
 
 - Navigate to [http://localhost:3000](http://localhost:3000)
-
-<br />
-
-## Developing
-### Built With
-- React
-- React Router
-- TypeScript
-- Tailwind CSS
-- AWS Amplify
-- PWA
-
-### Prerequisites
-- Install editor `Visual Studio Code` or `WebStorm`
-- Install `ESLint`, `Prettier` extensions(plugins) in the editor.
-  - `ESLint`: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
-  - `Prettier`: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
-- Turn the `formatOnSave` option on.
-- Make sure your `NodeJS` and `yarn` versions are up to date
-
-### Setting up Dev
-```bash
-$ git clone https://github.com/SoftwareMaestro-LinkLip/LinkLip-Client.git
-$ cd LinkLip-Client
-$ yarn install
-```
-
-### Deploying / Publishing
-- Make pull request to main branch and merge it.
-- Check building success in AWS Amplify.
 
 <br />
 
